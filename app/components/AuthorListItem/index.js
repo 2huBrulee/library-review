@@ -1,10 +1,11 @@
+/* eslint-disable camelcase */
 /**
  *
  * AuthorListItem
  *
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 // import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
@@ -46,6 +47,26 @@ const DetailLine = styled.div`
   margin: 5px;
 `;
 
+const Button = styled.button`
+  width: 140px;
+  margin: 5px 15px 5px 5px;
+  background: rgb(255, 128, 0);
+  border-width: 0;
+  border-radius: 5px;
+  align-items: center;
+  height: 20px;
+  padding: 0 15px;
+  justify-content: center;
+  display: flex;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+`;
+
+const BoldSpan = styled.span`
+  font-weight: bold;
+`;
+
 function AuthorListItem(props) {
   const {
     full_name,
@@ -58,6 +79,10 @@ function AuthorListItem(props) {
     // hidden,
   } = props;
 
+  const [maxBooks, setMaxBooks] = useState(3);
+
+  const changeBooksShown = () => setMaxBooks(maxBooks !== 3 ? 3 : books.length);
+
   const goToBook = book => () =>
     history.push({
       pathname: '/books',
@@ -67,19 +92,48 @@ function AuthorListItem(props) {
   return (
     <Container first={props.first}>
       <Details>
-        <DetailLine>{`Full Name: ${full_name}`}</DetailLine>
-        <DetailLine>{`Origin: ${origin} GR: ${gr_id}`}</DetailLine>
-        <DetailLine>{`Matilda ID: ${matilda_id}`}</DetailLine>
+        <DetailLine>
+          <BoldSpan>Full Name: </BoldSpan>
+          <span>{full_name}</span>
+        </DetailLine>
+        <DetailLine>
+          <BoldSpan>Origin: </BoldSpan>
+          <span>{origin}</span>
+          <BoldSpan>   GR: </BoldSpan>
+          <span>{gr_id}</span>
+          </DetailLine>
+
+          <DetailLine>
+            <BoldSpan>Matilda ID: </BoldSpan>
+            <span>{matilda_id}</span>
+          </DetailLine>
         {duplicate ? (
-          <DetailLine>{`Duplicate: ${duplicate}`}</DetailLine>
+          <DetailLine>
+            <BoldSpan>Duplicate: </BoldSpan>
+            <span>{duplicate}</span>
+            </DetailLine>
         ) : null}
-        <DetailLine>{`Books Written: ${books.length}`}</DetailLine>
+        <DetailLine>
+          <BoldSpan>Books Written:</BoldSpan>
+        <span>{books.length}</span>
+        </DetailLine>
       </Details>
       <Books>
-        <DetailLine>Books: </DetailLine>
+        <DetailLine>
+          <BoldSpan>Books: </BoldSpan>
+           </DetailLine>
         {books.map((book, index) =>
-          index < 3 ? <DetailLine onClick={goToBook(book)}>{`- ${book.title}`}</DetailLine> : null,
+          index < maxBooks ? (
+            <DetailLine onClick={goToBook(book)}>{`- ${
+              book.title
+            }`}</DetailLine>
+          ) : null,
         )}
+        {books.length > 3 ? (
+          <Button onClick={changeBooksShown}>
+            {maxBooks <= 3 ? 'See All' : 'Fold'}
+          </Button>
+        ) : null}
       </Books>
     </Container>
   );

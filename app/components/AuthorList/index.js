@@ -22,7 +22,7 @@ function AuthorList(props) {
             <AuthorListItem
               first={index === 0}
               {...author}
-              key={author.gr_id}
+              key={author.matilda_id}
             />
           ))
         : null}

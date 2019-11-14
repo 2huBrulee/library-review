@@ -42,6 +42,10 @@ const DetailLine = styled.div`
   margin: 5px;
 `;
 
+const BoldSpan = styled.span`
+  font-weight: bold;
+`;
+
 function BookListItem(props) {
   const {
     title,
@@ -53,8 +57,16 @@ function BookListItem(props) {
     series_index,
     text_variety,
     author_full_name,
+    history,
     // hidden,
   } = props;
+
+  const goToAuthor = author => () =>
+    history.push({
+      pathname: '/authors',
+      search: `?name=${author}`,
+    });
+
   return (
     <Container first={props.first}>
       <BookImg
@@ -64,13 +76,32 @@ function BookListItem(props) {
         }
       />
       <Details>
-        <DetailLine>{`TEXT ID: ${text_id}`}</DetailLine>
-        <DetailLine>{`Author: ${author_full_name} Lexile: ${lexile_score}`}</DetailLine>
-        <DetailLine>{`Title: ${title}`}</DetailLine>
+        <DetailLine>
+          <BoldSpan>TEXT ID: </BoldSpan>
+          <span>{text_id}</span>
+        </DetailLine>
+        <DetailLine onClick={goToAuthor(author_full_name)}>
+          <BoldSpan>Author: </BoldSpan>
+          <span>{author_full_name}</span>
+          <BoldSpan> Lexile: </BoldSpan>
+          <span>{lexile_score}</span>
+        </DetailLine>
+        <DetailLine>
+          <BoldSpan>Title: </BoldSpan>
+          <span>{title}</span>
+        </DetailLine>
         {series ? (
-          <DetailLine>{`Series Name: ${series} Series Index: ${series_index}`}</DetailLine>
+          <DetailLine>
+            <BoldSpan>Series Name: </BoldSpan>
+            <span>{series}</span>
+            <BoldSpan> Series Index: </BoldSpan>
+            <span>{series_index}</span>
+          </DetailLine>
         ) : null}
-        <DetailLine>{`Variety: ${text_variety}`}</DetailLine>
+        <DetailLine>
+          <BoldSpan>Variety: </BoldSpan>
+          <span>{text_variety}</span>
+        </DetailLine>
       </Details>
     </Container>
   );
