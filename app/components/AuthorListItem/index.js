@@ -131,7 +131,7 @@ function AuthorListItem(props) {
         )}
         {books.length > 3 ? (
           <Button onClick={changeBooksShown}>
-            {maxBooks <= 3 ? 'See All' : 'Fold'}
+            {maxBooks <= 3 ? 'See All' : 'Collapse'}
           </Button>
         ) : null}
       </Books>
