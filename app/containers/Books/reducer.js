@@ -26,13 +26,13 @@ const booksReducer = (state = initialState, action) =>
         draft.error = false;
         break;
       case LOAD_BOOKS_FOUND_SUCCESS:
-        console.log('search success', action);
+        console.log('book search success', action);
         draft.loading = false;
         draft.error = false;
         draft.bookList = action.bookList;
         break;
       case LOAD_BOOKS_FOUND_FAILED:
-        console.log('search failed', action);
+        console.log('book search failed', action);
         draft.loading = false;
         draft.error = action.error;
         break;

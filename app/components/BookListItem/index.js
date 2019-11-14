@@ -64,7 +64,7 @@ function BookListItem(props) {
   const goToAuthor = author => () =>
     history.push({
       pathname: '/authors',
-      search: `?name=${author}`,
+      search: `?full_name=${author}`,
     });
 
   return (
