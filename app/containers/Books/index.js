@@ -24,13 +24,10 @@ import saga from './saga';
 // import messages from './messages';
 import BookList from '../../components/BookList';
 import { loadBooksFound } from './actions';
+import NoSearchResults from '../../components/NoSearchResults';
 
 const ShowResults = ({ bookList }) =>
-  bookList.length > 0 ? (
-    <BookList bookList={bookList} />
-  ) : (
-    <div>No Results Found! </div>
-  );
+  bookList.length > 0 ? <BookList bookList={bookList} /> : <NoSearchResults />;
 
 export function Books(props) {
   useInjectReducer({ key: 'books', reducer });

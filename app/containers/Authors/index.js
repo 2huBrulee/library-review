@@ -24,12 +24,13 @@ import saga from './saga';
 // import messages from './messages';
 import { loadAuthorsFound } from './actions';
 import AuthorList from '../../components/AuthorList';
+import NoSearchResults from '../../components/NoSearchResults';
 
 const ShowResults = ({ authorList }) =>
   authorList.length > 0 ? (
     <AuthorList authorList={authorList} />
   ) : (
-    <div>No Results Found! </div>
+    <NoSearchResults />
   );
 
 export function Authors(props) {

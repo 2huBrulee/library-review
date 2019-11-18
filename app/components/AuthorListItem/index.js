@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable camelcase */
 /**
  *
@@ -67,6 +68,14 @@ const BoldSpan = styled.span`
   font-weight: bold;
 `;
 
+const ClickableSpan = styled.span`
+  color: blue;
+  &:hover {
+    background-color: palevioletred;
+    color: white;
+  }
+`;
+
 function AuthorListItem(props) {
   const {
     full_name,
@@ -99,34 +108,34 @@ function AuthorListItem(props) {
         <DetailLine>
           <BoldSpan>Origin: </BoldSpan>
           <span>{origin}</span>
-          <BoldSpan>   GR: </BoldSpan>
+          <BoldSpan> GR: </BoldSpan>
           <span>{gr_id}</span>
-          </DetailLine>
+        </DetailLine>
 
-          <DetailLine>
-            <BoldSpan>Matilda ID: </BoldSpan>
-            <span>{matilda_id}</span>
-          </DetailLine>
+        <DetailLine>
+          <BoldSpan>Matilda ID: </BoldSpan>
+          <span>{matilda_id}</span>
+        </DetailLine>
         {duplicate ? (
           <DetailLine>
             <BoldSpan>Duplicate: </BoldSpan>
             <span>{duplicate}</span>
-            </DetailLine>
+          </DetailLine>
         ) : null}
         <DetailLine>
           <BoldSpan>Books Written:</BoldSpan>
-        <span>{books.length}</span>
+          <span>{books.length}</span>
         </DetailLine>
       </Details>
       <Books>
         <DetailLine>
           <BoldSpan>Books: </BoldSpan>
-           </DetailLine>
+        </DetailLine>
         {books.map((book, index) =>
           index < maxBooks ? (
-            <DetailLine onClick={goToBook(book)}>{`- ${
-              book.title
-            }`}</DetailLine>
+            <DetailLine onClick={goToBook(book)}>
+              <ClickableSpan>{`- ${book.title}`}</ClickableSpan>
+            </DetailLine>
           ) : null,
         )}
         {books.length > 3 ? (
