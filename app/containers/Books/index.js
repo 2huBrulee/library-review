@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import qs from 'qs';
-import {WaveLoading} from 'styled-spinkit';
+import { WaveLoading } from 'styled-spinkit';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import {
@@ -44,6 +44,8 @@ export function Books(props) {
     if (bookQuery && bookQuery.trim().length > 0)
       dispatchLoadBooksFound(bookQuery);
   }, [bookQuery]);
+
+  if (error) console.log(`fetching error: ${error}`);
 
   return (
     <div>{loading ? <WaveLoading /> : <ShowResults bookList={bookList} />}</div>

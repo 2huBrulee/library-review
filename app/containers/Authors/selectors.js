@@ -27,5 +27,22 @@ const makeAuthorListSelector = () =>
     substate => substate.authorList,
   );
 
+const makeAuthorListLoaderSelector = () =>
+  createSelector(
+    selectAuthorsDomain,
+    substate => substate.loading,
+  );
+
+const makeAuthorListErrorSelector = () =>
+  createSelector(
+    selectAuthorsDomain,
+    substate => substate.error,
+  );
+
 export default makeSelectAuthors;
-export { selectAuthorsDomain, makeAuthorListSelector };
+export {
+  selectAuthorsDomain,
+  makeAuthorListSelector,
+  makeAuthorListLoaderSelector,
+  makeAuthorListErrorSelector,
+};
