@@ -11,21 +11,32 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import qs from 'qs';
+import {WaveLoading} from 'styled-spinkit';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { makeBookListSelector } from './selectors';
+import {
+  makeBookListSelector,
+  makeBookListLoaderSelector,
+  makeBookListErrorSelector,
+} from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
-
 import BookList from '../../components/BookList';
 import { loadBooksFound } from './actions';
+
+const ShowResults = ({ bookList }) =>
+  bookList.length > 0 ? (
+    <BookList bookList={bookList} />
+  ) : (
+    <div>No Results Found! </div>
+  );
 
 export function Books(props) {
   useInjectReducer({ key: 'books', reducer });
   useInjectSaga({ key: 'books', saga });
 
-  const { bookList, dispatchLoadBooksFound, location } = props;
+  const { bookList, dispatchLoadBooksFound, location, loading, error } = props;
   const params = qs.parse(location.search, { ignoreQueryPrefix: true });
   const bookQuery = params.name;
 
@@ -35,20 +46,24 @@ export function Books(props) {
   }, [bookQuery]);
 
   return (
-    <div>
-      <BookList bookList={bookList} key={bookQuery} />
-    </div>
+    <div>{loading ? <WaveLoading /> : <ShowResults bookList={bookList} />}</div>
   );
 }
+
+ShowResults.propTypes = { bookList: PropTypes.array };
 
 Books.propTypes = {
   dispatchLoadBooksFound: PropTypes.func.isRequired,
   bookList: PropTypes.array,
+  loading: PropTypes.bool,
+  error: PropTypes.object,
   location: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   bookList: makeBookListSelector(),
+  loading: makeBookListLoaderSelector(),
+  error: makeBookListErrorSelector(),
 });
 
 function mapDispatchToProps(dispatch) {

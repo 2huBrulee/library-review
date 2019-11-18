@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
-import { loadBooksFoundSuccess } from './actions';
+import { loadBooksFoundSuccess, loadBooksFoundFailed } from './actions';
 import { LOAD_BOOKS_FOUND } from './constants';
 
 const getBooks = bookQuery =>
@@ -17,7 +17,7 @@ export function* getBookSearchResults(action) {
     const { data } = yield call(getBooks, action.bookQuery);
     yield put(loadBooksFoundSuccess(data.results));
   } catch (e) {
-    console.log(e);
+    yield put(loadBooksFoundFailed(e));
   }
 }
 

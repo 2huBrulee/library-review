@@ -27,5 +27,22 @@ const makeBookListSelector = () =>
     substate => substate.bookList,
   );
 
+const makeBookListLoaderSelector = () =>
+  createSelector(
+    selectBooksDomain,
+    substate => substate.loading,
+  );
+
+const makeBookListErrorSelector = () =>
+  createSelector(
+    selectBooksDomain,
+    substate => substate.error,
+  );
+
 export default makeSelectBooks;
-export { selectBooksDomain, makeBookListSelector };
+export {
+  selectBooksDomain,
+  makeBookListSelector,
+  makeBookListLoaderSelector,
+  makeBookListErrorSelector,
+};
