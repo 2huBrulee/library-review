@@ -51,6 +51,7 @@ const ClickableSpan = styled.span`
   &:hover {
     background-color: palevioletred;
     color: white;
+    cursor: pointer;
   }
 `;
 

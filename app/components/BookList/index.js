@@ -19,8 +19,8 @@ function BookList(props) {
     <div>
       {bookList.length > 0
         ? bookList.map((book, index) => (
-          <BookListItem first={index === 0} {...book} key={book.gr_id} />
-        ))
+            <BookListItem first={index === 0} {...book} key={book.gr_id} />
+          ))
         : null}
     </div>
   );

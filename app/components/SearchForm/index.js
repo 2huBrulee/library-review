@@ -4,12 +4,13 @@
  *
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
+import qs from 'qs';
 import messages from './messages';
 
 const Container = styled.div`
@@ -35,10 +36,16 @@ const SearchQueryInput = styled.input`
   border-radius: 5px;
   border-color: gray;
   border-width: thin;
+  border-style: solid;
   padding: 10px 15px;
   margin: 5px 15px 5px 5px;
   color: gray;
   font-size: 14px;
+  ${({ isHelperVisible }) =>
+    isHelperVisible &&
+    `border-color: red;
+     border-width:2px;
+    `}
 `;
 
 const Select = styled.select`
@@ -80,14 +87,40 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
+const ValidateHelper = styled.div`
+  color: red;
+  font-size: 8px;
+  margin: 0 15px 0 5px;
+  padding: 0px 5px;
+`;
+
+const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 function SearchForm(props) {
-  const { history } = props;
+  const { history, location } = props;
 
   const [query, setQuery] = useState('');
   const [origin, setOrigin] = useState('ALL');
+  const [isHelperVisible, setHelperVisibility] = useState(false);
 
-  const handleQueryChange = e => setQuery(e.target.value);
-  const handleOriginChange = e => setOrigin(e.target.value);
+  const handleQueryChange = e => {
+    setQuery(e.target.value);
+    setHelperVisibility(validate(e.target.value));
+  };
+  const handleOriginChange = e => {
+    setOrigin(e.target.value);
+  };
+
+  const params = qs.parse(location.search, { ignoreQueryPrefix: true });
+
+  useEffect(() => {
+    setQuery(params.name || params.full_name || '');
+  }, [location]);
+
+  const validate = fieldContent => fieldContent.length < 1;
 
   const searchBooks = () => {
     const nameParams = encodeURI(query);
@@ -122,11 +155,17 @@ function SearchForm(props) {
       <SearchLabel>
         <FormattedMessage {...messages.searchLabel} />
       </SearchLabel>
-      <SearchQueryInput
-        onChange={handleQueryChange}
-        value={query}
-        placeholder="Enter Author's full name or Book Title"
-      />
+      <InputWrapper>
+        <SearchQueryInput
+          isHelperVisible={isHelperVisible}
+          onChange={handleQueryChange}
+          value={query}
+          placeholder="Enter Author's full name or Book Title"
+        />
+        {isHelperVisible ? (
+          <ValidateHelper>Field cannot be empty</ValidateHelper>
+        ) : null}
+      </InputWrapper>
       <Select value={origin} onChange={handleOriginChange}>
         <option defaultValue value="ALL">
           ALL
