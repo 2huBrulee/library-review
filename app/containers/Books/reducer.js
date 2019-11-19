@@ -45,6 +45,9 @@ const booksReducer = (state = initialState, action) =>
       case SET_SELECTED_BOOK:
         console.log('selecting ', action.book);
         draft.baseBookSelected = action.book;
+        draft.bookList = draft.bookList.filter(
+          book => book.gr_id !== action.book.gr_id,
+        );
         break;
       case SET_DUPLICATE:
         console.log('duplicates: ', [action.book, ...draft.duplicatedBooks]);
