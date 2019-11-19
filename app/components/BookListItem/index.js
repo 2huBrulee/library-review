@@ -55,6 +55,47 @@ const ClickableSpan = styled.span`
   }
 `;
 
+const Duplicates = styled.div`
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  padding: 0 20x 0 15px;
+`;
+
+const DeleteButton = styled.button`
+  width: 16px;
+  margin: 5px 15px 5px 5px;
+  background: rgb(255, 128, 0);
+  border-width: 0;
+  border-radius: 5px;
+  align-items: center;
+  height: 20px;
+  padding: 0;
+  justify-content: center;
+  display: inline-block;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+`;
+
+const Button = styled.button`
+  width: 120px;
+  margin: 5px 15px 5px 5px;
+  background: rgb(255, 128, 0);
+  border-width: 0;
+  border-radius: 5px;
+  align-items: center;
+  height: 25px;
+  padding: 0 15px;
+  justify-content: center;
+  display: flex;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+  ${({ selected }) => selected && `height: 40px;`}
+  ${({ searchingForDuplicates }) => searchingForDuplicates && `height: 40px;`}
+`;
+
 function BookListItem(props) {
   const {
     title,
@@ -68,7 +109,19 @@ function BookListItem(props) {
     author_full_name,
     history,
     // hidden,
+    selectBaseBook,
+    book,
+    selected,
+    clearSelection,
+    selectDuplicate = f => f,
+    searchingForDuplicates = f => f,
+    duplicatedBooks,
+    clearDuplicate,
   } = props;
+
+  const setSelected = () => selectBaseBook(book);
+  const setAsDuplicate = () => selectDuplicate(book);
+  const deleteDuplicate = duplicateBook => () => clearDuplicate(duplicateBook);
 
   const goToAuthor = author => () =>
     history.push({
@@ -114,6 +167,28 @@ function BookListItem(props) {
           <span>{text_variety}</span>
         </DetailLine>
       </Details>
+
+      <Duplicates>
+        {selected ? (
+          <Button selected onClick={clearSelection}>
+            Clear Selection
+          </Button>
+        ) : !selected && searchingForDuplicates ? (
+          <Button searchingForDuplicates onClick={setAsDuplicate}>
+            Mark as Duplicate
+          </Button>
+        ) : (
+          <Button onClick={setSelected}>Select</Button>
+        )}
+        {duplicatedBooks && duplicatedBooks.length > 0
+          ? duplicatedBooks.map(duplicatedBook => (
+              <DetailLine >
+                {duplicatedBook.title}
+                <DeleteButton onClick={deleteDuplicate(duplicatedBook)}>X</DeleteButton>
+              </DetailLine>
+            ))
+          : null}
+      </Duplicates>
     </Container>
   );
 }

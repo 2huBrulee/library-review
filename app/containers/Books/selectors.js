@@ -39,10 +39,24 @@ const makeBookListErrorSelector = () =>
     substate => substate.error,
   );
 
+const makeBaseBookSelector = () =>
+  createSelector(
+    selectBooksDomain,
+    substate => substate.baseBookSelected,
+  );
+
+const makeDuplicatedBooksSelector = () =>
+  createSelector(
+    selectBooksDomain,
+    substate => substate.duplicatedBooks,
+  );
+
 export default makeSelectBooks;
 export {
   selectBooksDomain,
   makeBookListSelector,
   makeBookListLoaderSelector,
   makeBookListErrorSelector,
+  makeBaseBookSelector,
+  makeDuplicatedBooksSelector,
 };

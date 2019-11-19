@@ -18,22 +18,57 @@ import {
   makeBookListSelector,
   makeBookListLoaderSelector,
   makeBookListErrorSelector,
+  makeBaseBookSelector,
+  makeDuplicatedBooksSelector,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
 import BookList from '../../components/BookList';
-import { loadBooksFound } from './actions';
+import {
+  loadBooksFound,
+  setSelectedBook,
+  setDuplicate,
+  clearSelected,
+  clearDuplicate,
+} from './actions';
 import NoSearchResults from '../../components/NoSearchResults';
+import SelectedItem from '../../components/SelectedItem';
 
-const ShowResults = ({ bookList }) =>
-  bookList.length > 0 ? <BookList bookList={bookList} /> : <NoSearchResults />;
+const ShowResults = ({
+  bookList,
+  dispatchSelectBaseBook,
+  dispatchSelectDuplicate,
+  searchingForDuplicates,
+}) =>
+  bookList.length > 0 ? (
+    <BookList
+      searchingForDuplicates={searchingForDuplicates}
+      bookList={bookList}
+      selectBaseBook={dispatchSelectBaseBook}
+      selectDuplicate={dispatchSelectDuplicate}
+    />
+  ) : (
+    <NoSearchResults />
+  );
 
 export function Books(props) {
   useInjectReducer({ key: 'books', reducer });
   useInjectSaga({ key: 'books', saga });
 
-  const { bookList, dispatchLoadBooksFound, location, loading, error } = props;
+  const {
+    bookList,
+    dispatchLoadBooksFound,
+    dispatchSelectBaseBook,
+    dispatchClearSelection,
+    dispatchClearDuplicate,
+    dispatchSelectDuplicate,
+    location,
+    loading,
+    error,
+    baseBookSelected,
+    duplicatedBooks,
+  } = props;
   const params = qs.parse(location.search, { ignoreQueryPrefix: true });
   const bookQuery = params.name;
 
@@ -45,29 +80,66 @@ export function Books(props) {
   if (error) console.log(`fetching error: ${error}`);
 
   return (
-    <div>{loading ? <WaveLoading /> : <ShowResults bookList={bookList} />}</div>
+    <div>
+      {baseBookSelected.gr_id ? (
+        <SelectedItem
+          baseBookSelected={baseBookSelected}
+          duplicatedBooks={duplicatedBooks}
+          clearSelection={dispatchClearSelection}
+          clearDuplicate={dispatchClearDuplicate}
+          book={baseBookSelected}
+        />
+      ) : null}
+      {loading ? (
+        <WaveLoading />
+      ) : (
+        <ShowResults
+          searchingForDuplicates={!!baseBookSelected.gr_id}
+          dispatchSelectBaseBook={dispatchSelectBaseBook}
+          dispatchSelectDuplicate={dispatchSelectDuplicate}
+          bookList={bookList}
+        />
+      )}
+    </div>
   );
 }
 
-ShowResults.propTypes = { bookList: PropTypes.array };
+ShowResults.propTypes = {
+  bookList: PropTypes.array,
+  dispatchSelectBaseBook: PropTypes.func.isRequired,
+  dispatchSelectDuplicate: PropTypes.func.isRequired,
+  searchingForDuplicates: PropTypes.bool,
+};
 
 Books.propTypes = {
   dispatchLoadBooksFound: PropTypes.func.isRequired,
+  dispatchSelectBaseBook: PropTypes.func.isRequired,
+  dispatchSelectDuplicate: PropTypes.func.isRequired,
+  dispatchClearSelection: PropTypes.func.isRequired,
+  dispatchClearDuplicate: PropTypes.func.isRequired,
   bookList: PropTypes.array,
   loading: PropTypes.bool,
   error: PropTypes.object,
   location: PropTypes.object,
+  baseBookSelected: PropTypes.object,
+  duplicatedBooks: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
   bookList: makeBookListSelector(),
   loading: makeBookListLoaderSelector(),
   error: makeBookListErrorSelector(),
+  baseBookSelected: makeBaseBookSelector(),
+  duplicatedBooks: makeDuplicatedBooksSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     dispatchLoadBooksFound: bookQuery => dispatch(loadBooksFound(bookQuery)),
+    dispatchSelectBaseBook: book => dispatch(setSelectedBook(book)),
+    dispatchSelectDuplicate: book => dispatch(setDuplicate(book)),
+    dispatchClearSelection: () => dispatch(clearSelected()),
+    dispatchClearDuplicate: book => dispatch(clearDuplicate(book)),
   };
 }
 

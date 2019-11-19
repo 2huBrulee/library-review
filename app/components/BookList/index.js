@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /**
  *
  * BookList
@@ -13,13 +14,27 @@ import BookListItem from '../BookListItem';
 // import messages from './messages';
 
 function BookList(props) {
-  const { bookList } = props;
+  const {
+    bookList,
+    selectBaseBook,
+    searchingForDuplicates,
+    selectDuplicate,
+    clearDuplicate,
+  } = props;
 
   return (
     <div>
       {bookList.length > 0
         ? bookList.map((book, index) => (
-            <BookListItem first={index === 0} {...book} key={book.gr_id} />
+            <BookListItem
+              searchingForDuplicates={searchingForDuplicates}
+              selectDuplicate={selectDuplicate}
+              selectBaseBook={selectBaseBook}
+              first={index === 0}
+              {...book}
+              book={book}
+              key={book.gr_id}
+            />
           ))
         : null}
     </div>

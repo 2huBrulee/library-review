@@ -11,11 +11,10 @@ import { withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 import qs from 'qs';
+import Sticky from 'react-sticky-el';
 import messages from './messages';
 
 const Container = styled.div`
-  position: sticky;
-  top: 0;
   display: flex;
   background-color: #fafafa;
   flex-direction: row;
@@ -151,33 +150,35 @@ function SearchForm(props) {
   };
 
   return (
-    <Container>
-      <SearchLabel>
-        <FormattedMessage {...messages.searchLabel} />
-      </SearchLabel>
-      <InputWrapper>
-        <SearchQueryInput
-          isHelperVisible={isHelperVisible}
-          onChange={handleQueryChange}
-          value={query}
-          placeholder="Enter Author's full name or Book Title"
-        />
-        {isHelperVisible ? (
-          <ValidateHelper>Field cannot be empty</ValidateHelper>
-        ) : null}
-      </InputWrapper>
-      <Select value={origin} onChange={handleOriginChange}>
-        <option defaultValue value="ALL">
-          ALL
-        </option>
-        <option value="BASE">BASE</option>
-        <option value="AUT">AUT</option>
-        <option value="LEXILE">LEXILE</option>
-        <option value="MANU">MANU</option>
-      </Select>
-      <Button onClick={searchAuthors}>Search Authors</Button>
-      <Button onClick={searchBooks}>Search Books</Button>
-    </Container>
+    <Sticky>
+      <Container>
+        <SearchLabel>
+          <FormattedMessage {...messages.searchLabel} />
+        </SearchLabel>
+        <InputWrapper>
+          <SearchQueryInput
+            isHelperVisible={isHelperVisible}
+            onChange={handleQueryChange}
+            value={query}
+            placeholder="Enter Author's full name or Book Title"
+          />
+          {isHelperVisible ? (
+            <ValidateHelper>Field cannot be empty</ValidateHelper>
+          ) : null}
+        </InputWrapper>
+        <Select value={origin} onChange={handleOriginChange}>
+          <option defaultValue value="ALL">
+            ALL
+          </option>
+          <option value="BASE">BASE</option>
+          <option value="AUT">AUT</option>
+          <option value="LEXILE">LEXILE</option>
+          <option value="MANU">MANU</option>
+        </Select>
+        <Button onClick={searchAuthors}>Search Authors</Button>
+        <Button onClick={searchBooks}>Search Books</Button>
+      </Container>
+    </Sticky>
   );
 }
 
