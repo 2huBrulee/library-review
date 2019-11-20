@@ -25,6 +25,7 @@ import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
 import BookList from '../../components/BookList';
+import BookHandling from '../../components/BookHandling';
 import {
   loadBooksFound,
   setSelectedBook,
@@ -40,6 +41,8 @@ const ShowResults = ({
   dispatchSelectBaseBook,
   dispatchSelectDuplicate,
   searchingForDuplicates,
+  duplicatedBooks,
+  clearDuplicate,
 }) =>
   bookList.length > 0 ? (
     <BookList
@@ -47,6 +50,8 @@ const ShowResults = ({
       bookList={bookList}
       selectBaseBook={dispatchSelectBaseBook}
       selectDuplicate={dispatchSelectDuplicate}
+      clearDuplicate={clearDuplicate}
+      duplicatedBooks={duplicatedBooks}
     />
   ) : (
     <NoSearchResults />
@@ -90,6 +95,10 @@ export function Books(props) {
           book={baseBookSelected}
         />
       ) : null}
+      {duplicatedBooks && duplicatedBooks.length > 0 ? (
+        <BookHandling selected={!!baseBookSelected.gr_id} />
+      ) : null}
+
       {loading ? (
         <WaveLoading />
       ) : (
@@ -97,6 +106,8 @@ export function Books(props) {
           searchingForDuplicates={!!baseBookSelected.gr_id}
           dispatchSelectBaseBook={dispatchSelectBaseBook}
           dispatchSelectDuplicate={dispatchSelectDuplicate}
+          clearDuplicate={dispatchClearDuplicate}
+          duplicatedBooks={duplicatedBooks}
           bookList={bookList}
         />
       )}

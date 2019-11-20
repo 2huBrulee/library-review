@@ -20,6 +20,7 @@ function BookList(props) {
     searchingForDuplicates,
     selectDuplicate,
     clearDuplicate,
+    duplicatedBooks,
   } = props;
 
   return (
@@ -27,13 +28,20 @@ function BookList(props) {
       {bookList.length > 0
         ? bookList.map((book, index) => (
             <BookListItem
+              checked={
+                !!duplicatedBooks.find(
+                  duplicatedBook => book.text_id === duplicatedBook.text_id,
+                )
+              }
+              duplicatedBooks={duplicatedBooks}
+              clearDuplicate={clearDuplicate}
               searchingForDuplicates={searchingForDuplicates}
               selectDuplicate={selectDuplicate}
               selectBaseBook={selectBaseBook}
               first={index === 0}
               {...book}
               book={book}
-              key={book.gr_id}
+              key={book.text_id}
             />
           ))
         : null}

@@ -150,7 +150,10 @@ function SearchForm(props) {
   };
 
   return (
-    <Sticky>
+    <Sticky stickyStyle={{
+      backgroundColor: '#fafafa',
+      zIndex: 99999,
+    }}>
       <Container>
         <SearchLabel>
           <FormattedMessage {...messages.searchLabel} />

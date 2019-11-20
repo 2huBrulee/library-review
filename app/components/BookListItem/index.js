@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/prop-types */
 /* eslint-disable camelcase */
 /**
@@ -6,7 +8,7 @@
  *
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 // import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 
@@ -14,11 +16,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 // import messages from './messages';
+import Checkbox from 'rc-checkbox';
+import 'rc-checkbox/assets/index.css';
 
 const Container = styled.div`
   max-height: 170px;
-  margin: 10px 20px;
-  padding: 10px 25px;
+  max-width: 800px;
+  align-items: stretch;
+  margin: 10px 10px;
+  padding: 10px 5px;
   border-width: 0px;
   border-top-color: lightgray;
   border-top-style: solid;
@@ -33,13 +39,21 @@ const BookImg = styled.img`
 
 const Details = styled.div`
   flex: 1;
-  display: flex;
+  min-width: 460px;
+  max-width: 460px;
+  display: block;
   padding: 0 0 0 15px;
   flex-direction: column;
 `;
 
 const DetailLine = styled.div`
   margin: 5px;
+  height: 30px;
+  overflow: hidden;
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+  ${({ maxWidth }) => maxWidth && `width: ${maxWidth}px`}
 `;
 
 const BoldSpan = styled.span`
@@ -57,9 +71,13 @@ const ClickableSpan = styled.span`
 
 const Duplicates = styled.div`
   width: 160px;
+  height: inherit;
   display: flex;
   flex-direction: column;
   padding: 0 20x 0 15px;
+  right: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 `;
 
 const DeleteButton = styled.button`
@@ -92,8 +110,17 @@ const Button = styled.button`
   font-size: 16px;
   color: white;
   cursor: pointer;
-  ${({ selected }) => selected && `height: 40px;`}
+  ${({ selected }) => selected && `height: 25px;`}
   ${({ searchingForDuplicates }) => searchingForDuplicates && `height: 40px;`}
+`;
+
+const StyledCheckbox = styled(Checkbox)`
+  margin: 0 10px 0 0;
+`;
+
+const DuplicateBook = styled.div`
+  display: flex;
+  flex-direction: row;
 `;
 
 function BookListItem(props) {
@@ -117,10 +144,15 @@ function BookListItem(props) {
     searchingForDuplicates = f => f,
     duplicatedBooks,
     clearDuplicate,
+    checked,
   } = props;
 
+  const changeCheck = () => {
+    console.log(book);
+    checked ? clearDuplicate(book) : selectDuplicate(book);
+  };
+
   const setSelected = () => selectBaseBook(book);
-  const setAsDuplicate = () => selectDuplicate(book);
   const deleteDuplicate = duplicateBook => () => clearDuplicate(duplicateBook);
 
   const goToAuthor = author => () =>
@@ -131,6 +163,9 @@ function BookListItem(props) {
 
   return (
     <Container first={props.first}>
+      {!selected ? (
+        <StyledCheckbox checked={checked} onChange={changeCheck} />
+      ) : null}
       <BookImg
         src={
           cover_url ||
@@ -171,21 +206,22 @@ function BookListItem(props) {
       <Duplicates>
         {selected ? (
           <Button selected onClick={clearSelection}>
-            Clear Selection
+            Clear
           </Button>
-        ) : !selected && searchingForDuplicates ? (
-          <Button searchingForDuplicates onClick={setAsDuplicate}>
-            Mark as Duplicate
-          </Button>
-        ) : (
+        ) : (!selected && searchingForDuplicates) ||
+          (duplicatedBooks && duplicatedBooks.length > 0) ? null : (
           <Button onClick={setSelected}>Select</Button>
         )}
-        {duplicatedBooks && duplicatedBooks.length > 0
+        {duplicatedBooks && duplicatedBooks.length > 0 && selected
           ? duplicatedBooks.map(duplicatedBook => (
-              <DetailLine >
-                {duplicatedBook.title}
-                <DeleteButton onClick={deleteDuplicate(duplicatedBook)}>X</DeleteButton>
-              </DetailLine>
+              <DuplicateBook>
+                <DetailLine maxWidth={100} title={duplicatedBook.title}>
+                  {duplicatedBook.title}
+                </DetailLine>
+                <DeleteButton onClick={deleteDuplicate(duplicatedBook)}>
+                  X
+                </DeleteButton>
+              </DuplicateBook>
             ))
           : null}
       </Duplicates>

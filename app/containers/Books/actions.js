@@ -12,6 +12,8 @@ import {
   SET_SELECTED_BOOK,
   CLEAR_SELECTED,
   CLEAR_DUPLICATE,
+  BATCH_HIDE,
+  BATCH_SET_REFERENCE,
 } from './constants';
 
 export const loadBooksFound = bookQuery => ({
@@ -46,4 +48,15 @@ export const clearSelected = () => ({
 export const clearDuplicate = book => ({
   type: CLEAR_DUPLICATE,
   book,
+});
+
+export const batchHide = booksToHide => ({
+  type: BATCH_HIDE,
+  booksToHide,
+});
+
+export const batchSetReference = (duplicates, referenceBook) => ({
+  type: BATCH_SET_REFERENCE,
+  duplicates,
+  referenceBook,
 });

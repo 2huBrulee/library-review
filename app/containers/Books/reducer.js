@@ -12,6 +12,8 @@ import {
   SET_DUPLICATE,
   CLEAR_SELECTED,
   CLEAR_DUPLICATE,
+  BATCH_HIDE,
+  BATCH_SET_REFERENCE,
 } from './constants';
 
 export const initialState = {
@@ -52,9 +54,6 @@ const booksReducer = (state = initialState, action) =>
       case SET_DUPLICATE:
         console.log('duplicates: ', [action.book, ...draft.duplicatedBooks]);
         draft.duplicatedBooks = [action.book, ...draft.duplicatedBooks];
-        draft.bookList = draft.bookList.filter(
-          book => book.gr_id !== action.book.gr_id,
-        );
         break;
       case CLEAR_SELECTED:
         console.log('clearing selection');
@@ -71,7 +70,12 @@ const booksReducer = (state = initialState, action) =>
         draft.duplicatedBooks = draft.duplicatedBooks.filter(
           book => book.gr_id !== action.book.gr_id,
         );
-        draft.bookList = [action.book, ...draft.bookList];
+        break;
+      case BATCH_HIDE:
+        console.log('hiding');
+        break;
+      case BATCH_SET_REFERENCE:
+        console.log('marking duplicates');
         break;
     }
   });

@@ -39,6 +39,7 @@ function SelectedItem(props) {
         backgroundColor: '#fafafa',
         margin: '55px 0 0 0',
         boxShadow: '0 4px 2px -2px lightgray',
+        zIndex: 99999,
       }}
     >
       <Wrapper>
