@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest, all } from 'redux-saga/effects';
 import axios from 'axios';
 import {
   loadBooksFoundSuccess,
@@ -55,16 +55,22 @@ export function* getBookSearchResults(action) {
 
 export function* getBatchBookHide(action) {
   try {
-    const { data } = yield call(hideBooks, action.booksToHide);
-    console.log(data);
+    const x = yield call(hideBooks, action.booksToHide);
   } catch (e) {
     console.log(e);
   }
 }
 
+export function* loadBooksSaga() {
+  yield takeLatest(LOAD_BOOKS_FOUND, getBookSearchResults);
+}
+
+export function* hideBooksSaga() {
+  yield takeLatest(BATCH_HIDE, getBatchBookHide);
+}
+
 // Individual exports for testing
 export default function* booksSaga() {
   // See example in containers/HomePage/saga.js
-  yield takeLatest(LOAD_BOOKS_FOUND, getBookSearchResults);
-  yield takeLatest(BATCH_HIDE, getBatchBookHide);
+  yield all([loadBooksSaga(), hideBooksSaga()]);
 }

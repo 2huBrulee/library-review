@@ -24,6 +24,13 @@ const Wrapper = styled.div`
   border-color: rgb(255, 128, 0);
 `;
 
+const stickyStyle = styled.style`
+  background-color: #fafafa;
+  margin: 55px 0 0 0;
+  box-shadow: 0 4px 2px -2px lightgray;
+  z-index: 99999;
+`;
+
 function SelectedItem(props) {
   const {
     book,
@@ -33,15 +40,7 @@ function SelectedItem(props) {
     duplicatedBooks,
   } = props;
   return (
-    <Sticky
-      topOffset={-55}
-      stickyStyle={{
-        backgroundColor: '#fafafa',
-        margin: '55px 0 0 0',
-        boxShadow: '0 4px 2px -2px lightgray',
-        zIndex: 99999,
-      }}
-    >
+    <Sticky topOffset={-55} stickyStyle={stickyStyle}>
       <Wrapper>
         <Reference>Reference</Reference>
         <BookListItem

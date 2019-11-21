@@ -4,7 +4,7 @@
  *
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import { FormattedMessage } from 'react-intl';
@@ -32,9 +32,11 @@ import {
   setDuplicate,
   clearSelected,
   clearDuplicate,
+  batchHide,
 } from './actions';
 import NoSearchResults from '../../components/NoSearchResults';
 import SelectedItem from '../../components/SelectedItem';
+import Modal from '../../components/Modal';
 
 const ShowResults = ({
   bookList,
@@ -68,6 +70,7 @@ export function Books(props) {
     dispatchClearSelection,
     dispatchClearDuplicate,
     dispatchSelectDuplicate,
+    dispatchBatchHide,
     location,
     loading,
     error,
@@ -84,8 +87,30 @@ export function Books(props) {
 
   if (error) console.log(`fetching error: ${error}`);
 
+  const batchHideAction = () => {
+    showModal();
+    dispatchBatchHide(duplicatedBooks);
+  };
+
+  const [isModalVisible, setModalVisibility] = useState(false);
+
+  const hideModal = () => setModalVisibility(false);
+  const showModal = () => setModalVisibility(true);
+
   return (
     <div>
+      <Modal visible={isModalVisible} hide={hideModal}>
+        <div>You have hidden the following book(s):</div>
+        {duplicatedBooks &&
+          duplicatedBooks.map(duplicatedBook => (
+            <div key={`dupli-${duplicatedBook.text_id}`}>
+              <strong>Title: </strong>
+              {duplicatedBook.title}
+              <strong> Matilda ID: </strong>
+              {duplicatedBook.text_id}
+            </div>
+          ))}
+      </Modal>
       {baseBookSelected.gr_id ? (
         <SelectedItem
           baseBookSelected={baseBookSelected}
@@ -96,7 +121,10 @@ export function Books(props) {
         />
       ) : null}
       {duplicatedBooks && duplicatedBooks.length > 0 ? (
-        <BookHandling selected={!!baseBookSelected.gr_id} />
+        <BookHandling
+          batchHide={batchHideAction}
+          selected={!!baseBookSelected.gr_id}
+        />
       ) : null}
 
       {loading ? (
@@ -120,6 +148,8 @@ ShowResults.propTypes = {
   dispatchSelectBaseBook: PropTypes.func.isRequired,
   dispatchSelectDuplicate: PropTypes.func.isRequired,
   searchingForDuplicates: PropTypes.bool,
+  duplicatedBooks: PropTypes.array,
+  clearDuplicate: PropTypes.func.isRequired,
 };
 
 Books.propTypes = {
@@ -128,6 +158,7 @@ Books.propTypes = {
   dispatchSelectDuplicate: PropTypes.func.isRequired,
   dispatchClearSelection: PropTypes.func.isRequired,
   dispatchClearDuplicate: PropTypes.func.isRequired,
+  dispatchBatchHide: PropTypes.func.isRequired,
   bookList: PropTypes.array,
   loading: PropTypes.bool,
   error: PropTypes.object,
@@ -151,6 +182,7 @@ function mapDispatchToProps(dispatch) {
     dispatchSelectDuplicate: book => dispatch(setDuplicate(book)),
     dispatchClearSelection: () => dispatch(clearSelected()),
     dispatchClearDuplicate: book => dispatch(clearDuplicate(book)),
+    dispatchBatchHide: booksToHide => dispatch(batchHide(booksToHide)),
   };
 }
 

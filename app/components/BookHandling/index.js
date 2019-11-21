@@ -35,22 +35,20 @@ const Button = styled.button`
 `;
 
 function BookHandling(props) {
-  const {
-    selected=false,
-  } = props;
+  const { selected = false, batchHide = f => f } = props;
 
   return (
     <Sticky
-      topOffset={selected?-275:-55}
+      topOffset={selected ? -275 : -55}
       stickyStyle={{
         backgroundColor: '#fafafa',
-        margin: `${selected?275:55}px 0 0 0`,
+        margin: `${selected ? 275 : 55}px 0 0 0`,
         boxShadow: '0 4px 2px -2px lightgray',
         zIndex: 99999,
       }}
     >
       <Wrapper>
-        <Button>Hide</Button>
+        <Button onClick={batchHide}>Hide</Button>
         <Button>Link</Button>
       </Wrapper>
     </Sticky>
