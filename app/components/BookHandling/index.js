@@ -49,7 +49,7 @@ function BookHandling(props) {
     >
       <Wrapper>
         <Button onClick={batchHide}>Hide</Button>
-        <Button>Link</Button>
+        {selected && <Button>Link</Button>}
       </Wrapper>
     </Sticky>
   );

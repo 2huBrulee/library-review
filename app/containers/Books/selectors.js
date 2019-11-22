@@ -24,7 +24,10 @@ const makeSelectBooks = () =>
 const makeBookListSelector = () =>
   createSelector(
     selectBooksDomain,
-    substate => substate.bookList,
+    substate =>
+      substate.bookList.filter(
+        book => book.text_id !== substate.baseBookSelected.text_id,
+      ),
   );
 
 const makeBookListLoaderSelector = () =>

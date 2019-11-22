@@ -17,9 +17,9 @@ const getBooks = bookQuery =>
     },
   });
 
-const hideBook = book =>
+const hideBooks = booksToHide =>
   axios.patch(
-    `https://matilda.whooosreading.org/api/v1/books/text_id/${book.text_id}`,
+    `https://matilda.whooosreading.org/api/v1/books/text_id`,
     {
       book: {
         hidden: true,
@@ -27,9 +27,20 @@ const hideBook = book =>
       embed:
         'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned',
     },
+    {
+      params: {
+        keys: booksToHide.reduce(
+          (booksString, bookToHide) =>
+            booksString === ''
+              ? bookToHide.text_id
+              : booksString + bookToHide.text_id,
+          '',
+        ),
+      },
+    },
   );
 
-const hideBooks = booksToHide => booksToHide.map(book => hideBook(book));
+const hideBook = booksToHide => booksToHide.map(book => hideBook(book));
 
 const setReferenceBook = (book, referenceBook) =>
   axios.patch(
@@ -55,7 +66,7 @@ export function* getBookSearchResults(action) {
 
 export function* getBatchBookHide(action) {
   try {
-    const x = yield call(hideBooks, action.booksToHide);
+    yield call(hideBooks, action.booksToHide);
   } catch (e) {
     console.log(e);
   }

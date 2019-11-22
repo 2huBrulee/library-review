@@ -10,5 +10,5 @@ import React from 'react';
 // import messages from './messages';
 
 export default function HomePage() {
-  return <div>---</div>;
+  return <div />;
 }

@@ -16,8 +16,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 // import messages from './messages';
-import Checkbox from 'rc-checkbox';
-import 'rc-checkbox/assets/index.css';
+import Checkbox from 'react-simple-checkbox';
 
 const Container = styled.div`
   max-height: 170px;
@@ -34,13 +33,13 @@ const Container = styled.div`
 `;
 
 const BookImg = styled.img`
-  height: 100%;
+  max-height: inherit;
+  max-width: 120px;
 `;
 
 const Details = styled.div`
   flex: 1;
-  min-width: 460px;
-  max-width: 460px;
+  max-width: 440px;
   display: block;
   padding: 0 0 0 15px;
   flex-direction: column;
@@ -70,11 +69,10 @@ const ClickableSpan = styled.span`
 `;
 
 const Duplicates = styled.div`
-  width: 160px;
   height: inherit;
   display: flex;
   flex-direction: column;
-  padding: 0 20x 0 15px;
+  padding: 0 10px 0 15px;
   right: 0;
   overflow-y: auto;
   overflow-x: hidden;
@@ -141,16 +139,14 @@ function BookListItem(props) {
     selected,
     clearSelection,
     selectDuplicate = f => f,
-    searchingForDuplicates = f => f,
     duplicatedBooks,
     clearDuplicate,
     checked,
   } = props;
 
-  const changeCheck = () => {
-    console.log(book);
+  const changeCheck = () => 
     checked ? clearDuplicate(book) : selectDuplicate(book);
-  };
+
 
   const setSelected = () => selectBaseBook(book);
   const deleteDuplicate = duplicateBook => () => clearDuplicate(duplicateBook);
@@ -164,7 +160,16 @@ function BookListItem(props) {
   return (
     <Container first={props.first}>
       {!selected ? (
-        <StyledCheckbox checked={checked} onChange={changeCheck} />
+        <StyledCheckbox
+          color={'#FF8000'}
+          size={3}
+          tickSize={3}
+          borderThickness={1}
+          checked={checked}
+          backAnimationDuration={50}
+          tickAnimationDuration={300}
+          onChange={changeCheck}
+        />
       ) : null}
       <BookImg
         src={
@@ -208,8 +213,7 @@ function BookListItem(props) {
           <Button selected onClick={clearSelection}>
             Clear
           </Button>
-        ) : (!selected && searchingForDuplicates) ||
-          (duplicatedBooks && duplicatedBooks.length > 0) ? null : (
+        ) : (
           <Button onClick={setSelected}>Select</Button>
         )}
         {duplicatedBooks && duplicatedBooks.length > 0 && selected
