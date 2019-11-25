@@ -14,6 +14,8 @@ import {
   CLEAR_DUPLICATE,
   BATCH_HIDE,
   BATCH_SET_REFERENCE,
+  SET_REFERENCE_FAILED,
+  SET_REFERENCE_SUCCESS,
 } from './constants';
 
 export const loadBooksFound = bookQuery => ({
@@ -59,4 +61,14 @@ export const batchSetReference = (duplicates, referenceBook) => ({
   type: BATCH_SET_REFERENCE,
   duplicates,
   referenceBook,
+});
+
+export const setReferenceSucces = booksChanged => ({
+  type: SET_REFERENCE_SUCCESS,
+  booksChanged,
+});
+
+export const setReferenceFailed = error => ({
+  type: SET_REFERENCE_FAILED,
+  error,
 });

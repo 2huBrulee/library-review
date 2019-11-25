@@ -144,9 +144,8 @@ function BookListItem(props) {
     checked,
   } = props;
 
-  const changeCheck = () => 
+  const changeCheck = () =>
     checked ? clearDuplicate(book) : selectDuplicate(book);
-
 
   const setSelected = () => selectBaseBook(book);
   const deleteDuplicate = duplicateBook => () => clearDuplicate(duplicateBook);

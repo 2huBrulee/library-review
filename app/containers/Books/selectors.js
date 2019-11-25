@@ -54,6 +54,12 @@ const makeDuplicatedBooksSelector = () =>
     substate => substate.duplicatedBooks,
   );
 
+const makePatchSuccessBooksSelector = () =>
+  createSelector(
+    selectBooksDomain,
+    substate => substate.bookPatchSuccess,
+  );
+
 export default makeSelectBooks;
 export {
   selectBooksDomain,
@@ -62,4 +68,5 @@ export {
   makeBookListErrorSelector,
   makeBaseBookSelector,
   makeDuplicatedBooksSelector,
+  makePatchSuccessBooksSelector,
 };

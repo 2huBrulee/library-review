@@ -20,6 +20,7 @@ import {
   makeBookListErrorSelector,
   makeBaseBookSelector,
   makeDuplicatedBooksSelector,
+  makePatchSuccessBooksSelector,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -33,6 +34,7 @@ import {
   clearSelected,
   clearDuplicate,
   batchHide,
+  batchSetReference,
 } from './actions';
 import NoSearchResults from '../../components/NoSearchResults';
 import SelectedItem from '../../components/SelectedItem';
@@ -76,6 +78,7 @@ export function Books(props) {
     error,
     baseBookSelected,
     duplicatedBooks,
+    patchSuccessBooks,
   } = props;
   const params = qs.parse(location.search, { ignoreQueryPrefix: true });
   const bookQuery = params.name;
@@ -100,7 +103,7 @@ export function Books(props) {
   return (
     <div>
       <Modal visible={isModalVisible} hide={hideModal}>
-        <div>You have hidden the following book(s):</div>
+        <div>You have modified the following book(s):</div>
         {duplicatedBooks &&
           duplicatedBooks.map(duplicatedBook => (
             <div key={`dupli-${duplicatedBook.text_id}`}>
@@ -173,6 +176,7 @@ const mapStateToProps = createStructuredSelector({
   error: makeBookListErrorSelector(),
   baseBookSelected: makeBaseBookSelector(),
   duplicatedBooks: makeDuplicatedBooksSelector(),
+  patchSuccessBooks: makePatchSuccessBooksSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -183,6 +187,8 @@ function mapDispatchToProps(dispatch) {
     dispatchClearSelection: () => dispatch(clearSelected()),
     dispatchClearDuplicate: book => dispatch(clearDuplicate(book)),
     dispatchBatchHide: booksToHide => dispatch(batchHide(booksToHide)),
+    dispatchBatchLink: (booksToLink, referenceBook) =>
+      dispatch(batchSetReference(booksToLink, referenceBook)),
   };
 }
 

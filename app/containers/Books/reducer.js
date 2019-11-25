@@ -14,6 +14,8 @@ import {
   CLEAR_DUPLICATE,
   BATCH_HIDE,
   BATCH_SET_REFERENCE,
+  SET_REFERENCE_FAILED,
+  SET_REFERENCE_SUCCESS,
 } from './constants';
 
 export const initialState = {
@@ -22,6 +24,8 @@ export const initialState = {
   error: false,
   baseBookSelected: {},
   duplicatedBooks: [],
+  bookPatchFailed: false,
+  bookPatchSuccess: {},
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -76,6 +80,12 @@ const booksReducer = (state = initialState, action) =>
         break;
       case BATCH_SET_REFERENCE:
         console.log('marking duplicates');
+        break;
+      case SET_REFERENCE_FAILED:
+        draft.bookPatchFailed = action.error;
+        break;
+      case SET_REFERENCE_SUCCESS:
+        draft.bookPatchSuccess = action.booksChanged;
         break;
     }
   });
