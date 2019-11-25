@@ -67,7 +67,7 @@ const setReferenceBook = (booksToReference, referenceBook) =>
 export function* getBookSearchResults(action) {
   try {
     const { data } = yield call(getBooks, action.bookQuery);
-    yield put(loadBooksFoundSuccess(data.results));
+    yield put(loadBooksFoundSuccess(data.results?data.results:data));
   } catch (e) {
     yield put(loadBooksFoundFailed(e));
   }

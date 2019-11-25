@@ -72,6 +72,7 @@ export function Books(props) {
     dispatchClearSelection,
     dispatchClearDuplicate,
     dispatchSelectDuplicate,
+    dispatchBatchLink,
     dispatchBatchHide,
     location,
     loading,
@@ -93,6 +94,11 @@ export function Books(props) {
   const batchHideAction = () => {
     showModal();
     dispatchBatchHide(duplicatedBooks);
+  };
+
+  const batchLinkingAction = () => {
+    showModal();
+    dispatchBatchLink(duplicatedBooks, baseBookSelected);
   };
 
   const [isModalVisible, setModalVisibility] = useState(false);
@@ -126,6 +132,7 @@ export function Books(props) {
       {duplicatedBooks && duplicatedBooks.length > 0 ? (
         <BookHandling
           batchHide={batchHideAction}
+          batchLinking={batchLinkingAction}
           selected={!!baseBookSelected.gr_id}
         />
       ) : null}
