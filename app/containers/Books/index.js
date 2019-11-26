@@ -46,7 +46,7 @@ const ShowResults = ({
   dispatchSelectDuplicate,
   searchingForDuplicates,
   duplicatedBooks,
-  clearDuplicate,
+  clearDuplicates,
 }) =>
   bookList.length > 0 ? (
     <BookList
@@ -54,7 +54,7 @@ const ShowResults = ({
       bookList={bookList}
       selectBaseBook={dispatchSelectBaseBook}
       selectDuplicate={dispatchSelectDuplicate}
-      clearDuplicate={clearDuplicate}
+      clearDuplicate={clearDuplicates}
       duplicatedBooks={duplicatedBooks}
     />
   ) : (
@@ -105,7 +105,7 @@ export function Books(props) {
 
   const hideModal = () => setModalVisibility(false);
   const showModal = () => setModalVisibility(true);
-  
+
   return (
     <div>
       <Modal
@@ -149,7 +149,7 @@ export function Books(props) {
           searchingForDuplicates={!!baseBookSelected.gr_id}
           dispatchSelectBaseBook={dispatchSelectBaseBook}
           dispatchSelectDuplicate={dispatchSelectDuplicate}
-          clearDuplicate={dispatchClearDuplicate}
+          clearDuplicates={dispatchClearDuplicate}
           duplicatedBooks={duplicatedBooks}
           bookList={bookList}
         />
@@ -164,7 +164,7 @@ ShowResults.propTypes = {
   dispatchSelectDuplicate: PropTypes.func.isRequired,
   searchingForDuplicates: PropTypes.bool,
   duplicatedBooks: PropTypes.array,
-  clearDuplicate: PropTypes.func.isRequired,
+  clearDuplicates: PropTypes.func.isRequired,
 };
 
 Books.propTypes = {
@@ -174,12 +174,14 @@ Books.propTypes = {
   dispatchClearSelection: PropTypes.func.isRequired,
   dispatchClearDuplicate: PropTypes.func.isRequired,
   dispatchBatchHide: PropTypes.func.isRequired,
+  dispatchBatchLink: PropTypes.func.isRequired,
   bookList: PropTypes.array,
   loading: PropTypes.bool,
-  error: PropTypes.object,
+  error: PropTypes.any,
   location: PropTypes.object,
   baseBookSelected: PropTypes.object,
   duplicatedBooks: PropTypes.array,
+  editedBooks: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
