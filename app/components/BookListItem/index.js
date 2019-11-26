@@ -97,8 +97,10 @@ const DeleteButton = styled.button`
 const Button = styled.button`
   width: 120px;
   margin: 5px 15px 5px 5px;
-  background: rgb(255, 128, 0);
-  border-width: 0;
+  background: #fafafa;
+  border-color: #ff8000;
+  border-style: solid;
+  border-width: 1px;
   border-radius: 5px;
   align-items: center;
   height: 25px;
@@ -106,7 +108,7 @@ const Button = styled.button`
   justify-content: center;
   display: flex;
   font-size: 16px;
-  color: white;
+  color: #ff8000;
   cursor: pointer;
   ${({ selected }) => selected && `height: 25px;`}
   ${({ searchingForDuplicates }) => searchingForDuplicates && `height: 40px;`}
@@ -213,7 +215,7 @@ function BookListItem(props) {
             Clear
           </Button>
         ) : (
-          <Button onClick={setSelected}>Select</Button>
+          <Button onClick={setSelected}>Reference</Button>
         )}
         {duplicatedBooks && duplicatedBooks.length > 0 && selected
           ? duplicatedBooks.map(duplicatedBook => (
