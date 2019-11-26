@@ -184,16 +184,16 @@ function BookListItem(props) {
           <span>{text_id}</span>
         </DetailLine>
         <DetailLine>
+          <BoldSpan>Title: </BoldSpan>
+          <span>{title}</span>
+        </DetailLine>
+        <DetailLine>
           <ClickableSpan onClick={goToAuthor(author_full_name)}>
             <BoldSpan>Author: </BoldSpan>
             <span>{author_full_name}</span>
           </ClickableSpan>
           <BoldSpan> Lexile: </BoldSpan>
           <span>{lexile_score}</span>
-        </DetailLine>
-        <DetailLine>
-          <BoldSpan>Title: </BoldSpan>
-          <span>{title}</span>
         </DetailLine>
         {series ? (
           <DetailLine>
