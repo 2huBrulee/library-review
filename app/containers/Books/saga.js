@@ -5,6 +5,8 @@ import {
   loadBooksFoundFailed,
   setReferenceFailed,
   setReferenceSucces,
+  batchHideSuccess,
+  batchHideFailed,
 } from './actions';
 import { LOAD_BOOKS_FOUND, BATCH_HIDE, BATCH_SET_REFERENCE } from './constants';
 
@@ -21,7 +23,7 @@ const hideBooks = booksToHide =>
   axios.patch(
     `https://matilda.whooosreading.org/api/v1/books/text_id`,
     {
-      book: {
+      [booksToHide.length > 1 ? 'books' : 'book']: {
         hidden: true,
       },
       embed:
@@ -33,7 +35,7 @@ const hideBooks = booksToHide =>
           (booksString, bookToHide) =>
             booksString === ''
               ? bookToHide.text_id
-              : booksString + bookToHide.text_id,
+              : `${booksString},${bookToHide.text_id}`,
           '',
         ),
       },
@@ -44,7 +46,7 @@ const setReferenceBook = (booksToReference, referenceBook) =>
   axios.patch(
     `https://matilda.whooosreading.org/api/v1/books/text_id`,
     {
-      book: {
+      [booksToReference.length > 1 ? 'books' : 'book']: {
         duplicate: referenceBook.text_id,
         hidden: true,
       },
@@ -57,7 +59,7 @@ const setReferenceBook = (booksToReference, referenceBook) =>
           (booksString, bookToReference) =>
             booksString === ''
               ? bookToReference.text_id
-              : booksString + bookToReference.text_id,
+              : `${booksString},${bookToReference.text_id}`,
           '',
         ),
       },
@@ -67,7 +69,7 @@ const setReferenceBook = (booksToReference, referenceBook) =>
 export function* getBookSearchResults(action) {
   try {
     const { data } = yield call(getBooks, action.bookQuery);
-    yield put(loadBooksFoundSuccess(data.results?data.results:data));
+    yield put(loadBooksFoundSuccess(data.results ? data.results : [data.book]));
   } catch (e) {
     yield put(loadBooksFoundFailed(e));
   }
@@ -75,9 +77,10 @@ export function* getBookSearchResults(action) {
 
 export function* getBatchBookHide(action) {
   try {
-    yield call(hideBooks, action.booksToHide);
+    const { data } = yield call(hideBooks, action.booksToHide);
+    yield put(batchHideSuccess(data.results ? data.results : [data.book]));
   } catch (e) {
-    console.log(e);
+    yield put(batchHideFailed(e));
   }
 }
 
@@ -88,9 +91,9 @@ export function* getBatchBookReference(action) {
       action.duplicates,
       action.referenceBook,
     );
-    yield put(setReferenceSucces(data));
+    yield put(setReferenceSucces(data.results ? data.results : [data.book]));
   } catch (e) {
-    console.log(e);
+    yield put(setReferenceFailed(e));
   }
 }
 

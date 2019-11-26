@@ -16,6 +16,8 @@ import {
   BATCH_SET_REFERENCE,
   SET_REFERENCE_FAILED,
   SET_REFERENCE_SUCCESS,
+  BATCH_HIDE_FAILED,
+  BATCH_HIDE_SUCCESS,
 } from './constants';
 
 export const initialState = {
@@ -24,8 +26,7 @@ export const initialState = {
   error: false,
   baseBookSelected: {},
   duplicatedBooks: [],
-  bookPatchFailed: false,
-  bookPatchSuccess: {},
+  editedBooks: [],
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -76,16 +77,45 @@ const booksReducer = (state = initialState, action) =>
         );
         break;
       case BATCH_HIDE:
+        draft.editedBooks = [];
         console.log('hiding');
+        draft.error = false;
+        draft.loading = true;
+        break;
+      case BATCH_HIDE_FAILED:
+        draft.error = action.error;
+        draft.loading = false;
+        break;
+      case BATCH_HIDE_SUCCESS:
+        draft.editedBooks = action.booksChanged;
+        draft.duplicatedBooks = [];
+        draft.bookList = draft.bookList.filter(
+          bookToEvaluate =>
+            action.booksChanged.findIndex(
+              bookChanged => bookChanged.text_id === bookToEvaluate.text_id,
+            ) < 0,
+        );
+        draft.loading = false;
         break;
       case BATCH_SET_REFERENCE:
         console.log('marking duplicates');
+        draft.error = false;
+        draft.loading = true;
         break;
       case SET_REFERENCE_FAILED:
-        draft.bookPatchFailed = action.error;
+        draft.error = action.error;
+        draft.loading = false;
         break;
       case SET_REFERENCE_SUCCESS:
-        draft.bookPatchSuccess = action.booksChanged;
+        draft.editedBooks = action.booksChanged;
+        draft.duplicatedBooks = [];
+        draft.bookList = draft.bookList.filter(
+          bookToEvaluate =>
+            action.booksChanged.findIndex(
+              bookChanged => bookChanged.text_id === bookToEvaluate.text_id,
+            ) < 0,
+        );
+        draft.loading = false;
         break;
     }
   });

@@ -20,7 +20,7 @@ import {
   makeBookListErrorSelector,
   makeBaseBookSelector,
   makeDuplicatedBooksSelector,
-  makePatchSuccessBooksSelector,
+  makeEditedBooksSelector,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -79,7 +79,7 @@ export function Books(props) {
     error,
     baseBookSelected,
     duplicatedBooks,
-    patchSuccessBooks,
+    editedBooks,
   } = props;
   const params = qs.parse(location.search, { ignoreQueryPrefix: true });
   const bookQuery = params.name;
@@ -105,18 +105,23 @@ export function Books(props) {
 
   const hideModal = () => setModalVisibility(false);
   const showModal = () => setModalVisibility(true);
-
+  
   return (
     <div>
-      <Modal visible={isModalVisible} hide={hideModal}>
-        <div>You have modified the following book(s):</div>
-        {duplicatedBooks &&
-          duplicatedBooks.map(duplicatedBook => (
-            <div key={`dupli-${duplicatedBook.text_id}`}>
+      <Modal
+        visible={isModalVisible}
+        hide={hideModal}
+        loading={loading}
+        error={error}
+      >
+        <div>You have successfully modified the following book(s):</div>
+        {editedBooks &&
+          editedBooks.map(editedBook => (
+            <div key={`dupli-${editedBook.text_id}`}>
               <strong>Title: </strong>
-              {duplicatedBook.title}
+              {editedBook.title}
               <strong> Matilda ID: </strong>
-              {duplicatedBook.text_id}
+              {editedBook.text_id}
             </div>
           ))}
       </Modal>
@@ -183,7 +188,7 @@ const mapStateToProps = createStructuredSelector({
   error: makeBookListErrorSelector(),
   baseBookSelected: makeBaseBookSelector(),
   duplicatedBooks: makeDuplicatedBooksSelector(),
-  patchSuccessBooks: makePatchSuccessBooksSelector(),
+  editedBooks: makeEditedBooksSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
