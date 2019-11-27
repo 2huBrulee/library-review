@@ -14,12 +14,13 @@ import HomePage from 'containers/HomePage/Loadable';
 import Authors from 'containers/Authors/Loadable';
 import Books from 'containers/Books/Loadable';
 // import NotFoundPage from 'containers/NotFoundPage/Loadable';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 
 import { FormattedMessage } from 'react-intl';
 import GlobalStyle from '../../global-styles';
 import SearchForm from '../../components/SearchForm';
 import messages from './messages';
+import theme from '../../theme';
 
 const Title = styled.div`
   font-size: 40px;
@@ -38,20 +39,22 @@ const Container = styled.div`
 
 export default function App() {
   return (
-    <Container>
-      <Title>
-        <FormattedMessage {...messages.header} />
-      </Title>
-      <SearchForm />
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/authors" component={Authors} />
-        <Route exact path="/books" component={Books} />
-        <Route>
-          <Redirect to="/" />
-        </Route>
-      </Switch>
-      <GlobalStyle />
-    </Container>
+    <ThemeProvider theme={theme}>
+      <Container>
+        <Title>
+          <FormattedMessage {...messages.header} />
+        </Title>
+        <SearchForm />
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route exact path="/authors" component={Authors} />
+          <Route exact path="/books" component={Books} />
+          <Route>
+            <Redirect to="/" />
+          </Route>
+        </Switch>
+        <GlobalStyle />
+      </Container>
+    </ThemeProvider>
   );
 }
