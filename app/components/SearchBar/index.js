@@ -7,7 +7,8 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { space } from 'styled-system';
+import { margin } from 'styled-system';
+import Sticky from 'react-sticky-el';
 import Select from '../Select';
 import TextInput from '../TextInput';
 import Button from '../Button';
@@ -19,6 +20,14 @@ const StyledButton = styled(Button)`
   flex: 1 0;
 `;
 
+const StyledSticky = styled(Sticky)`
+  background-color: #fafafa;
+  &.sticky {
+    z-index: 99999;
+    box-shadow: 0 4px 2px -2px lightgray !important;
+  }
+`;
+
 const Wrapper = styled.div`
   width: 100%;
   max-width: 800px;
@@ -27,13 +36,11 @@ const Wrapper = styled.div`
   justify-content: flex-end;
   box-sizing: border-box;
   align-items: center;
-  ${space};
   & > ${StyledTextInput} {
     flex: 1 0;
   }
   & > * {
-    margin-top: 8px;
-    margin-bottom: 8px;
+    ${margin};
   }
 `;
 
@@ -46,21 +53,18 @@ const options = [
 
 function SearchBar(props) {
   return (
-    <Wrapper {...props}>
-      <Select options={options} mr={2} ml={2} />
-      <StyledTextInput placeholder="Enter some text..." mr={2} ml={2} />
-      <Select options={options} mr={2} ml={2} />
-      <StyledButton mr={2} ml={2}>
-        Search
-      </StyledButton>
-
-      <Select options={options} mr={2} ml={2} />
-      <Checkbox label="Checkbox1" ml={2} mr={2} />
-      <Checkbox label="Checkbox2" ml={2} mr={2} />
-      <ClickableText ml={2} mr={2}>
-        show less...
-      </ClickableText>
-    </Wrapper>
+    <StyledSticky>
+      <Wrapper {...props} margin={2}>
+        <Select options={options} />
+        <StyledTextInput placeholder="Enter some text..." />
+        <Select options={options} />
+        <StyledButton>Search</StyledButton>
+        <Select options={options} />
+        <Checkbox label="Checkbox1" />
+        <Checkbox label="Checkbox2" />
+        <ClickableText>show less...</ClickableText>
+      </Wrapper>
+    </StyledSticky>
   );
 }
 
