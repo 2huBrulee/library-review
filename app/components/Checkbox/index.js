@@ -7,11 +7,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { margin } from 'styled-system';
 
 const Wrapper = styled.div`
+  ${margin};
   display: flex;
   align-items: center;
-  height: 30px;
+  height: 32px;
   position: relative;
   color: black;
   font-size: 16px;
@@ -67,7 +69,7 @@ const HiddenCheckbox = styled.input.attrs({
 function Checkbox(props) {
   const { label } = props;
   return (
-    <Wrapper>
+    <Wrapper {...props}>
       <HiddenCheckbox {...props} />
       <StyledCheckbox />
       {label && label}
