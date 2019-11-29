@@ -44,29 +44,62 @@ const Wrapper = styled.div`
   }
 `;
 
-const options = [
+const SearchTypes = [
   {
+    label: 'search 1',
     value: 1,
-    label: 'First Option',
+  },
+  {
+    label: 'search 2',
+    value: 2,
   },
 ];
 
-function SearchBar(props) {
+const textPlaceholder = 'Placeholder text ...';
+
+const Origins = [
+  {
+    label: 'origin 1',
+    value: 1,
+  },
+  {
+    label: 'origin2',
+    value: 2,
+  },
+];
+
+const Checkbox1 = {
+  label: 'checkbox1',
+  value: 1,
+};
+const Checkbox2 = {
+  label: 'checkbox2',
+  value: 2,
+};
+
+const SearchBar = props => {
+  const {
+    checkbox1 = Checkbox1,
+    checkbox2 = Checkbox2,
+    origins = Origins,
+    searchTypes = SearchTypes,
+    inputPlaceholder = textPlaceholder,
+  } = props;
   return (
     <StyledSticky>
       <Wrapper {...props} margin={2}>
-        <Select options={options} />
-        <StyledTextInput placeholder="Enter some text..." />
-        <Select options={options} />
+        <Select options={searchTypes} />
+        <StyledTextInput placeholder={inputPlaceholder} />
+        <Select options={origins} />
         <StyledButton>Search</StyledButton>
-        <Select options={options} />
-        <Checkbox label="Checkbox1" />
-        <Checkbox label="Checkbox2" />
+        <Select options={origins} />
+        <Checkbox {...checkbox1} />
+        <Checkbox {...checkbox2} />
         <ClickableText>show less...</ClickableText>
       </Wrapper>
     </StyledSticky>
   );
-}
+};
 
 SearchBar.propTypes = {};
 
