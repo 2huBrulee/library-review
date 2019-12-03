@@ -6,8 +6,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import qs from 'qs';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { push } from 'connected-react-router';
 // import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -50,6 +51,7 @@ export function SearchBarContainer(props) {
     dispatchChangeDuplicatesVisibility,
     dispatchChangeMoreOptionsVisibility,
     dispatchChangeNumberOfResults,
+    dispatchNewRoute,
     searchCategory,
     searchString,
     searchType,
@@ -58,7 +60,6 @@ export function SearchBarContainer(props) {
     duplicatesIncluded,
     showingMoreOptions,
     numberOfResults,
-    history,
   } = props;
 
   useInjectReducer({ key: 'searchBarContainer', reducer });
@@ -69,7 +70,7 @@ export function SearchBarContainer(props) {
       const nameParams = encodeURI(searchString);
       let searchQuery = `?name=${nameParams}`;
       if (searchOrigin !== 'ALL') searchQuery += `&origin=${searchOrigin}`;
-      history.push({
+      dispatchNewRoute({
         pathname: '/books',
         search: searchQuery,
       });
@@ -168,6 +169,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(changeMoreOptionsVisibility()),
     dispatchChangeNumberOfResults: numberOfResults =>
       dispatch(changeNumberOfResults(numberOfResults)),
+    dispatchNewRoute: newLocation => dispatch(push(newLocation)),
   };
 }
 
