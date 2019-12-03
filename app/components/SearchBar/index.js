@@ -79,23 +79,45 @@ const Checkbox2 = {
 
 const SearchBar = props => {
   const {
-    checkbox1 = Checkbox1,
-    checkbox2 = Checkbox2,
-    origins = Origins,
-    searchTypes = SearchTypes,
-    inputPlaceholder = textPlaceholder,
+    searchCategory,
+    searchString,
+    searchType,
+    searchOrigin,
+    hiddenIncluded,
+    duplicatesIncluded,
+    showingMoreOptions,
+    numberOfResults,
+    searchCategories,
+    origins,
+    searchTypes,
+    handleCategoryChange,
+    handleOriginChange,
+    handleTypeChange,
+    handleSearchQueryInput,
+    handleShowMoreOptionsClick,
+    handleShowDuplicatesClick,
+    handleShowHiddenClick,
   } = props;
+
+  console.log(showingMoreOptions);
+
   return (
     <StyledSticky>
       <Wrapper {...props} margin={2}>
         <Select options={searchTypes} />
-        <StyledTextInput placeholder={inputPlaceholder} />
+        <StyledTextInput placeholder="placeholder" />
         <Select options={origins} />
         <StyledButton>Search</StyledButton>
-        <Select options={origins} />
-        <Checkbox {...checkbox1} />
-        <Checkbox {...checkbox2} />
-        <ClickableText>show less...</ClickableText>
+        {showingMoreOptions && <Select options={searchCategory} />}
+        {showingMoreOptions && (
+          <Checkbox onChange={handleShowDuplicatesClick} {...Checkbox1} />
+        )}
+        {showingMoreOptions && (
+          <Checkbox onChange={handleShowHiddenClick} {...Checkbox2} />
+        )}
+        <ClickableText onClick={handleShowMoreOptionsClick}>
+          show less...
+        </ClickableText>
       </Wrapper>
     </StyledSticky>
   );

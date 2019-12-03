@@ -14,17 +14,26 @@ const selectSearchBarContainerDomain = state =>
 
 const testGlobalState = state => state;
 
-const searchCategorySelector = state => state.searchBarContainer.searchCategory;
-const searchStringSelector = state => state.searchBarContainer.searchString;
-const searchTypeSelector = state => state.searchBarContainer.searchType;
-const searchOriginSelector = state => state.searchBarContainer.searchOrigin;
-const hiddenIncludedSelector = state => state.searchBarContainer.hiddenIncluded;
+const searchCategorySelector = state =>
+  state.searchBarContainer
+    ? state.searchBarContainer.searchCategory
+    : initialState.searchCategory;
+const searchStringSelector = state =>
+  state.searchBarContainer.searchString || initialState.searchString;
+const searchTypeSelector = state =>
+  state.searchBarContainer.searchType || initialState.searchType;
+const searchOriginSelector = state =>
+  state.searchBarContainer.searchOrigin || initialState.searchOrigin;
+const hiddenIncludedSelector = state =>
+  state.searchBarContainer.hiddenIncluded || initialState.hiddenIncluded;
 const duplicatesIncludedSelector = state =>
-  state.searchBarContainer.duplicatesIncluded;
+  state.searchBarContainer.duplicatesIncluded ||
+  initialState.duplicatesIncluded;
 const showingMoreOptionsSelector = state =>
-  state.searchBarContainer.showingMoreOptions;
+  state.searchBarContainer.showingMoreOptions ||
+  initialState.showingMoreOptions;
 const numberOfResultsSelector = state =>
-  state.searchBarContainer.numberOfResults;
+  state.searchBarContainer.numberOfResults || initialState.numberOfResults;
 
 /**
  * Default selector used by SearchBarContainer

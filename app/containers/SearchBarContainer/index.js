@@ -13,6 +13,7 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import SearchBar from 'components/SearchBar';
+import { SEARCH_CATEGORY, SEARCH_TYPE, ORIGINS } from './constants';
 import makeSelectSearchBarContainer, {
   searchCategorySelector,
   searchStringSelector,
@@ -59,7 +60,46 @@ export function SearchBarContainer(props) {
   useInjectReducer({ key: 'searchBarContainer', reducer });
   useInjectSaga({ key: 'searchBarContainer', saga });
 
-  return <SearchBar checkbox="s" />;
+  const handleOriginChange = () => newOrigin =>
+    dispatchSetSearchOrigin(newOrigin);
+
+  const handleCategoryChange = () => newCategory =>
+    dispatchSetSearchCategory(newCategory);
+
+  const handleTypeChange = () => newType => dispatchSetSearchType(newType);
+
+  const handleSearchQueryInput = e =>
+    dispatchChangeSearchString(e.target.value);
+
+  const handleShowMoreOptionsClick = () =>
+    dispatchChangeMoreOptionsVisibility();
+
+  const handleShowDuplicatesClick = () => dispatchChangeDuplicatesVisibility();
+
+  const handleShowHiddenClick = () => dispatchChangeHiddenVisibility();
+
+  return (
+    <SearchBar
+      searchCategory={searchCategory}
+      searchString={searchString}
+      searchType={searchType}
+      searchOrigin={searchOrigin}
+      hiddenIncluded={hiddenIncluded}
+      duplicatesIncluded={duplicatesIncluded}
+      showingMoreOptions={showingMoreOptions}
+      numberOfResults={numberOfResults}
+      searchCategories={SEARCH_CATEGORY}
+      origins={ORIGINS}
+      searchTypes={SEARCH_TYPE}
+      handleCategoryChange={handleCategoryChange}
+      handleOriginChange={handleOriginChange}
+      handleTypeChange={handleTypeChange}
+      handleSearchQueryInput={handleSearchQueryInput}
+      handleShowMoreOptionsClick={handleShowMoreOptionsClick}
+      handleShowDuplicatesClick={handleShowDuplicatesClick}
+      handleShowHiddenClick={handleShowHiddenClick}
+    />
+  );
 }
 
 SearchBarContainer.propTypes = {

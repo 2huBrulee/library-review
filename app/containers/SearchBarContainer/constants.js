@@ -4,8 +4,8 @@
  *
  */
 
-export const AUTHORS = 'AUTHORS';
-export const BOOKS = 'BOOKS';
+export const AUTHORS = 'Search for Authors';
+export const BOOKS = 'Search for Books';
 
 export const TRUSTED = 'TRUSTED';
 export const REGULAR = 'REGULAR';
@@ -16,7 +16,11 @@ export const AUT = 'AUT';
 export const LEXILE = 'LEXILE';
 export const MANU = 'MANU';
 
-export const SEARCH_TYPES = [AUTHORS, BOOKS];
+export const SEARCH_TYPE = [TRUSTED, REGULAR, GR];
+
+export const ORIGINS = [BASE, AUT, LEXILE, MANU];
+
+export const SEARCH_CATEGORY = [AUTHORS, BOOKS];
 
 export const SET_BOOKS_SEARCH = 'app/SearchBarContainer/SET_BOOKS_SEARCH';
 export const SET_AUTHORS_SEARCH = 'app/SearchBarContainer/SET_AUTHORS_SEARCH';
