@@ -39,7 +39,9 @@ function Select(props) {
       </StyledOption>
       {options &&
         options.map(option => (
-          <StyledOption key={`${option.value}`}>{option.label}</StyledOption>
+          <StyledOption key={`${option.value}`} value={option.value}>
+            {option.label}
+          </StyledOption>
         ))}
     </StyledSelect>
   );

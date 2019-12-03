@@ -16,7 +16,7 @@ import {
 } from './constants';
 
 export const initialState = {
-  searchCategory: 'BOOK',
+  searchCategory: 'BOOKS',
   searchString: '',
   searchType: 'REGULAR',
   searchOrigin: 'ALL',

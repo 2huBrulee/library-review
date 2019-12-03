@@ -7,13 +7,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 // import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import SearchBar from 'components/SearchBar';
-import { SEARCH_CATEGORY, SEARCH_TYPE, ORIGINS } from './constants';
+import { SEARCH_CATEGORIES, SEARCH_TYPES, ORIGINS, BOOKS } from './constants';
 import makeSelectSearchBarContainer, {
   searchCategorySelector,
   searchStringSelector,
@@ -24,6 +25,7 @@ import makeSelectSearchBarContainer, {
   showingMoreOptionsSelector,
   numberOfResultsSelector,
 } from './selectors';
+
 import {
   setSearchCategory,
   setSearchType,
@@ -56,17 +58,29 @@ export function SearchBarContainer(props) {
     duplicatesIncluded,
     showingMoreOptions,
     numberOfResults,
+    history,
   } = props;
+
   useInjectReducer({ key: 'searchBarContainer', reducer });
   useInjectSaga({ key: 'searchBarContainer', saga });
 
-  const handleOriginChange = () => newOrigin =>
-    dispatchSetSearchOrigin(newOrigin);
+  const search = () => {
+    if (searchCategory === BOOKS) {
+      const nameParams = encodeURI(searchString);
+      let searchQuery = `?name=${nameParams}`;
+      if (searchOrigin !== 'ALL') searchQuery += `&origin=${searchOrigin}`;
+      history.push({
+        pathname: '/books',
+        search: searchQuery,
+      });
+    }
+  };
 
-  const handleCategoryChange = () => newCategory =>
-    dispatchSetSearchCategory(newCategory);
+  const handleOriginChange = e => dispatchSetSearchOrigin(e.target.value);
 
-  const handleTypeChange = () => newType => dispatchSetSearchType(newType);
+  const handleCategoryChange = e => dispatchSetSearchCategory(e.target.value);
+
+  const handleTypeChange = e => dispatchSetSearchType(e.target.value);
 
   const handleSearchQueryInput = e =>
     dispatchChangeSearchString(e.target.value);
@@ -78,6 +92,9 @@ export function SearchBarContainer(props) {
 
   const handleShowHiddenClick = () => dispatchChangeHiddenVisibility();
 
+  const handleChangeNumberOfResults = e =>
+    dispatchChangeNumberOfResults(e.target.value);
+
   return (
     <SearchBar
       searchCategory={searchCategory}
@@ -88,9 +105,9 @@ export function SearchBarContainer(props) {
       duplicatesIncluded={duplicatesIncluded}
       showingMoreOptions={showingMoreOptions}
       numberOfResults={numberOfResults}
-      searchCategories={SEARCH_CATEGORY}
+      searchCategories={SEARCH_CATEGORIES}
       origins={ORIGINS}
-      searchTypes={SEARCH_TYPE}
+      searchTypes={SEARCH_TYPES}
       handleCategoryChange={handleCategoryChange}
       handleOriginChange={handleOriginChange}
       handleTypeChange={handleTypeChange}
@@ -98,6 +115,8 @@ export function SearchBarContainer(props) {
       handleShowMoreOptionsClick={handleShowMoreOptionsClick}
       handleShowDuplicatesClick={handleShowDuplicatesClick}
       handleShowHiddenClick={handleShowHiddenClick}
+      handleChangeNumberOfResults={handleChangeNumberOfResults}
+      search={search}
     />
   );
 }

@@ -23,7 +23,7 @@ function ClickableText(props) {
 }
 
 ClickableText.propTypes = {
-  children: PropTypes.element,
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 };
 
 export default ClickableText;

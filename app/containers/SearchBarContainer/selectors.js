@@ -12,28 +12,53 @@ const selectSearchBarContainerDomain = state =>
  * Other specific selectors
  */
 
-const testGlobalState = state => state;
+const searchCategorySelector = () =>
+  createSelector(
+    selectSearchBarContainerDomain,
+    substate => substate.searchCategory,
+  );
 
-const searchCategorySelector = state =>
-  state.searchBarContainer
-    ? state.searchBarContainer.searchCategory
-    : initialState.searchCategory;
-const searchStringSelector = state =>
-  state.searchBarContainer.searchString || initialState.searchString;
-const searchTypeSelector = state =>
-  state.searchBarContainer.searchType || initialState.searchType;
-const searchOriginSelector = state =>
-  state.searchBarContainer.searchOrigin || initialState.searchOrigin;
-const hiddenIncludedSelector = state =>
-  state.searchBarContainer.hiddenIncluded || initialState.hiddenIncluded;
-const duplicatesIncludedSelector = state =>
-  state.searchBarContainer.duplicatesIncluded ||
-  initialState.duplicatesIncluded;
-const showingMoreOptionsSelector = state =>
-  state.searchBarContainer.showingMoreOptions ||
-  initialState.showingMoreOptions;
-const numberOfResultsSelector = state =>
-  state.searchBarContainer.numberOfResults || initialState.numberOfResults;
+const searchStringSelector = () =>
+  createSelector(
+    selectSearchBarContainerDomain,
+    substate => substate.searchString,
+  );
+
+const searchTypeSelector = () =>
+  createSelector(
+    selectSearchBarContainerDomain,
+    substate => substate.searchType,
+  );
+
+const searchOriginSelector = () =>
+  createSelector(
+    selectSearchBarContainerDomain,
+    substate => substate.searchOrigin,
+  );
+
+const hiddenIncludedSelector = () =>
+  createSelector(
+    selectSearchBarContainerDomain,
+    substate => substate.hiddenIncluded,
+  );
+
+const duplicatesIncludedSelector = () =>
+  createSelector(
+    selectSearchBarContainerDomain,
+    substate => substate.duplicatesIncluded,
+  );
+
+const showingMoreOptionsSelector = () =>
+  createSelector(
+    selectSearchBarContainerDomain,
+    substate => substate.showingMoreOptions,
+  );
+
+const numberOfResultsSelector = () =>
+  createSelector(
+    selectSearchBarContainerDomain,
+    substate => substate.numberOfResults,
+  );
 
 /**
  * Default selector used by SearchBarContainer
@@ -48,7 +73,6 @@ const makeSelectSearchBarContainer = () =>
 export default makeSelectSearchBarContainer;
 export {
   selectSearchBarContainerDomain,
-  testGlobalState,
   searchCategorySelector,
   searchStringSelector,
   searchTypeSelector,

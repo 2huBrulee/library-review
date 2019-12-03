@@ -4,8 +4,8 @@
  *
  */
 
-export const AUTHORS = 'Search for Authors';
-export const BOOKS = 'Search for Books';
+export const AUTHORS = 'AUTHORS';
+export const BOOKS = 'BOOKS';
 
 export const TRUSTED = 'TRUSTED';
 export const REGULAR = 'REGULAR';
@@ -16,11 +16,57 @@ export const AUT = 'AUT';
 export const LEXILE = 'LEXILE';
 export const MANU = 'MANU';
 
-export const SEARCH_TYPE = [TRUSTED, REGULAR, GR];
+export const SEARCH_TYPES = [
+  {
+    label: TRUSTED,
+    value: TRUSTED,
+  },
+  {
+    label: REGULAR,
+    value: REGULAR,
+    defaultChecked: true,
+  },
+  {
+    label: GR,
+    value: GR,
+  },
+];
 
-export const ORIGINS = [BASE, AUT, LEXILE, MANU];
+export const ORIGINS = [
+  {
+    label: 'ALL',
+    value: 'ALL',
+    defaultChecked: true,
+  },
+  {
+    label: BASE,
+    value: BASE,
+  },
+  {
+    label: AUT,
+    value: AUT,
+  },
+  {
+    label: LEXILE,
+    value: LEXILE,
+  },
+  {
+    label: MANU,
+    value: MANU,
+  },
+];
 
-export const SEARCH_CATEGORY = [AUTHORS, BOOKS];
+export const SEARCH_CATEGORIES = [
+  {
+    label: 'Search Authors',
+    value: AUTHORS,
+  },
+  {
+    label: 'Search Books',
+    value: BOOKS,
+    defaultChecked: true,
+  },
+];
 
 export const SET_BOOKS_SEARCH = 'app/SearchBarContainer/SET_BOOKS_SEARCH';
 export const SET_AUTHORS_SEARCH = 'app/SearchBarContainer/SET_AUTHORS_SEARCH';

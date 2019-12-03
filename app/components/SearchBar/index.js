@@ -1,3 +1,6 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-nested-ternary */
 /**
  *
  * SearchBar
@@ -16,8 +19,18 @@ import Checkbox from '../Checkbox';
 import ClickableText from '../ClickableText';
 
 const StyledTextInput = styled(TextInput)``;
-const StyledButton = styled(Button)`
+
+const StyledTextInputNumberOf = styled(TextInput)`
   flex: 1 0;
+  min-width: 100px;
+`;
+
+const StyledButton = styled(Button)`
+  flex: 1 1;
+`;
+
+const StyledClickableText = styled(ClickableText)`
+  min-width: 100px;
 `;
 
 const StyledSticky = styled(Sticky)`
@@ -44,39 +57,6 @@ const Wrapper = styled.div`
   }
 `;
 
-const SearchTypes = [
-  {
-    label: 'search 1',
-    value: 1,
-  },
-  {
-    label: 'search 2',
-    value: 2,
-  },
-];
-
-const textPlaceholder = 'Placeholder text ...';
-
-const Origins = [
-  {
-    label: 'origin 1',
-    value: 1,
-  },
-  {
-    label: 'origin2',
-    value: 2,
-  },
-];
-
-const Checkbox1 = {
-  label: 'checkbox1',
-  value: 1,
-};
-const Checkbox2 = {
-  label: 'checkbox2',
-  value: 2,
-};
-
 const SearchBar = props => {
   const {
     searchCategory,
@@ -97,27 +77,66 @@ const SearchBar = props => {
     handleShowMoreOptionsClick,
     handleShowDuplicatesClick,
     handleShowHiddenClick,
+    handleChangeNumberOfResults,
+    search,
   } = props;
-
-  console.log(showingMoreOptions);
 
   return (
     <StyledSticky>
       <Wrapper {...props} margin={2}>
-        <Select options={searchTypes} />
-        <StyledTextInput placeholder="placeholder" />
-        <Select options={origins} />
-        <StyledButton>Search</StyledButton>
-        {showingMoreOptions && <Select options={searchCategory} />}
+        <Select
+          options={searchCategories}
+          value={searchCategory}
+          onChange={handleCategoryChange}
+        />
+        <StyledTextInput
+          placeholder={
+            searchCategory === 'BOOKS'
+              ? 'Enter Book Title'
+              : searchCategory === 'AUTHORS'
+                ? "Enter Author's name"
+                : '<<<< Select Search Type'
+          }
+          value={searchString}
+          onChange={handleSearchQueryInput}
+        />
+        <Select
+          options={searchTypes}
+          value={searchType}
+          onChange={handleTypeChange}
+        />
+        <StyledButton onClick={search}>Search</StyledButton>
         {showingMoreOptions && (
-          <Checkbox onChange={handleShowDuplicatesClick} {...Checkbox1} />
+          <Select
+            options={origins}
+            value={searchOrigin}
+            onChange={handleOriginChange}
+          />
         )}
         {showingMoreOptions && (
-          <Checkbox onChange={handleShowHiddenClick} {...Checkbox2} />
+          <Checkbox
+            onChange={handleShowDuplicatesClick}
+            label="duplicates"
+            value={duplicatesIncluded}
+          />
         )}
-        <ClickableText onClick={handleShowMoreOptionsClick}>
-          show less...
-        </ClickableText>
+        {showingMoreOptions && (
+          <Checkbox
+            onChange={handleShowHiddenClick}
+            label="hidden"
+            value={hiddenIncluded}
+          />
+        )}
+        {showingMoreOptions && (
+          <StyledTextInputNumberOf
+            onChange={handleChangeNumberOfResults}
+            value={numberOfResults === -1 ? '' : numberOfResults}
+            placeholder="# of results"
+          />
+        )}
+        <StyledClickableText onClick={handleShowMoreOptionsClick}>
+          {showingMoreOptions ? 'show less...' : 'show more...'}
+        </StyledClickableText>
       </Wrapper>
     </StyledSticky>
   );
