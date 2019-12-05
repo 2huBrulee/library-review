@@ -49,8 +49,8 @@ export function Authors(props) {
 
   useEffect(() => {
     if (authorQuery && authorQuery.trim().length > 0)
-      dispatchLoadAuthorsFound(authorQuery);
-  }, [authorQuery]);
+      dispatchLoadAuthorsFound(params);
+  }, [location.search]);
 
   if (error) console.log(`fetching error: ${error}`);
 

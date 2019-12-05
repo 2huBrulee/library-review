@@ -23,6 +23,9 @@ const StyledButton = styled.button`
   color: #ff8000;
   &:hover {
     cursor: pointer;
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
 `;
 

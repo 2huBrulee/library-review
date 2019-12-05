@@ -85,3 +85,4 @@ export const CHANGE_DUPLICATES_VISIBILITY =
   'app/SearchBarContainer/CHANGE_DUPLICATES_VISIBILITY';
 export const CHANGE_NUMBER_OF_RESULTS =
   'app/SearchBarContainer/CHANGE_NUMBER_OF_RESULTS';
+export const SET_REDUX_INIT = 'app/SearchBarContainer/SET_REDUX_INIT';

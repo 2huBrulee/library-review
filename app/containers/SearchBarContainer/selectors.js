@@ -3,14 +3,29 @@ import { initialState } from './reducer';
 
 /**
  * Direct selector to the searchBarContainer state domain
+ * urlSearch: state.router.location.search
  */
 
 const selectSearchBarContainerDomain = state =>
   state.searchBarContainer || initialState;
 
+const selectRouterLocation = state => state.router.location || { search: '' };
+
 /**
  * Other specific selectors
  */
+
+const searchSelector = () =>
+  createSelector(
+    selectRouterLocation,
+    substate => substate.search,
+  );
+
+const pathSelector = () =>
+  createSelector(
+    selectRouterLocation,
+    substate => substate.pathname,
+  );
 
 const searchCategorySelector = () =>
   createSelector(
@@ -60,6 +75,12 @@ const numberOfResultsSelector = () =>
     substate => substate.numberOfResults,
   );
 
+const reduxInitSelector = () =>
+  createSelector(
+    selectSearchBarContainerDomain,
+    substate => substate.reduxInit,
+  );
+
 /**
  * Default selector used by SearchBarContainer
  */
@@ -81,4 +102,7 @@ export {
   duplicatesIncludedSelector,
   showingMoreOptionsSelector,
   numberOfResultsSelector,
+  searchSelector,
+  pathSelector,
+  reduxInitSelector,
 };

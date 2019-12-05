@@ -18,10 +18,17 @@ import Button from '../Button';
 import Checkbox from '../Checkbox';
 import ClickableText from '../ClickableText';
 
-const StyledTextInput = styled(TextInput)``;
+const StyledTextInput = styled(TextInput)`
+  transition: all 0.3s ease-in-out;
+  outline: none;
+  ${({ valid }) => !valid && `border-color: red;`};
+  :focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+  }
+`;
 
 const StyledTextInputNumberOf = styled(TextInput)`
-  flex: 1 0;
+  flex: 0;
   min-width: 100px;
 `;
 
@@ -81,6 +88,8 @@ const SearchBar = props => {
     search,
   } = props;
 
+  const isQueryValid = searchString.length >= 1;
+
   return (
     <StyledSticky>
       <Wrapper {...props} margin={2}>
@@ -97,34 +106,45 @@ const SearchBar = props => {
                 ? "Enter Author's name"
                 : '<<<< Select Search Type'
           }
+          valid={isQueryValid}
           value={searchString}
           onChange={handleSearchQueryInput}
         />
-        <Select
-          options={searchTypes}
-          value={searchType}
-          onChange={handleTypeChange}
-        />
-        <StyledButton onClick={search}>Search</StyledButton>
-        {showingMoreOptions && (
+        {searchCategory === 'BOOKS' ? (
+          <Select
+            options={searchTypes}
+            value={searchType}
+            onChange={handleTypeChange}
+          />
+        ) : (
           <Select
             options={origins}
             value={searchOrigin}
             onChange={handleOriginChange}
           />
         )}
-        {showingMoreOptions && (
+        <StyledButton disabled={!isQueryValid} onClick={search}>
+          Search
+        </StyledButton>
+        {showingMoreOptions && searchCategory === 'BOOKS' && (
+          <Select
+            options={origins}
+            value={searchOrigin}
+            onChange={handleOriginChange}
+          />
+        )}
+        {showingMoreOptions && searchCategory === 'BOOKS' && (
           <Checkbox
             onChange={handleShowDuplicatesClick}
             label="duplicates"
-            value={duplicatesIncluded}
+            checked={duplicatesIncluded}
           />
         )}
-        {showingMoreOptions && (
+        {showingMoreOptions && searchCategory === 'BOOKS' && (
           <Checkbox
             onChange={handleShowHiddenClick}
             label="hidden"
-            value={hiddenIncluded}
+            checked={hiddenIncluded}
           />
         )}
         {showingMoreOptions && (

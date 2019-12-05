@@ -13,6 +13,7 @@ import {
   CHANGE_HIDDEN_VISIBILITY,
   CHANGE_DUPLICATES_VISIBILITY,
   CHANGE_NUMBER_OF_RESULTS,
+  SET_REDUX_INIT,
 } from './constants';
 
 export const initialState = {
@@ -24,6 +25,7 @@ export const initialState = {
   duplicatesIncluded: false,
   showingMoreOptions: false,
   numberOfResults: -1,
+  reduxInit: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -53,6 +55,9 @@ const searchBarContainerReducer = (state = initialState, action) =>
         break;
       case CHANGE_NUMBER_OF_RESULTS:
         draft.numberOfResults = action.numberOfResults;
+        break;
+      case SET_REDUX_INIT:
+        draft.reduxInit = true;
         break;
     }
   });

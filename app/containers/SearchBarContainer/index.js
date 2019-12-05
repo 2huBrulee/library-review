@@ -4,7 +4,7 @@
  *
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import qs from 'qs';
 import { connect } from 'react-redux';
@@ -15,7 +15,14 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import SearchBar from 'components/SearchBar';
-import { SEARCH_CATEGORIES, SEARCH_TYPES, ORIGINS, BOOKS } from './constants';
+import {
+  SEARCH_CATEGORIES,
+  SEARCH_TYPES,
+  ORIGINS,
+  BOOKS,
+  TRUSTED,
+  GR,
+} from './constants';
 import makeSelectSearchBarContainer, {
   searchCategorySelector,
   searchStringSelector,
@@ -25,6 +32,9 @@ import makeSelectSearchBarContainer, {
   duplicatesIncludedSelector,
   showingMoreOptionsSelector,
   numberOfResultsSelector,
+  searchSelector,
+  pathSelector,
+  reduxInitSelector,
 } from './selectors';
 
 import {
@@ -60,18 +70,65 @@ export function SearchBarContainer(props) {
     duplicatesIncluded,
     showingMoreOptions,
     numberOfResults,
+    urlSearch,
+    pathname,
+    reduxInit,
   } = props;
+
+  const params = qs.parse(urlSearch, { ignoreQueryPrefix: true });
+  console.log(pathname);
+
+  useEffect(() => {
+    if (reduxInit) {
+      dispatchSetSearchCategory(pathname === '/books' ? 'BOOKS' : 'AUTHORS');
+      dispatchChangeSearchString(params.q || params.full_name || '');
+      if (params.origin) dispatchSetSearchOrigin(params.origin);
+      else dispatchSetSearchOrigin('ALL');
+      if (params.trusted) dispatchSetSearchType(TRUSTED);
+      if (params.gr) dispatchSetSearchType(GR);
+      if (params.hidden) dispatchChangeHiddenVisibility(params.hidden);
+      if (params.duplicates)
+        dispatchChangeDuplicatesVisibility(params.duplicates);
+      if (params.num_results) {
+        let nResults;
+        try {
+          nResults = parseInt(params.num_results, 10);
+        } catch (e) {
+          nResults = -1;
+        }
+        dispatchChangeNumberOfResults(nResults > 0 ? nResults : -1);
+      }
+    }
+  }, [reduxInit]);
 
   useInjectReducer({ key: 'searchBarContainer', reducer });
   useInjectSaga({ key: 'searchBarContainer', saga });
 
   const search = () => {
     if (searchCategory === BOOKS) {
-      const nameParams = encodeURI(searchString);
-      let searchQuery = `?name=${nameParams}`;
-      if (searchOrigin !== 'ALL') searchQuery += `&origin=${searchOrigin}`;
+      const queryObject = {
+        q: searchString,
+        ...(searchOrigin !== 'ALL' ? { origin: searchOrigin } : null),
+        ...(searchType === TRUSTED ? { trusted: true } : null),
+        ...(searchType === GR ? { gr: true } : null),
+        ...(hiddenIncluded ? { hidden: true } : null),
+        ...(duplicatesIncluded ? { duplicates: true } : null),
+        ...(numberOfResults > 0 ? { num_results: numberOfResults } : null),
+      };
+      const searchQuery = `?${qs.stringify(queryObject)}`;
       dispatchNewRoute({
         pathname: '/books',
+        search: searchQuery,
+      });
+    } else {
+      const queryObject = {
+        full_name: searchString,
+        ...(searchOrigin !== 'ALL' ? { origin: searchOrigin } : null),
+        ...(numberOfResults > 0 ? { num_results: numberOfResults } : null),
+      };
+      const searchQuery = `?${qs.stringify(queryObject)}`;
+      dispatchNewRoute({
+        pathname: '/authors',
         search: searchQuery,
       });
     }
@@ -91,10 +148,19 @@ export function SearchBarContainer(props) {
 
   const handleShowDuplicatesClick = () => dispatchChangeDuplicatesVisibility();
 
-  const handleShowHiddenClick = () => dispatchChangeHiddenVisibility();
+  const handleShowHiddenClick = () => {
+    dispatchChangeHiddenVisibility();
+  };
 
-  const handleChangeNumberOfResults = e =>
-    dispatchChangeNumberOfResults(e.target.value);
+  const handleChangeNumberOfResults = e => {
+    let nResults;
+    try {
+      nResults = parseInt(e.target.value, 10);
+    } catch (ex) {
+      nResults = -1;
+    }
+    dispatchChangeNumberOfResults(nResults > 0 ? nResults : -1);
+  };
 
   return (
     <SearchBar
@@ -131,6 +197,7 @@ SearchBarContainer.propTypes = {
   dispatchChangeDuplicatesVisibility: PropTypes.func.isRequired,
   dispatchChangeMoreOptionsVisibility: PropTypes.func.isRequired,
   dispatchChangeNumberOfResults: PropTypes.func.isRequired,
+  dispatchNewRoute: PropTypes.func.isRequired,
   searchCategory: PropTypes.string,
   searchString: PropTypes.string,
   searchType: PropTypes.string,
@@ -151,6 +218,9 @@ const mapStateToProps = createStructuredSelector({
   duplicatesIncluded: duplicatesIncludedSelector(),
   showingMoreOptions: showingMoreOptionsSelector(),
   numberOfResults: numberOfResultsSelector(),
+  urlSearch: searchSelector(),
+  reduxInit: reduxInitSelector(),
+  pathname: pathSelector(),
 });
 
 function mapDispatchToProps(dispatch) {

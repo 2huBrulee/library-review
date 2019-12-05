@@ -69,7 +69,7 @@ const HiddenCheckbox = styled.input.attrs({
 function Checkbox(props) {
   const { label } = props;
   return (
-    <Wrapper {...props}>
+    <Wrapper>
       <HiddenCheckbox {...props} />
       <StyledCheckbox />
       {label && label}

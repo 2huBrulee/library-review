@@ -13,6 +13,7 @@ import {
   CHANGE_HIDDEN_VISIBILITY,
   CHANGE_DUPLICATES_VISIBILITY,
   CHANGE_NUMBER_OF_RESULTS,
+  SET_REDUX_INIT,
 } from './constants';
 
 export const setSearchCategory = searchCategory => ({
@@ -50,4 +51,8 @@ export const changeMoreOptionsVisibility = () => ({
 export const changeNumberOfResults = numberOfResults => ({
   type: CHANGE_NUMBER_OF_RESULTS,
   numberOfResults,
+});
+
+export const setReduxInit = () => ({
+  type: SET_REDUX_INIT,
 });

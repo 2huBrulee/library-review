@@ -13,9 +13,17 @@ import { LOAD_BOOKS_FOUND, BATCH_HIDE, BATCH_SET_REFERENCE } from './constants';
 const getBooks = bookQuery =>
   axios.get(`https://matilda.whooosreading.org/api/v1/search`, {
     params: {
-      q: bookQuery,
+      ...bookQuery,
       embed:
-        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned',
+        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicated',
+    },
+  });
+
+const getBookById = id =>
+  axios.get(`https://matilda.whooosreading.org/api/v1/books/text_id/${id}`, {
+    params: {
+      embed:
+        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicated',
     },
   });
 
@@ -27,7 +35,7 @@ const hideBooks = booksToHide =>
         hidden: true,
       },
       embed:
-        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned',
+        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicated',
     },
     {
       params: {
@@ -68,8 +76,18 @@ const setReferenceBook = (booksToReference, referenceBook) =>
 
 export function* getBookSearchResults(action) {
   try {
-    const { data } = yield call(getBooks, action.bookQuery);
-    yield put(loadBooksFoundSuccess(data.results ? data.results : [data.book]));
+    const originRegEx = /(^AUT.+)|(^BASE.+)|(^LEXILE.+)|(^MANU.+)/g;
+    if (originRegEx.test(action.bookQuery.q)) {
+      const { data } = yield call(getBookById, action.bookQuery.q);
+      yield put(
+        loadBooksFoundSuccess(data.results ? data.results : [data.book]),
+      );
+    } else {
+      const { data } = yield call(getBooks, action.bookQuery);
+      yield put(
+        loadBooksFoundSuccess(data.results ? data.results : [data.book]),
+      );
+    }
   } catch (e) {
     yield put(loadBooksFoundFailed(e));
   }

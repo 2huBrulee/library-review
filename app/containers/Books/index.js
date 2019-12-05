@@ -81,13 +81,14 @@ export function Books(props) {
     duplicatedBooks,
     editedBooks,
   } = props;
+
   const params = qs.parse(location.search, { ignoreQueryPrefix: true });
-  const bookQuery = params.name;
+  const bookQuery = params.q;
 
   useEffect(() => {
     if (bookQuery && bookQuery.trim().length > 0)
-      dispatchLoadBooksFound(bookQuery);
-  }, [bookQuery]);
+      dispatchLoadBooksFound(params);
+  }, [location.search]);
 
   if (error) console.log(`fetching error: ${error}`);
 

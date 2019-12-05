@@ -13,7 +13,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import HomePage from 'containers/HomePage/Loadable';
 import Authors from 'containers/Authors/Loadable';
 import Books from 'containers/Books/Loadable';
-import SearchBarContainer from 'containers/SearchBarContainer/Loadable';
+import SearchBarContainer from 'containers/SearchBarContainer';
 // import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import styled, { ThemeProvider } from 'styled-components';
 
@@ -44,7 +44,9 @@ export default function App() {
         <Title>
           <FormattedMessage {...messages.header} />
         </Title>
-        <SearchBarContainer />
+        <Switch>
+          <Route path="/:path(authors|books)?" component={SearchBarContainer} />
+        </Switch>
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/authors" component={Authors} />
