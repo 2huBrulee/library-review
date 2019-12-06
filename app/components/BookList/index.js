@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 
 // import { FormattedMessage } from 'react-intl';
 import BookListItem from '../BookListItem';
+import BookListItemEditMode from '../BookListItemEditMode';
 // import messages from './messages';
 
 function BookList(props) {
@@ -26,6 +27,7 @@ function BookList(props) {
 
   return (
     <div>
+      <BookListItemEditMode />
       {bookList.length > 0
         ? bookList.map((book, index) => (
             <BookListItem

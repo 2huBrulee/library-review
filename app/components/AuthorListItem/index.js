@@ -28,7 +28,7 @@ const Books = styled.div`
   width: 300px;
   display: flex;
   flex-direction: column;
-  padding: 0 20x 0 15px;
+  padding: 0 20px 0 15px;
 `;
 
 /*
