@@ -19,7 +19,6 @@ import { withRouter } from 'react-router-dom';
 import Checkbox from 'react-simple-checkbox';
 
 const Container = styled.div`
-  max-height: 170px;
   max-width: 800px;
   align-items: stretch;
   margin: 10px 10px;
@@ -33,8 +32,9 @@ const Container = styled.div`
 `;
 
 const BookImg = styled.img`
-  max-height: inherit;
-  max-width: 120px;
+  display: block;
+  height: max-content;
+  width: 120px;
 `;
 
 const Details = styled.div`
