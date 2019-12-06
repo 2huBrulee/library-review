@@ -55,8 +55,8 @@ function BookHandling(props) {
       <Wrapper>
         <Button onClick={batchHide}>Hide</Button>
         {selected && <Button onClick={batchLinking}>Link</Button>}
-        <Button onClick={batchTrust(true)}>Mass Trust</Button>
-        <Button onClick={batchTrust(false)}>Mass Distrust</Button>
+        <Button onClick={batchTrust(true)}>Trust</Button>
+        <Button onClick={batchTrust(false)}>Distrust</Button>
       </Wrapper>
     </Sticky>
   );

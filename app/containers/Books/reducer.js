@@ -121,6 +121,7 @@ const booksReducer = (state = initialState, action) =>
         draft.loading = false;
         break;
       case SET_TRUST_STATUS:
+        draft.editedBooks = [];
         draft.loading = true;
         draft.error = false;
         break;

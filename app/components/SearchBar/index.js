@@ -34,6 +34,7 @@ const StyledTextInput = styled(TextInput)`
 const StyledTextInputNumberOf = styled(TextInput)`
   flex: 0;
   min-width: 100px;
+  max-width: 159px;
 `;
 
 const StyledButton = styled(Button)``;
