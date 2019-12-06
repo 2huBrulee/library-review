@@ -18,16 +18,28 @@ const Wrapper = styled.div`
   border-width: 0px;
   border-top-color: lightgray;
   border-top-style: solid;
-  display: flex;
-  flex-flow: row wrap;
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  grid-gap: auto;
   align-items: center;
   ${({ first }) => !first && `border-top-width: thin;`}
+
+  & > :nth-child(even) {
+    grid-column: 3/5;
+  }
+  & > :nth-child(odd) {
+    grid-column: 1/3;
+  }
+  & > * {
+    margin: 4px;
+  }
 `;
 
 const InputDiv = styled.div`
+  justify-content: space-between;
+  padding: 0 16px;
   display: flex;
   align-items: center;
-  grid-auto-columns: 100%;
 `;
 
 const Label = styled.div`
@@ -59,30 +71,58 @@ function BookListItemEditMode(props) {
     <Wrapper>
       <InputDiv>
         <Label>Title</Label>
-        <TextInput name="title" value={changes.title} />
+        <TextInput onChange={handleChange} name="title" value={changes.title} />
       </InputDiv>
       <InputDiv>
         <Label>Image URL</Label>
-        <TextInput name="img_url" value={changes.img_url} />
+        <TextInput
+          onChange={handleChange}
+          name="img_url"
+          value={changes.img_url}
+        />
       </InputDiv>
       <InputDiv>
         <Label>Cover URL</Label>
-        <TextInput name="cover_url" value={changes.cover_url} />
+        <TextInput
+          onChange={handleChange}
+          name="cover_url"
+          value={changes.cover_url}
+        />
       </InputDiv>
       <InputDiv>
         <Label>Series</Label>
-        <TextInput name="series" value={changes.series} />
+        <TextInput
+          onChange={handleChange}
+          name="series"
+          value={changes.series}
+        />
       </InputDiv>
       <InputDiv>
         <Label>Series Index</Label>
-        <TextInput name="series_index" value={changes.series_index} />
+        <TextInput
+          onChange={handleChange}
+          name="series_index"
+          value={changes.series_index}
+        />
       </InputDiv>
       <InputDiv>
         <Label>Text Variety</Label>
-        <TextInput name="text_variety" value={changes.text_variety} />
+        <TextInput
+          onChange={handleChange}
+          name="text_variety"
+          value={changes.text_variety}
+        />
       </InputDiv>
-      <Checkbox label="hidden" value={changes.hidden} />
-      <Checkbox label="trusted" value={changes.trusted} />
+      <Checkbox
+        onChange={handleChange}
+        label="hidden"
+        checked={changes.hidden}
+      />
+      <Checkbox
+        onChange={handleChange}
+        label="trusted"
+        checked={changes.trusted}
+      />
       <Button>Save</Button>
     </Wrapper>
   );

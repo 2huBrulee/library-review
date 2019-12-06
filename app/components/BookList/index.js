@@ -27,6 +27,7 @@ function BookList(props) {
 
   return (
     <div>
+      {bookList.length > 0 ? <BookListItemEditMode book={bookList[0]} /> : null}
       {bookList.length > 0
         ? bookList.map((book, index) => (
             <BookListItem
