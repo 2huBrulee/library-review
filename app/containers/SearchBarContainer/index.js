@@ -86,8 +86,8 @@ export function SearchBarContainer(props) {
       if (params.trusted) dispatchSetSearchType(TRUSTED);
       if (params.gr) dispatchSetSearchType(GR);
       if (params.hidden) dispatchChangeHiddenVisibility(params.hidden);
-      if (params.duplicates)
-        dispatchChangeDuplicatesVisibility(params.duplicates);
+      if (params.duplicate)
+        dispatchChangeDuplicatesVisibility(params.duplicate);
       if (params.num_results) {
         let nResults;
         try {
@@ -111,7 +111,7 @@ export function SearchBarContainer(props) {
         ...(searchType === TRUSTED ? { trusted: true } : null),
         ...(searchType === GR ? { gr: true } : null),
         ...(hiddenIncluded ? { hidden: true } : null),
-        ...(duplicatesIncluded ? { duplicates: true } : null),
+        ...(duplicatesIncluded ? { duplicate: true } : null),
         ...(numberOfResults > 0 ? { num_results: numberOfResults } : null),
       };
       const searchQuery = `?${qs.stringify(queryObject)}`;

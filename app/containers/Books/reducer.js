@@ -37,6 +37,7 @@ const booksReducer = (state = initialState, action) =>
     switch (action.type) {
       case LOAD_BOOKS_FOUND:
         console.log('searching books', action);
+        draft.duplicatedBooks = [];
         draft.loading = true;
         draft.error = false;
         break;
@@ -59,8 +60,8 @@ const booksReducer = (state = initialState, action) =>
         );
         break;
       case SET_DUPLICATE:
-        console.log('duplicates: ', [action.book, ...draft.duplicatedBooks]);
-        draft.duplicatedBooks = [action.book, ...draft.duplicatedBooks];
+        console.log('duplicates: ', [action.book, ...state.duplicatedBooks]);
+        draft.duplicatedBooks = [action.book, ...state.duplicatedBooks];
         break;
       case CLEAR_SELECTED:
         console.log('clearing selection');
@@ -135,6 +136,7 @@ const booksReducer = (state = initialState, action) =>
             bookToEvaluate,
           ),
         );
+        draft.duplicatedBooks = [];
         draft.loading = false;
         break;
     }
