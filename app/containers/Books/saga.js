@@ -7,15 +7,21 @@ import {
   setReferenceSucces,
   batchHideSuccess,
   batchHideFailed,
+  setTrustSuccess,
 } from './actions';
-import { LOAD_BOOKS_FOUND, BATCH_HIDE, BATCH_SET_REFERENCE } from './constants';
+import {
+  LOAD_BOOKS_FOUND,
+  BATCH_HIDE,
+  BATCH_SET_REFERENCE,
+  SET_TRUST_STATUS,
+} from './constants';
 
 const getBooks = bookQuery =>
   axios.get(`https://matilda.whooosreading.org/api/v1/search`, {
     params: {
       ...bookQuery,
       embed:
-        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicated',
+        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate',
     },
   });
 
@@ -23,7 +29,7 @@ const getBookById = id =>
   axios.get(`https://matilda.whooosreading.org/api/v1/books/text_id/${id}`, {
     params: {
       embed:
-        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicated',
+        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate',
     },
   });
 
@@ -35,7 +41,7 @@ const hideBooks = booksToHide =>
         hidden: true,
       },
       embed:
-        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicated',
+        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate',
     },
     {
       params: {
@@ -50,6 +56,33 @@ const hideBooks = booksToHide =>
     },
   );
 
+const setTrustStatus = (booksToEdit, trust) =>
+  axios.patch(
+    `https://matilda.whooosreading.org/api/v1/books/text_id`,
+    {
+      [booksToEdit.length > 1 ? 'books' : 'book']: {
+        trusted: trust,
+      },
+      embed:
+        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate',
+    },
+    {
+      params: {
+        keys: (() => {
+          const xd = booksToEdit.reduce(
+            (booksString, bookToEdit) =>
+              booksString === ''
+                ? bookToEdit.text_id
+                : `${booksString},${bookToEdit.text_id}`,
+            '',
+          );
+          console.log(xd);
+          return xd;
+        })(),
+      },
+    },
+  );
+
 const setReferenceBook = (booksToReference, referenceBook) =>
   axios.patch(
     `https://matilda.whooosreading.org/api/v1/books/text_id`,
@@ -59,7 +92,7 @@ const setReferenceBook = (booksToReference, referenceBook) =>
         hidden: true,
       },
       embed:
-        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned',
+        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate',
     },
     {
       params: {
@@ -93,6 +126,19 @@ export function* getBookSearchResults(action) {
   }
 }
 
+export function* getBatchBookTrust(action) {
+  try {
+    const { data } = yield call(
+      setTrustStatus,
+      action.booksToTrust,
+      action.trust,
+    );
+    yield put(setTrustSuccess(data.results ? data.results : [data.book]));
+  } catch (e) {
+    yield put(setReferenceFailed(e));
+  }
+}
+
 export function* getBatchBookHide(action) {
   try {
     const { data } = yield call(hideBooks, action.booksToHide);
@@ -115,6 +161,10 @@ export function* getBatchBookReference(action) {
   }
 }
 
+export function* bookTrustSaga() {
+  yield takeLatest(SET_TRUST_STATUS, getBatchBookTrust);
+}
+
 export function* loadBooksSaga() {
   yield takeLatest(LOAD_BOOKS_FOUND, getBookSearchResults);
 }
@@ -130,5 +180,10 @@ export function* referenceBooksSaga() {
 // Individual exports for testing
 export default function* booksSaga() {
   // See example in containers/HomePage/saga.js
-  yield all([loadBooksSaga(), hideBooksSaga(), referenceBooksSaga()]);
+  yield all([
+    loadBooksSaga(),
+    hideBooksSaga(),
+    referenceBooksSaga(),
+    bookTrustSaga(),
+  ]);
 }

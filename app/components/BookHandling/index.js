@@ -35,7 +35,12 @@ const Button = styled.button`
 `;
 
 function BookHandling(props) {
-  const { selected = false, batchHide = f => f, batchLinking = f => f } = props;
+  const {
+    selected = false,
+    batchHide = f => f,
+    batchLinking = f => f,
+    batchTrust = f => f,
+  } = props;
 
   return (
     <Sticky
@@ -50,6 +55,8 @@ function BookHandling(props) {
       <Wrapper>
         <Button onClick={batchHide}>Hide</Button>
         {selected && <Button onClick={batchLinking}>Link</Button>}
+        <Button onClick={batchTrust(true)}>Mass Trust</Button>
+        <Button onClick={batchTrust(false)}>Mass Distrust</Button>
       </Wrapper>
     </Sticky>
   );

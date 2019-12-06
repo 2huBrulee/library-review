@@ -16,12 +16,12 @@ const Wrapper = styled.div`
   height: 32px;
   position: relative;
   color: black;
+  padding: 0 8px;
   font-size: 16px;
 `;
 
 const StyledCheckbox = styled.div`
   position: absolute;
-  left: 3px;
   width: 24px;
   height: 24px;
   border-radius: 3px;
@@ -46,7 +46,7 @@ const HiddenCheckbox = styled.input.attrs({
       border-radius: 3px;
       width: 12px;
       height: 12px;
-      margin: 6px;
+      margin: 5px;
       background: ${props => props.theme.backgroundColor};
     }
   }
@@ -59,7 +59,7 @@ const HiddenCheckbox = styled.input.attrs({
       border-radius: 3px;
       width: 12px;
       height: 12px;
-      margin: 6px;
+      margin: 5px;
       box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.1);
       background: ${props => props.theme.backgroundColor};
     }

@@ -3,6 +3,15 @@ import axios from 'axios';
 import { loadAuthorsFoundSuccess } from './actions';
 import { LOAD_AUTHORS_FOUND } from './constants';
 
+const getAuthorkByKey = key =>
+  axios.get(`https://matilda.whooosreading.org/api/v1/authors`, {
+    params: {
+      key,
+      embed:
+        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate',
+    },
+  });
+
 const getAuthors = authorQuery =>
   axios.get(`https://matilda.whooosreading.org/api/v1/authors`, {
     params: {
@@ -17,10 +26,24 @@ const getAuthors = authorQuery =>
   });
 
 export function* getAuthorSearchResults(action) {
+  console.log(action);
   try {
-    console.log(action.authorQuery);
-    const { data } = yield call(getAuthors, action.authorQuery);
-    yield put(loadAuthorsFoundSuccess(data.authors));
+    const originRegEx = /(^AUT.+)|(^BASE.+)|(^LEXILE.+)|(^MANU.+)/g;
+    if (originRegEx.test(action.authorQuery.full_name)) {
+      const { data } = yield call(
+        getAuthorkByKey,
+        action.authorQuery.full_name,
+      );
+      yield put(
+        loadAuthorsFoundSuccess(data.authors ? data.authors : [data.book]),
+      );
+    } else {
+      console.log('here');
+      const { data } = yield call(getAuthors, action.authorQuery);
+      yield put(
+        loadAuthorsFoundSuccess(data.authors ? data.authors : [data.author]),
+      );
+    }
   } catch (e) {
     console.log(e);
   }

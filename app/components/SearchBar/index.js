@@ -18,6 +18,10 @@ import Button from '../Button';
 import Checkbox from '../Checkbox';
 import ClickableText from '../ClickableText';
 
+const StyledCheckbox = styled(Checkbox)`
+  background-color: green;
+`;
+
 const StyledTextInput = styled(TextInput)`
   transition: all 0.3s ease-in-out;
   outline: none;
@@ -32,9 +36,7 @@ const StyledTextInputNumberOf = styled(TextInput)`
   min-width: 100px;
 `;
 
-const StyledButton = styled(Button)`
-  flex: 1 1;
-`;
+const StyledButton = styled(Button)``;
 
 const StyledClickableText = styled(ClickableText)`
   min-width: 100px;
@@ -54,13 +56,20 @@ const Wrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
+  text-align: right;
   box-sizing: border-box;
   align-items: center;
-  & > ${StyledTextInput} {
-    flex: 1 0;
+
+  & > ${StyledCheckbox} {
+    background-color: red;
+    min-width: 10px;
+    flex: 0 0;
   }
+
   & > * {
     ${margin};
+    flex: 2 1;
+    min-width: 150px;
   }
 `;
 
@@ -134,7 +143,7 @@ const SearchBar = props => {
           />
         )}
         {showingMoreOptions && searchCategory === 'BOOKS' && (
-          <Checkbox
+          <StyledCheckbox
             onChange={handleShowDuplicatesClick}
             label="duplicates"
             checked={duplicatesIncluded}

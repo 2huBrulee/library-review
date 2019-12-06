@@ -76,11 +76,10 @@ export function SearchBarContainer(props) {
   } = props;
 
   const params = qs.parse(urlSearch, { ignoreQueryPrefix: true });
-  console.log(pathname);
 
   useEffect(() => {
     if (reduxInit) {
-      dispatchSetSearchCategory(pathname === '/books' ? 'BOOKS' : 'AUTHORS');
+      dispatchSetSearchCategory(pathname === '/authors' ? 'AUTHORS' : 'BOOKS');
       dispatchChangeSearchString(params.q || params.full_name || '');
       if (params.origin) dispatchSetSearchOrigin(params.origin);
       else dispatchSetSearchOrigin('ALL');

@@ -21,6 +21,7 @@ function BookList(props) {
     selectDuplicate,
     clearDuplicate,
     duplicatedBooks,
+    setTrust,
   } = props;
 
   return (
@@ -38,6 +39,7 @@ function BookList(props) {
               searchingForDuplicates={searchingForDuplicates}
               selectDuplicate={selectDuplicate}
               selectBaseBook={selectBaseBook}
+              setTrust={setTrust}
               first={index === 0}
               {...book}
               book={book}

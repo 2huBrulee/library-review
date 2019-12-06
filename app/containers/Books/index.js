@@ -35,6 +35,7 @@ import {
   clearDuplicate,
   batchHide,
   batchSetReference,
+  setTrustStatus,
 } from './actions';
 import NoSearchResults from '../../components/NoSearchResults';
 import SelectedItem from '../../components/SelectedItem';
@@ -45,6 +46,7 @@ const ShowResults = ({
   dispatchSelectBaseBook,
   dispatchSelectDuplicate,
   searchingForDuplicates,
+  dispatchSetTrust,
   duplicatedBooks,
   clearDuplicates,
 }) =>
@@ -54,6 +56,7 @@ const ShowResults = ({
       bookList={bookList}
       selectBaseBook={dispatchSelectBaseBook}
       selectDuplicate={dispatchSelectDuplicate}
+      setTrust={dispatchSetTrust}
       clearDuplicate={clearDuplicates}
       duplicatedBooks={duplicatedBooks}
     />
@@ -74,6 +77,7 @@ export function Books(props) {
     dispatchSelectDuplicate,
     dispatchBatchLink,
     dispatchBatchHide,
+    dispatchSetTrust,
     location,
     loading,
     error,
@@ -91,6 +95,11 @@ export function Books(props) {
   }, [location.search]);
 
   if (error) console.log(`fetching error: ${error}`);
+
+  const batchTrust = trust => () => {
+    showModal();
+    dispatchSetTrust(duplicatedBooks, trust);
+  };
 
   const batchHideAction = () => {
     showModal();
@@ -126,7 +135,7 @@ export function Books(props) {
             </div>
           ))}
       </Modal>
-      {baseBookSelected.gr_id ? (
+      {baseBookSelected.text_id ? (
         <SelectedItem
           baseBookSelected={baseBookSelected}
           duplicatedBooks={duplicatedBooks}
@@ -139,7 +148,8 @@ export function Books(props) {
         <BookHandling
           batchHide={batchHideAction}
           batchLinking={batchLinkingAction}
-          selected={!!baseBookSelected.gr_id}
+          batchTrust={batchTrust}
+          selected={!!baseBookSelected.text_id}
         />
       ) : null}
 
@@ -147,11 +157,12 @@ export function Books(props) {
         <WaveLoading />
       ) : (
         <ShowResults
-          searchingForDuplicates={!!baseBookSelected.gr_id}
+          searchingForDuplicates={!!baseBookSelected.text_id}
           dispatchSelectBaseBook={dispatchSelectBaseBook}
           dispatchSelectDuplicate={dispatchSelectDuplicate}
           clearDuplicates={dispatchClearDuplicate}
           duplicatedBooks={duplicatedBooks}
+          dispatchSetTrust={dispatchSetTrust}
           bookList={bookList}
         />
       )}
@@ -176,6 +187,7 @@ Books.propTypes = {
   dispatchClearDuplicate: PropTypes.func.isRequired,
   dispatchBatchHide: PropTypes.func.isRequired,
   dispatchBatchLink: PropTypes.func.isRequired,
+  dispatchSetTrust: PropTypes.func.isRequired,
   bookList: PropTypes.array,
   loading: PropTypes.bool,
   error: PropTypes.any,
@@ -204,6 +216,8 @@ function mapDispatchToProps(dispatch) {
     dispatchBatchHide: booksToHide => dispatch(batchHide(booksToHide)),
     dispatchBatchLink: (booksToLink, referenceBook) =>
       dispatch(batchSetReference(booksToLink, referenceBook)),
+    dispatchSetTrust: (booksToTrust, trust) =>
+      dispatch(setTrustStatus(booksToTrust, trust)),
   };
 }
 

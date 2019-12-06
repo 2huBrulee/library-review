@@ -12,7 +12,7 @@ import { margin } from 'styled-system';
 const StyledTextInput = styled.input`
   ${margin};
   box-sizing: content-box;
-  min-width: 256px;
+  min-width: 128px;
   height: 32px;
   border: 1px solid #707070;
   border-radius: 5px;

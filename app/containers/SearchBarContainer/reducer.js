@@ -19,7 +19,7 @@ import {
 export const initialState = {
   searchCategory: 'BOOKS',
   searchString: '',
-  searchType: 'REGULAR',
+  searchType: 'TRUSTED',
   searchOrigin: 'ALL',
   hiddenIncluded: false,
   duplicatesIncluded: false,

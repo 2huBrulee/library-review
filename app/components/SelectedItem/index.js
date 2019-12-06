@@ -14,10 +14,6 @@ import messages from './messages';
 import AuthorListItem from '../AuthorListItem';
 import BookListItem from '../BookListItem';
 
-const Reference = styled.div`
-  margin: 10px 0 0 10px;
-`;
-
 const Wrapper = styled.div`
   border-style: solid;
   border-width: thin;
@@ -44,7 +40,6 @@ function SelectedItem(props) {
       }}
     >
       <Wrapper>
-        <Reference>Reference</Reference>
         <BookListItem
           first
           selected

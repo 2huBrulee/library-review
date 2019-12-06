@@ -134,7 +134,7 @@ function AuthorListItem(props) {
         </DetailLine>
         {books.map((book, index) =>
           index < maxBooks ? (
-            <DetailLine onClick={goToBook(book)}>
+            <DetailLine key={book.text_id} onClick={goToBook(book)}>
               <ClickableSpan>{`- ${book.title}`}</ClickableSpan>
             </DetailLine>
           ) : null,

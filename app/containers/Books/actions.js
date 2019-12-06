@@ -18,6 +18,8 @@ import {
   SET_REFERENCE_SUCCESS,
   BATCH_HIDE_SUCCESS,
   BATCH_HIDE_FAILED,
+  SET_TRUST_STATUS,
+  SET_TRUST_SUCCESS,
 } from './constants';
 
 export const loadBooksFound = bookQuery => ({
@@ -83,4 +85,15 @@ export const setReferenceSucces = booksChanged => ({
 export const setReferenceFailed = error => ({
   type: SET_REFERENCE_FAILED,
   error,
+});
+
+export const setTrustStatus = (booksToTrust, trust) => ({
+  type: SET_TRUST_STATUS,
+  booksToTrust,
+  trust,
+});
+
+export const setTrustSuccess = booksChanged => ({
+  type: SET_TRUST_SUCCESS,
+  booksChanged,
 });

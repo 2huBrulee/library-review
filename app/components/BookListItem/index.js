@@ -45,6 +45,14 @@ const Details = styled.div`
   flex-direction: column;
 `;
 
+const Buttons = styled.div`
+  flex: 1;
+  max-width: 160px;
+  display: block;
+  padding: 0 0 0 15px;
+  flex-direction: column;
+`;
+
 const DetailLine = styled.div`
   margin: 5px;
   height: 30px;
@@ -72,7 +80,7 @@ const Duplicates = styled.div`
   height: inherit;
   display: flex;
   flex-direction: column;
-  padding: 0 10px 0 15px;
+  padding: 0;
   right: 0;
   overflow-y: auto;
   overflow-x: hidden;
@@ -96,7 +104,7 @@ const DeleteButton = styled.button`
 
 const Button = styled.button`
   width: 120px;
-  margin: 5px 15px 5px 5px;
+  margin: 5px auto;
   background: #fafafa;
   border-color: #ff8000;
   border-style: solid;
@@ -112,6 +120,25 @@ const Button = styled.button`
   cursor: pointer;
   ${({ selected }) => selected && `height: 25px;`}
   ${({ searchingForDuplicates }) => searchingForDuplicates && `height: 40px;`}
+`;
+
+const TrustedButton = styled.button`
+  width: 120px;
+  margin: 5px auto;
+  background-color: #fafafa;
+  border-color: green;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  align-items: center;
+  height: 25px;
+  padding: 0 15px;
+  justify-content: center;
+  display: flex;
+  font-size: 16px;
+  color: green;
+  cursor: pointer;
+  ${({ trusted }) => trusted && `color: #fafafa; background-color: green`}
 `;
 
 const StyledCheckbox = styled(Checkbox)`
@@ -137,14 +164,20 @@ function BookListItem(props) {
     history,
     // hidden,
     selectBaseBook,
+    trusted,
+    hidden,
+    duplicate,
     book,
     selected,
     clearSelection,
     selectDuplicate = f => f,
     duplicatedBooks,
     clearDuplicate,
+    setTrust,
     checked,
   } = props;
+
+  const changeTrust = () => setTrust([book], !trusted);
 
   const changeCheck = () =>
     checked ? clearDuplicate(book) : selectDuplicate(book);
@@ -162,7 +195,7 @@ function BookListItem(props) {
     <Container first={props.first}>
       {!selected ? (
         <StyledCheckbox
-          color={'#FF8000'}
+          color="#FF8000"
           size={3}
           tickSize={3}
           borderThickness={1}
@@ -204,32 +237,42 @@ function BookListItem(props) {
           </DetailLine>
         ) : null}
         <DetailLine>
+          <BoldSpan>Hidden: </BoldSpan>
+          <span>{hidden ? 'true ' : 'false '}</span>
           <BoldSpan>Variety: </BoldSpan>
           <span>{text_variety}</span>
         </DetailLine>
+        <DetailLine>
+          <BoldSpan>Duplicate: </BoldSpan>
+          <span>{duplicate || '-'}</span>
+        </DetailLine>
       </Details>
-
-      <Duplicates>
-        {selected ? (
-          <Button selected onClick={clearSelection}>
-            Clear
-          </Button>
-        ) : (
-          <Button onClick={setSelected}>Reference</Button>
-        )}
-        {duplicatedBooks && duplicatedBooks.length > 0 && selected
-          ? duplicatedBooks.map(duplicatedBook => (
-              <DuplicateBook>
-                <DetailLine maxWidth={100} title={duplicatedBook.title}>
-                  {duplicatedBook.title}
-                </DetailLine>
-                <DeleteButton onClick={deleteDuplicate(duplicatedBook)}>
-                  X
-                </DeleteButton>
-              </DuplicateBook>
-            ))
-          : null}
-      </Duplicates>
+      <Buttons>
+        <TrustedButton onClick={changeTrust} trusted={trusted}>
+          {trusted ? 'trusted' : 'trust'}
+        </TrustedButton>
+        <Duplicates>
+          {selected ? (
+            <Button selected onClick={clearSelection}>
+              Clear
+            </Button>
+          ) : (
+            <Button onClick={setSelected}>Reference</Button>
+          )}
+          {duplicatedBooks && duplicatedBooks.length > 0 && selected
+            ? duplicatedBooks.map(duplicatedBook => (
+                <DuplicateBook>
+                  <DetailLine maxWidth={100} title={duplicatedBook.title}>
+                    {duplicatedBook.title}
+                  </DetailLine>
+                  <DeleteButton onClick={deleteDuplicate(duplicatedBook)}>
+                    X
+                  </DeleteButton>
+                </DuplicateBook>
+              ))
+            : null}
+        </Duplicates>
+      </Buttons>
     </Container>
   );
 }

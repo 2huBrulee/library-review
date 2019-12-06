@@ -18,6 +18,8 @@ import {
   SET_REFERENCE_SUCCESS,
   BATCH_HIDE_FAILED,
   BATCH_HIDE_SUCCESS,
+  SET_TRUST_STATUS,
+  SET_TRUST_SUCCESS,
 } from './constants';
 
 export const initialState = {
@@ -52,8 +54,8 @@ const booksReducer = (state = initialState, action) =>
       case SET_SELECTED_BOOK:
         console.log('selecting ', action.book);
         draft.baseBookSelected = action.book;
-        draft.duplicatedBooks = draft.duplicatedBooks.filter(
-          book => book.gr_id !== action.book.gr_id,
+        draft.duplicatedBooks = state.duplicatedBooks.filter(
+          book => book.text_id !== action.book.text_id,
         );
         break;
       case SET_DUPLICATE:
@@ -69,11 +71,11 @@ const booksReducer = (state = initialState, action) =>
         console.log(
           'duplicates',
           draft.duplicatedBooks.filter(
-            book => book.gr_id !== action.book.gr_id,
+            book => book.text_id !== action.book.text_id,
           ),
         );
-        draft.duplicatedBooks = draft.duplicatedBooks.filter(
-          book => book.gr_id !== action.book.gr_id,
+        draft.duplicatedBooks = state.duplicatedBooks.filter(
+          book => book.text_id !== action.book.text_id,
         );
         break;
       case BATCH_HIDE:
@@ -89,7 +91,7 @@ const booksReducer = (state = initialState, action) =>
       case BATCH_HIDE_SUCCESS:
         draft.editedBooks = action.booksChanged;
         draft.duplicatedBooks = [];
-        draft.bookList = draft.bookList.filter(
+        draft.bookList = state.bookList.filter(
           bookToEvaluate =>
             action.booksChanged.findIndex(
               bookChanged => bookChanged.text_id === bookToEvaluate.text_id,
@@ -109,11 +111,29 @@ const booksReducer = (state = initialState, action) =>
       case SET_REFERENCE_SUCCESS:
         draft.editedBooks = action.booksChanged;
         draft.duplicatedBooks = [];
-        draft.bookList = draft.bookList.filter(
+        draft.bookList = state.bookList.filter(
           bookToEvaluate =>
             action.booksChanged.findIndex(
               bookChanged => bookChanged.text_id === bookToEvaluate.text_id,
             ) < 0,
+        );
+        draft.loading = false;
+        break;
+      case SET_TRUST_STATUS:
+        draft.loading = true;
+        draft.error = false;
+        break;
+      case SET_TRUST_SUCCESS:
+        draft.editedBooks = action.booksChanged;
+        draft.bookList = state.bookList.map(bookToEvaluate =>
+          action.booksChanged.reduce(
+            (bookToReturn, bookChanged) =>
+              bookChanged.text_id === bookToEvaluate.text_id &&
+              bookToReturn.text_id === bookToEvaluate.text_id
+                ? bookChanged
+                : bookToReturn,
+            bookToEvaluate,
+          ),
         );
         draft.loading = false;
         break;
