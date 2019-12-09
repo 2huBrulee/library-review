@@ -19,3 +19,5 @@ export const SET_REFERENCE_FAILED = 'app/Books/SET_REFERENCE_FAILED';
 export const SET_REFERENCE_SUCCESS = 'app/Books/SET_REFERENCE_SUCCESS';
 export const SET_TRUST_STATUS = 'app/Books/SET_TRUST_STATUS';
 export const SET_TRUST_SUCCESS = 'app/Books/SET_TRUST_SUCCESS';
+export const EDIT_BOOK = 'app/Books/EDIT_BOOK';
+export const EDIT_SUCCESS = 'app/Books/EDIT_SUCCESS';

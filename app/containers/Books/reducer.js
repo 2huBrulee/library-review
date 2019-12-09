@@ -20,6 +20,8 @@ import {
   BATCH_HIDE_SUCCESS,
   SET_TRUST_STATUS,
   SET_TRUST_SUCCESS,
+  EDIT_BOOK,
+  EDIT_SUCCESS,
 } from './constants';
 
 export const initialState = {
@@ -126,6 +128,24 @@ const booksReducer = (state = initialState, action) =>
         draft.error = false;
         break;
       case SET_TRUST_SUCCESS:
+        draft.editedBooks = action.booksChanged;
+        draft.bookList = state.bookList.map(bookToEvaluate =>
+          action.booksChanged.reduce(
+            (bookToReturn, bookChanged) =>
+              bookChanged.text_id === bookToEvaluate.text_id &&
+              bookToReturn.text_id === bookToEvaluate.text_id
+                ? bookChanged
+                : bookToReturn,
+            bookToEvaluate,
+          ),
+        );
+        draft.duplicatedBooks = [];
+        draft.loading = false;
+        break;
+      case EDIT_BOOK:
+        break;
+      case EDIT_SUCCESS:
+        console.log(action);
         draft.editedBooks = action.booksChanged;
         draft.bookList = state.bookList.map(bookToEvaluate =>
           action.booksChanged.reduce(

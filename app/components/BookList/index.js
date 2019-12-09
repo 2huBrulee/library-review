@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 
 // import { FormattedMessage } from 'react-intl';
-import BookListItem from '../BookListItem';
+import BookLogic from '../BookLogic';
 import BookListItemEditMode from '../BookListItemEditMode';
 // import messages from './messages';
 
@@ -23,14 +23,14 @@ function BookList(props) {
     clearDuplicate,
     duplicatedBooks,
     setTrust,
+    edit,
   } = props;
 
   return (
     <div>
-      {bookList.length > 0 ? <BookListItemEditMode book={bookList[0]} /> : null}
       {bookList.length > 0
         ? bookList.map((book, index) => (
-            <BookListItem
+            <BookLogic
               checked={
                 !!duplicatedBooks.find(
                   duplicatedBook => book.text_id === duplicatedBook.text_id,
@@ -42,6 +42,7 @@ function BookList(props) {
               selectDuplicate={selectDuplicate}
               selectBaseBook={selectBaseBook}
               setTrust={setTrust}
+              edit={edit}
               first={index === 0}
               {...book}
               book={book}

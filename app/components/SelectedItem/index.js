@@ -10,9 +10,9 @@ import React from 'react';
 import Sticky from 'react-sticky-el';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
+import BookLogic from 'components/BookLogic';
 import messages from './messages';
 import AuthorListItem from '../AuthorListItem';
-import BookListItem from '../BookListItem';
 
 const Wrapper = styled.div`
   border-style: solid;
@@ -40,9 +40,10 @@ function SelectedItem(props) {
       }}
     >
       <Wrapper>
-        <BookListItem
+        <BookLogic
           first
           selected
+          book={book}
           {...book}
           clearSelection={clearSelection}
           duplicatedBooks={duplicatedBooks}

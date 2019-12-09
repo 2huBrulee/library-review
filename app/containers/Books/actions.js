@@ -20,6 +20,8 @@ import {
   BATCH_HIDE_FAILED,
   SET_TRUST_STATUS,
   SET_TRUST_SUCCESS,
+  EDIT_BOOK,
+  EDIT_SUCCESS,
 } from './constants';
 
 export const loadBooksFound = bookQuery => ({
@@ -95,5 +97,16 @@ export const setTrustStatus = (booksToTrust, trust) => ({
 
 export const setTrustSuccess = booksChanged => ({
   type: SET_TRUST_SUCCESS,
+  booksChanged,
+});
+
+export const editBook = (book, changes) => ({
+  type: EDIT_BOOK,
+  book,
+  changes,
+});
+
+export const editSuccess = booksChanged => ({
+  type: EDIT_SUCCESS,
   booksChanged,
 });

@@ -36,6 +36,7 @@ import {
   batchHide,
   batchSetReference,
   setTrustStatus,
+  editBook,
 } from './actions';
 import NoSearchResults from '../../components/NoSearchResults';
 import SelectedItem from '../../components/SelectedItem';
@@ -47,6 +48,7 @@ const ShowResults = ({
   dispatchSelectDuplicate,
   searchingForDuplicates,
   dispatchSetTrust,
+  dispatchEditBook,
   duplicatedBooks,
   clearDuplicates,
 }) =>
@@ -57,6 +59,7 @@ const ShowResults = ({
       selectBaseBook={dispatchSelectBaseBook}
       selectDuplicate={dispatchSelectDuplicate}
       setTrust={dispatchSetTrust}
+      edit={dispatchEditBook}
       clearDuplicate={clearDuplicates}
       duplicatedBooks={duplicatedBooks}
     />
@@ -84,6 +87,7 @@ export function Books(props) {
     baseBookSelected,
     duplicatedBooks,
     editedBooks,
+    dispatchEditBook,
   } = props;
 
   const params = qs.parse(location.search, { ignoreQueryPrefix: true });
@@ -163,6 +167,7 @@ export function Books(props) {
           clearDuplicates={dispatchClearDuplicate}
           duplicatedBooks={duplicatedBooks}
           dispatchSetTrust={dispatchSetTrust}
+          dispatchEditBook={dispatchEditBook}
           bookList={bookList}
         />
       )}
@@ -188,6 +193,7 @@ Books.propTypes = {
   dispatchBatchHide: PropTypes.func.isRequired,
   dispatchBatchLink: PropTypes.func.isRequired,
   dispatchSetTrust: PropTypes.func.isRequired,
+  dispatchEditBook: PropTypes.func.isRequired,
   bookList: PropTypes.array,
   loading: PropTypes.bool,
   error: PropTypes.any,
@@ -218,6 +224,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(batchSetReference(booksToLink, referenceBook)),
     dispatchSetTrust: (booksToTrust, trust) =>
       dispatch(setTrustStatus(booksToTrust, trust)),
+    dispatchEditBook: (book, changes) => dispatch(editBook(book, changes)),
   };
 }
 

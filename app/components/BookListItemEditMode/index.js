@@ -4,7 +4,7 @@
  *
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import TextInput from 'components/TextInput';
@@ -52,20 +52,70 @@ const Label = styled.div`
 */
 
 function BookListItemEditMode(props) {
-  const { book } = props;
+  const { modify, book, saveChanges } = props;
 
   const [changes, setChanges] = useState({
-    title: book.title,
-    img_url: book.img_url,
-    cover_url: book.cover_url,
-    hidden: book.hidden,
-    series: book.series,
-    series_index: book.series_index,
-    trusted: book.trusted,
-    text_variety: book.text_variety,
+    title: '',
+    img_url: '',
+    cover_url: '',
+    hidden: false,
+    series: '',
+    series_index: '',
+    trusted: false,
+    text_variety: '',
   });
 
-  const handleChange = e => setChanges({ [e.target.name]: e.target.value });
+  const {
+    title,
+    img_url,
+    cover_url,
+    hidden,
+    series,
+    series_index,
+    trusted,
+    text_variety,
+  } = book;
+
+  useEffect(
+    () =>
+      setChanges({
+        title,
+        img_url,
+        cover_url,
+        hidden,
+        series,
+        series_index,
+        trusted,
+        text_variety,
+      }),
+    [
+      title,
+      img_url,
+      cover_url,
+      hidden,
+      series,
+      series_index,
+      trusted,
+      text_variety,
+    ],
+  );
+
+  const cancelEdition = () => modify(false);
+
+  const save = () => {
+    saveChanges(changes);
+    cancelEdition();
+  };
+
+  const handleChange = e => {
+    e.persist();
+    setChanges(prevValues => ({
+      ...prevValues,
+      ...(e.target.type === 'checkbox'
+        ? { [e.target.name]: e.target.checked }
+        : { [e.target.name]: e.target.value }),
+    }));
+  };
 
   return (
     <Wrapper>
@@ -115,15 +165,18 @@ function BookListItemEditMode(props) {
       </InputDiv>
       <Checkbox
         onChange={handleChange}
+        name="hidden"
         label="hidden"
         checked={changes.hidden}
       />
       <Checkbox
         onChange={handleChange}
+        name="trusted"
         label="trusted"
         checked={changes.trusted}
       />
-      <Button>Save</Button>
+      <Button onClick={save}>Save</Button>
+      <Button onClick={cancelEdition}>Cancel</Button>
     </Wrapper>
   );
 }

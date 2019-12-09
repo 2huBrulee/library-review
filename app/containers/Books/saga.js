@@ -8,12 +8,14 @@ import {
   batchHideSuccess,
   batchHideFailed,
   setTrustSuccess,
+  editSuccess,
 } from './actions';
 import {
   LOAD_BOOKS_FOUND,
   BATCH_HIDE,
   BATCH_SET_REFERENCE,
   SET_TRUST_STATUS,
+  EDIT_BOOK,
 } from './constants';
 
 const getBooks = bookQuery =>
@@ -53,6 +55,16 @@ const hideBooks = booksToHide =>
           '',
         ),
       },
+    },
+  );
+
+const editBook = (book, newData) =>
+  axios.patch(
+    `https://matilda.whooosreading.org/api/v1/books/text_id/${book.text_id}`,
+    {
+      book: newData,
+      embed:
+        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate',
     },
   );
 
@@ -139,6 +151,15 @@ export function* getBatchBookTrust(action) {
   }
 }
 
+export function* getEditBook(action) {
+  try {
+    const { data } = yield call(editBook, action.book, action.changes);
+    yield put(editSuccess(data.results ? data.results : [data.book]));
+  } catch (e) {
+    yield put(setReferenceFailed(e));
+  }
+}
+
 export function* getBatchBookHide(action) {
   try {
     const { data } = yield call(hideBooks, action.booksToHide);
@@ -177,6 +198,10 @@ export function* referenceBooksSaga() {
   yield takeLatest(BATCH_SET_REFERENCE, getBatchBookReference);
 }
 
+export function* editBookSaga() {
+  yield takeLatest(EDIT_BOOK, getEditBook);
+}
+
 // Individual exports for testing
 export default function* booksSaga() {
   // See example in containers/HomePage/saga.js
@@ -185,5 +210,6 @@ export default function* booksSaga() {
     hideBooksSaga(),
     referenceBooksSaga(),
     bookTrustSaga(),
+    editBookSaga(),
   ]);
 }
