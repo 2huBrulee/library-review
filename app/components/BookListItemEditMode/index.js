@@ -109,12 +109,35 @@ function BookListItemEditMode(props) {
 
   const handleChange = e => {
     e.persist();
-    setChanges(prevValues => ({
-      ...prevValues,
-      ...(e.target.type === 'checkbox'
-        ? { [e.target.name]: e.target.checked }
-        : { [e.target.name]: e.target.value }),
-    }));
+    if (e.target.name === 'series_index') {
+      try {
+        const newSI = parseInt(e.target.value, 10);
+        if (newSI >= 0) {
+          setChanges(prevValues => ({
+            ...prevValues,
+            [e.target.name]: newSI.toString(10),
+          }));
+        } else {
+          setChanges(prevValues => ({
+            ...prevValues,
+            [e.target.name]: '',
+          }));
+        }
+      } catch (ex) {
+        setChanges(prevValues => ({
+          ...prevValues,
+          [e.target.name]: '',
+        }));
+      }
+    } else {
+      console.log('nope');
+      setChanges(prevValues => ({
+        ...prevValues,
+        ...(e.target.type === 'checkbox'
+          ? { [e.target.name]: e.target.checked }
+          : { [e.target.name]: e.target.value }),
+      }));
+    }
   };
 
   return (
