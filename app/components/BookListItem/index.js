@@ -201,6 +201,7 @@ function BookListItem(props) {
     // gr_id,
     cover_url,
     lexile_score,
+    lexile_record,
     series,
     series_index,
     text_variety,
@@ -280,8 +281,6 @@ function BookListItem(props) {
             <BoldSpan>Author: </BoldSpan>
             <span>{author_full_name}</span>
           </ClickableSpan>
-          <BoldSpan> Lexile: </BoldSpan>
-          <span>{lexile_score}</span>
         </DetailLine>
         {series ? (
           <DetailLine>
@@ -293,12 +292,22 @@ function BookListItem(props) {
         ) : null}
         <DetailLine>
           <BoldSpan>Variety: </BoldSpan>
-          <span>{text_variety}</span>
+          <span>{text_variety || ' - '}</span>
+          <BoldSpan> Duplicate: </BoldSpan>
+          <span>{duplicate || ' - '}</span>
         </DetailLine>
         <DetailLine>
-          <BoldSpan>Duplicate: </BoldSpan>
-          <span>{duplicate || '-'}</span>
+          <BoldSpan> Lexile Score: </BoldSpan>
+          <span>{lexile_score || 'none'}</span>
+          {lexile_record && <BoldSpan> Lexile Author: </BoldSpan>}
+          {lexile_record && <span>{lexile_record.lexile_author}</span>}
         </DetailLine>
+        {lexile_record && (
+          <DetailLine>
+            <BoldSpan> Lexile Title: </BoldSpan>
+            <span>{lexile_record.title}</span>
+          </DetailLine>
+        )}
       </Details>
       <Buttons>
         <TrustedButton onClick={changeTrust} trusted={trusted}>
