@@ -12,13 +12,15 @@ import { validateEditFields } from 'containers/Books/validations';
 // import styled from 'styled-components';
 
 function BookLogic(props) {
-  const { book, edit } = props;
+  const { book, edit, hideBook } = props;
   const [isBeingModified, setModify] = useState(false);
 
   const saveChanges = changes => {
     const validatedChanges = validateEditFields(book, changes);
-    edit(book, validatedChanges);
+    if (Object.keys(validatedChanges).length > 0) edit(book, validatedChanges);
   };
+
+  const toggleHideBook = () => hideBook([book], !book.hidden);
 
   if (isBeingModified)
     return (
@@ -28,7 +30,13 @@ function BookLogic(props) {
         {...props}
       />
     );
-  return <BookListItem modify={setModify} {...props} />;
+  return (
+    <BookListItem
+      toggleHideBook={toggleHideBook}
+      modify={setModify}
+      {...props}
+    />
+  );
 }
 
 BookLogic.propTypes = {};

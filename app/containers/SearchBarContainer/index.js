@@ -22,6 +22,7 @@ import {
   BOOKS,
   TRUSTED,
   GR,
+  REGULAR,
 } from './constants';
 import makeSelectSearchBarContainer, {
   searchCategorySelector,
@@ -84,7 +85,8 @@ export function SearchBarContainer(props) {
       if (params.origin) dispatchSetSearchOrigin(params.origin);
       else dispatchSetSearchOrigin('ALL');
       if (params.trusted) dispatchSetSearchType(TRUSTED);
-      if (params.gr) dispatchSetSearchType(GR);
+      else if (params.gr) dispatchSetSearchType(GR);
+      else dispatchSetSearchType(REGULAR);
       if (params.hidden) dispatchChangeHiddenVisibility(params.hidden);
       if (params.duplicate)
         dispatchChangeDuplicatesVisibility(params.duplicate);

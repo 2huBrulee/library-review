@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import TextInput from 'components/TextInput';
 import Checkbox from 'components/Checkbox';
 import Button from 'components/Button';
+import Select from 'components/Select';
 
 const Wrapper = styled.div`
   max-width: 800px;
@@ -47,8 +48,12 @@ const Label = styled.div`
   padding: 0;
 `;
 
+const StyledSelect = styled(Select)`
+  width: 196px;
+`;
+
 /*
-  title, img_url, cover_url, hidden, series, series_index, trusted, text_variety
+  title, img_url, duplicate, hidden, series, series_index, trusted, text_variety
 */
 
 function BookListItemEditMode(props) {
@@ -57,7 +62,7 @@ function BookListItemEditMode(props) {
   const [changes, setChanges] = useState({
     title: '',
     img_url: '',
-    cover_url: '',
+    duplicate: '',
     hidden: false,
     series: '',
     series_index: '',
@@ -68,7 +73,7 @@ function BookListItemEditMode(props) {
   const {
     title,
     img_url,
-    cover_url,
+    duplicate,
     hidden,
     series,
     series_index,
@@ -81,7 +86,7 @@ function BookListItemEditMode(props) {
       setChanges({
         title,
         img_url,
-        cover_url,
+        duplicate,
         hidden,
         series,
         series_index,
@@ -91,7 +96,7 @@ function BookListItemEditMode(props) {
     [
       title,
       img_url,
-      cover_url,
+      duplicate,
       hidden,
       series,
       series_index,
@@ -109,6 +114,7 @@ function BookListItemEditMode(props) {
 
   const handleChange = e => {
     e.persist();
+    console.log(e.target.value);
     if (e.target.name === 'series_index') {
       try {
         const newSI = parseInt(e.target.value, 10);
@@ -130,7 +136,6 @@ function BookListItemEditMode(props) {
         }));
       }
     } else {
-      console.log('nope');
       setChanges(prevValues => ({
         ...prevValues,
         ...(e.target.type === 'checkbox'
@@ -155,11 +160,11 @@ function BookListItemEditMode(props) {
         />
       </InputDiv>
       <InputDiv>
-        <Label>Cover URL</Label>
+        <Label>Duplicate</Label>
         <TextInput
           onChange={handleChange}
-          name="cover_url"
-          value={changes.cover_url}
+          name="duplicate"
+          value={changes.duplicate}
         />
       </InputDiv>
       <InputDiv>
@@ -180,12 +185,17 @@ function BookListItemEditMode(props) {
       </InputDiv>
       <InputDiv>
         <Label>Text Variety</Label>
-        <TextInput
-          onChange={handleChange}
+        <StyledSelect
           name="text_variety"
           value={changes.text_variety}
+          onChange={handleChange}
+          options={[
+            { label: 'fiction', value: 'fiction' },
+            { label: 'non-fiction', value: 'non-fiction' },
+          ]}
         />
       </InputDiv>
+
       <Checkbox
         onChange={handleChange}
         name="hidden"

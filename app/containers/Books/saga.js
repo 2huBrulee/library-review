@@ -24,6 +24,7 @@ const getBooks = bookQuery =>
       ...bookQuery,
       embed:
         'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate',
+      force_display_cover: true,
     },
   });
 
@@ -32,18 +33,20 @@ const getBookById = id =>
     params: {
       embed:
         'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate',
+      force_display_cover: true,
     },
   });
 
-const hideBooks = booksToHide =>
+const hideBooks = (booksToHide, hidden) =>
   axios.patch(
     `https://matilda.whooosreading.org/api/v1/books/text_id`,
     {
       [booksToHide.length > 1 ? 'books' : 'book']: {
-        hidden: true,
+        hidden,
       },
       embed:
         'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate',
+      force_display_cover: true,
     },
     {
       params: {
@@ -65,6 +68,7 @@ const editBook = (book, newData) =>
       book: newData,
       embed:
         'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate',
+      force_display_cover: true,
     },
   );
 
@@ -77,6 +81,7 @@ const setTrustStatus = (booksToEdit, trust) =>
       },
       embed:
         'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate',
+      force_display_cover: true,
     },
     {
       params: {
@@ -105,6 +110,7 @@ const setReferenceBook = (booksToReference, referenceBook) =>
       },
       embed:
         'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate',
+      force_display_cover: true,
     },
     {
       params: {
@@ -162,7 +168,7 @@ export function* getEditBook(action) {
 
 export function* getBatchBookHide(action) {
   try {
-    const { data } = yield call(hideBooks, action.booksToHide);
+    const { data } = yield call(hideBooks, action.booksToHide, action.hidden);
     yield put(batchHideSuccess(data.results ? data.results : [data.book]));
   } catch (e) {
     yield put(batchHideFailed(e));

@@ -2,7 +2,7 @@ export const validateEditFields = (baseBook, changes) => {
   const {
     title,
     img_url,
-    cover_url,
+    duplicate,
     hidden,
     series,
     series_index,
@@ -18,10 +18,10 @@ export const validateEditFields = (baseBook, changes) => {
     if (changes.img_url.length > 0) validatedChanges.img_url = changes.img_url;
     else validatedChanges.img_url = null;
   }
-  if (cover_url !== changes.cover_url) {
-    if (changes.cover_url.length > 0)
-      validatedChanges.cover_url = changes.cover_url;
-    else validatedChanges.cover_url = null;
+  if (duplicate !== changes.duplicate) {
+    if (changes.duplicate.length > 0)
+      validatedChanges.duplicate = changes.duplicate;
+    else validatedChanges.duplicate = null;
   }
   if (series !== changes.series) {
     if (changes.series.length > 0) validatedChanges.title = changes.series;
@@ -38,7 +38,7 @@ export const validateEditFields = (baseBook, changes) => {
     else validatedChanges.text_variety = null;
   }
   if (hidden !== changes.hidden) validatedChanges.hidden = changes.hidden;
-  if (trusted !== changes.trusted) validatedChanges.hidden = changes.trusted;
+  if (trusted !== changes.trusted) validatedChanges.trusted = changes.trusted;
 
   console.log(validatedChanges);
   return validatedChanges;

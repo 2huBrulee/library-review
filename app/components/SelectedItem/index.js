@@ -28,6 +28,7 @@ function SelectedItem(props) {
     clearSelection,
     clearDuplicate,
     duplicatedBooks,
+    hideBook,
   } = props;
   return (
     <Sticky
@@ -45,6 +46,7 @@ function SelectedItem(props) {
           selected
           book={book}
           {...book}
+          hideBook={hideBook}
           clearSelection={clearSelection}
           duplicatedBooks={duplicatedBooks}
           clearDuplicate={clearDuplicate}

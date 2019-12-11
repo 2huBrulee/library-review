@@ -58,9 +58,10 @@ export const clearDuplicate = book => ({
   book,
 });
 
-export const batchHide = booksToHide => ({
+export const batchHide = (booksToHide, hidden) => ({
   type: BATCH_HIDE,
   booksToHide,
+  hidden,
 });
 
 export const batchHideSuccess = booksChanged => ({

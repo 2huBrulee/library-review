@@ -50,6 +50,7 @@ const ShowResults = ({
   dispatchSetTrust,
   dispatchEditBook,
   duplicatedBooks,
+  hideBook,
   clearDuplicates,
 }) =>
   bookList.length > 0 ? (
@@ -60,6 +61,7 @@ const ShowResults = ({
       selectDuplicate={dispatchSelectDuplicate}
       setTrust={dispatchSetTrust}
       edit={dispatchEditBook}
+      hideBook={hideBook}
       clearDuplicate={clearDuplicates}
       duplicatedBooks={duplicatedBooks}
     />
@@ -107,7 +109,7 @@ export function Books(props) {
 
   const batchHideAction = () => {
     showModal();
-    dispatchBatchHide(duplicatedBooks);
+    dispatchBatchHide(duplicatedBooks, true);
   };
 
   const batchLinkingAction = () => {
@@ -145,6 +147,7 @@ export function Books(props) {
           duplicatedBooks={duplicatedBooks}
           clearSelection={dispatchClearSelection}
           clearDuplicate={dispatchClearDuplicate}
+          hideBook={dispatchBatchHide}
           book={baseBookSelected}
         />
       ) : null}
@@ -168,6 +171,7 @@ export function Books(props) {
           duplicatedBooks={duplicatedBooks}
           dispatchSetTrust={dispatchSetTrust}
           dispatchEditBook={dispatchEditBook}
+          hideBook={dispatchBatchHide}
           bookList={bookList}
         />
       )}
@@ -219,7 +223,8 @@ function mapDispatchToProps(dispatch) {
     dispatchSelectDuplicate: book => dispatch(setDuplicate(book)),
     dispatchClearSelection: () => dispatch(clearSelected()),
     dispatchClearDuplicate: book => dispatch(clearDuplicate(book)),
-    dispatchBatchHide: booksToHide => dispatch(batchHide(booksToHide)),
+    dispatchBatchHide: (booksToHide, hidden) =>
+      dispatch(batchHide(booksToHide, hidden)),
     dispatchBatchLink: (booksToLink, referenceBook) =>
       dispatch(batchSetReference(booksToLink, referenceBook)),
     dispatchSetTrust: (booksToTrust, trust) =>

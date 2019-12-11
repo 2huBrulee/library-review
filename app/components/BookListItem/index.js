@@ -141,6 +141,25 @@ const TrustedButton = styled.button`
   ${({ trusted }) => trusted && `color: #fafafa; background-color: green`}
 `;
 
+const HiddenButton = styled.button`
+  width: 120px;
+  margin: 5px auto;
+  background-color: #fafafa;
+  border-color: darkgray;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  align-items: center;
+  height: 25px;
+  padding: 0 15px;
+  justify-content: center;
+  display: flex;
+  font-size: 16px;
+  color: darkgray;
+  cursor: pointer;
+  ${({ hidden }) => hidden && `color: #fafafa; background-color: darkgray`}
+`;
+
 const ButtonColumn = styled.div`
   display: flex;
   flex-flow: column wrap;
@@ -198,6 +217,7 @@ function BookListItem(props) {
     selectDuplicate = f => f,
     duplicatedBooks,
     clearDuplicate,
+    toggleHideBook,
     setTrust,
     checked,
     modify,
@@ -272,8 +292,6 @@ function BookListItem(props) {
           </DetailLine>
         ) : null}
         <DetailLine>
-          <BoldSpan>Hidden: </BoldSpan>
-          <span>{hidden ? 'true ' : 'false '}</span>
           <BoldSpan>Variety: </BoldSpan>
           <span>{text_variety}</span>
         </DetailLine>
@@ -286,6 +304,9 @@ function BookListItem(props) {
         <TrustedButton onClick={changeTrust} trusted={trusted}>
           {trusted ? 'trusted' : 'trust'}
         </TrustedButton>
+        <HiddenButton onClick={toggleHideBook} hidden={hidden}>
+          {hidden ? 'hidden' : 'not hidden'}
+        </HiddenButton>
         <Duplicates>
           {selected ? (
             <Button selected onClick={clearSelection}>
