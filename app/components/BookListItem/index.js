@@ -181,6 +181,12 @@ const Icon = styled.svg`
   height: 32px;
 `;
 
+const DivisionLine = styled.div`
+  height: 3px;
+  border: none;
+  border-bottom: 1px solid lightgray;
+`;
+
 const ButtonIcon = styled.button`
   background-color: #fafafa;
   padding: 0;
@@ -296,15 +302,23 @@ function BookListItem(props) {
           <BoldSpan> Duplicate: </BoldSpan>
           <span>{duplicate || ' - '}</span>
         </DetailLine>
-        <DetailLine>
-          <BoldSpan> Lexile Score: </BoldSpan>
-          <span>{lexile_score || 'none'}</span>
-          {lexile_record && <BoldSpan> Lexile Author: </BoldSpan>}
-          {lexile_record && <span>{lexile_record.lexile_author}</span>}
-        </DetailLine>
+        {lexile_record && <DivisionLine />}
         {lexile_record && (
           <DetailLine>
-            <BoldSpan> Lexile Title: </BoldSpan>
+            <BoldSpan>Lexile Record</BoldSpan>
+          </DetailLine>
+        )}
+        {lexile_record && (
+          <DetailLine>
+            <BoldSpan>Score: </BoldSpan>
+            <span>{lexile_score}</span>
+            <BoldSpan> Author: </BoldSpan>
+            <span>{lexile_record.lexile_author}</span>
+          </DetailLine>
+        )}
+        {lexile_record && (
+          <DetailLine>
+            <BoldSpan>Title: </BoldSpan>
             <span>{lexile_record.title}</span>
           </DetailLine>
         )}
