@@ -13,7 +13,7 @@ const StyledTextInput = styled.input`
   ${margin};
   box-sizing: content-box;
   min-width: 128px;
-  height: 32px;
+  min-height: 32px;
   border: 1px solid #707070;
   border-radius: 5px;
   padding: 4px 8px;

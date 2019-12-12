@@ -12,7 +12,7 @@ import { margin } from 'styled-system';
 const StyledSelect = styled.select`
   ${margin};
   box-sizing: content-box;
-  height: 32px;
+  min-height: 32px;
   min-width: 128px;
   border: 1px solid #707070;
   border-radius: 5px;

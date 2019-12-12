@@ -325,10 +325,10 @@ function BookListItem(props) {
       </Details>
       <Buttons>
         <TrustedButton onClick={changeTrust} trusted={trusted}>
-          {trusted ? 'trusted' : 'trust'}
+          {trusted ? 'Trusted' : 'Trust'}
         </TrustedButton>
         <HiddenButton onClick={toggleHideBook} hidden={hidden}>
-          {hidden ? 'hidden' : 'not hidden'}
+          {hidden ? 'Hidden' : 'Visible'}
         </HiddenButton>
         <Duplicates>
           {selected ? (
