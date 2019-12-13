@@ -253,10 +253,23 @@ function BookListItem(props) {
     checked,
     modify,
     searchLexile,
+    edit,
   } = props;
 
   const [editingLexile, setEditingLexile] = useState(false);
   const [selectedLexile, setSelectedLexile] = useState(null);
+
+  const editBookLexile = () => {
+    if (selectedLexile) {
+      if (
+        !lexile_record ||
+        selectedLexile.lexile_id !== lexile_record.lexile_id
+      ) {
+        edit(book, { lexile_record_ir: selectedLexile.lexile_id });
+      }
+    }
+    setEditingLexileFalse();
+  };
 
   const setEditingLexileTrue = () => {
     setSelectedLexile(lexile_record);
@@ -377,7 +390,7 @@ function BookListItem(props) {
         )}
         {editingLexile && (
           <LexileButtonsContainer>
-            <Button onClick={f => f}>Save</Button>
+            <Button onClick={editBookLexile}>Save</Button>
             <Button onClick={setEditingLexileFalse}>Cancel</Button>
           </LexileButtonsContainer>
         )}

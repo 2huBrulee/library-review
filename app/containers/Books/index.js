@@ -147,6 +147,7 @@ export function Books(props) {
           duplicatedBooks={duplicatedBooks}
           clearSelection={dispatchClearSelection}
           clearDuplicate={dispatchClearDuplicate}
+          dispatchEditBook={dispatchEditBook}
           hideBook={dispatchBatchHide}
           book={baseBookSelected}
         />
