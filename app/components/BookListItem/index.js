@@ -17,6 +17,8 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 // import messages from './messages';
 import Checkbox from 'react-simple-checkbox';
+import Select from 'components/Select';
+import Autocomplete from 'components/Autocomplete';
 
 const Container = styled.div`
   max-width: 800px;
@@ -51,6 +53,10 @@ const Buttons = styled.div`
   display: block;
   padding: 0 0 0 15px;
   flex-direction: column;
+  & > * {
+    margin-left: auto;
+    margin-right: auto;
+  }
 `;
 
 const DetailLine = styled.div`
@@ -103,8 +109,8 @@ const DeleteButton = styled.button`
 `;
 
 const Button = styled.button`
-  width: 120px;
-  margin: 5px auto;
+  min-width: 120px;
+  margin: 4px 8px;
   background: #fafafa;
   border-color: #ff8000;
   border-style: solid;
@@ -124,7 +130,7 @@ const Button = styled.button`
 
 const TrustedButton = styled.button`
   width: 120px;
-  margin: 5px auto;
+  margin: 4px 8px;
   background-color: #fafafa;
   border-color: green;
   border-style: solid;
@@ -143,7 +149,7 @@ const TrustedButton = styled.button`
 
 const HiddenButton = styled.button`
   width: 120px;
-  margin: 5px auto;
+  margin: 4px 8px;
   background-color: #fafafa;
   border-color: darkgray;
   border-style: solid;
@@ -200,6 +206,24 @@ const ButtonIcon = styled.button`
   }
 `;
 
+const EditLexileButtonIcon = styled.button`
+  background-color: #fafafa;
+  padding: 0;
+  margin: 0;
+  width: max-content;
+  height: max-content;
+  color: #ff8000;
+  border: 0;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const LexileButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
 function BookListItem(props) {
   const {
     title,
@@ -228,7 +252,20 @@ function BookListItem(props) {
     setTrust,
     checked,
     modify,
+    searchLexile,
   } = props;
+
+  const [editingLexile, setEditingLexile] = useState(false);
+  const [selectedLexile, setSelectedLexile] = useState(null);
+
+  const setEditingLexileTrue = () => {
+    setSelectedLexile(lexile_record);
+    setEditingLexile(true);
+  };
+  const setEditingLexileFalse = () => {
+    setEditingLexile(false);
+    setSelectedLexile(null);
+  };
 
   const changeTrust = () => setTrust([book], !trusted);
 
@@ -302,13 +339,50 @@ function BookListItem(props) {
           <BoldSpan> Duplicate: </BoldSpan>
           <span>{duplicate || ' - '}</span>
         </DetailLine>
-        {lexile_record && <DivisionLine />}
+        <DivisionLine />
+
+        {!lexile_record && !editingLexile && (
+          <Button onClick={setEditingLexileTrue}>Add Lexile Record</Button>
+        )}
         {lexile_record && (
           <DetailLine>
             <BoldSpan>Lexile Record</BoldSpan>
+            <EditLexileButtonIcon onClick={setEditingLexileTrue}>
+              <Icon viewBox="0 0 20 20">
+                <path d="M18.303,4.742l-1.454-1.455c-0.171-0.171-0.475-0.171-0.646,0l-3.061,3.064H2.019c-0.251,0-0.457,0.205-0.457,0.456v9.578c0,0.251,0.206,0.456,0.457,0.456h13.683c0.252,0,0.457-0.205,0.457-0.456V7.533l2.144-2.146C18.481,5.208,18.483,4.917,18.303,4.742 M15.258,15.929H2.476V7.263h9.754L9.695,9.792c-0.057,0.057-0.101,0.13-0.119,0.212L9.18,11.36h-3.98c-0.251,0-0.457,0.205-0.457,0.456c0,0.253,0.205,0.456,0.457,0.456h4.336c0.023,0,0.899,0.02,1.498-0.127c0.312-0.077,0.55-0.137,0.55-0.137c0.08-0.018,0.155-0.059,0.212-0.118l3.463-3.443V15.929z M11.241,11.156l-1.078,0.267l0.267-1.076l6.097-6.091l0.808,0.808L11.241,11.156z" />
+              </Icon>
+            </EditLexileButtonIcon>
           </DetailLine>
         )}
-        {lexile_record && (
+        {editingLexile && (
+          <Autocomplete
+            setSelected={setSelectedLexile}
+            getOptions={searchLexile}
+            baseSearch={title}
+          />
+        )}
+        {editingLexile && (
+          <DetailLine>
+            <BoldSpan>Score: </BoldSpan>
+            <span>{selectedLexile ? selectedLexile.lexile : '---'}</span>
+            <BoldSpan> Author: </BoldSpan>
+            <span>{selectedLexile ? selectedLexile.lexile_author : '---'}</span>
+          </DetailLine>
+        )}
+        {editingLexile && (
+          <DetailLine>
+            <BoldSpan>Title: </BoldSpan>
+            <span>{selectedLexile ? selectedLexile.title : '---'}</span>
+          </DetailLine>
+        )}
+        {editingLexile && (
+          <LexileButtonsContainer>
+            <Button onClick={f => f}>Save</Button>
+            <Button onClick={setEditingLexileFalse}>Cancel</Button>
+          </LexileButtonsContainer>
+        )}
+
+        {lexile_record && !editingLexile && (
           <DetailLine>
             <BoldSpan>Score: </BoldSpan>
             <span>{lexile_score}</span>
@@ -316,7 +390,7 @@ function BookListItem(props) {
             <span>{lexile_record.lexile_author}</span>
           </DetailLine>
         )}
-        {lexile_record && (
+        {lexile_record && !editingLexile && (
           <DetailLine>
             <BoldSpan>Title: </BoldSpan>
             <span>{lexile_record.title}</span>
@@ -330,14 +404,14 @@ function BookListItem(props) {
         <HiddenButton onClick={toggleHideBook} hidden={hidden}>
           {hidden ? 'Hidden' : 'Visible'}
         </HiddenButton>
+        {selected ? (
+          <Button selected onClick={clearSelection}>
+            Clear
+          </Button>
+        ) : (
+          <Button onClick={setSelected}>Reference</Button>
+        )}
         <Duplicates>
-          {selected ? (
-            <Button selected onClick={clearSelection}>
-              Clear
-            </Button>
-          ) : (
-            <Button onClick={setSelected}>Reference</Button>
-          )}
           {duplicatedBooks && duplicatedBooks.length > 0 && selected
             ? duplicatedBooks.map(duplicatedBook => (
                 <DuplicateBook>

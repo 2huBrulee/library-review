@@ -5,6 +5,7 @@
  */
 
 import React, { useState } from 'react';
+import qs from 'qs';
 import BookListItemEditMode from 'components/BookListItemEditMode';
 import BookListItem from 'components/BookListItem';
 import { validateEditFields } from 'containers/Books/validations';
@@ -14,6 +15,23 @@ import { validateEditFields } from 'containers/Books/validations';
 function BookLogic(props) {
   const { book, edit, hideBook } = props;
   const [isBeingModified, setModify] = useState(false);
+
+  const searchLexile = search => {
+    const queryString = qs.stringify({ q: search });
+    console.log(queryString);
+    return fetch(
+      `https://matilda.whooosreading.org/api/v1/lexile_records?${queryString}`,
+      {
+        method: 'GET',
+      },
+    )
+      .then(r => r.json())
+      .then(r => r.lexile_records)
+      .catch(error => {
+        console.error(error);
+        return [];
+      });
+  };
 
   const saveChanges = changes => {
     const validatedChanges = validateEditFields(book, changes);
@@ -27,6 +45,7 @@ function BookLogic(props) {
       <BookListItemEditMode
         modify={setModify}
         saveChanges={saveChanges}
+        searchLexile={searchLexile}
         {...props}
       />
     );
@@ -34,6 +53,7 @@ function BookLogic(props) {
     <BookListItem
       toggleHideBook={toggleHideBook}
       modify={setModify}
+      searchLexile={searchLexile}
       {...props}
     />
   );
