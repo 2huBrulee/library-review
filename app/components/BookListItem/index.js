@@ -17,8 +17,9 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 // import messages from './messages';
 import Checkbox from 'react-simple-checkbox';
-import Select from 'components/Select';
+
 import Autocomplete from 'components/Autocomplete';
+import AsyncCustomSelect from 'components/AsyncCustomSelect';
 
 const Container = styled.div`
   max-width: 800px;
@@ -33,10 +34,14 @@ const Container = styled.div`
   ${({ first }) => !first && `border-top-width: thin;`}
 `;
 
+const ImageContainer = styled.div`
+  width: 120px;
+`;
+
 const BookImg = styled.img`
   display: block;
-  height: max-content;
-  width: 120px;
+  width: 100%;
+  height: auto;
 `;
 
 const Details = styled.div`
@@ -224,6 +229,16 @@ const LexileButtonsContainer = styled.div`
   flex-direction: row;
 `;
 
+const DivideIntoRows = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+`;
+
+const Columns = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+`;
+
 function BookListItem(props) {
   const {
     title,
@@ -261,11 +276,8 @@ function BookListItem(props) {
 
   const editBookLexile = () => {
     if (selectedLexile) {
-      if (
-        !lexile_record ||
-        selectedLexile.lexile_id !== lexile_record.lexile_id
-      ) {
-        edit(book, { lexile_record_ir: selectedLexile.lexile_id });
+      if (!lexile_record || selectedLexile.id !== lexile_record.id) {
+        edit(book, { lexile_record_id: selectedLexile.id });
       }
     }
     setEditingLexileFalse();
@@ -317,128 +329,136 @@ function BookListItem(props) {
           </Icon>
         </ButtonIcon>
       </ButtonColumn>
-      <BookImg
-        src={
-          cover_url ||
-          'http://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
-        }
-      />
-      <Details>
-        <DetailLine>
-          <BoldSpan>TEXT ID: </BoldSpan>
-          <span>{text_id}</span>
-        </DetailLine>
-        <DetailLine>
-          <BoldSpan>Title: </BoldSpan>
-          <span>{title}</span>
-        </DetailLine>
-        <DetailLine>
-          <ClickableSpan onClick={goToAuthor(author_full_name)}>
-            <BoldSpan>Author: </BoldSpan>
-            <span>{author_full_name}</span>
-          </ClickableSpan>
-        </DetailLine>
-        {series ? (
-          <DetailLine>
-            <BoldSpan>Series Name: </BoldSpan>
-            <span>{series}</span>
-            <BoldSpan> Series Index: </BoldSpan>
-            <span>{series_index}</span>
-          </DetailLine>
-        ) : null}
-        <DetailLine>
-          <BoldSpan>Variety: </BoldSpan>
-          <span>{text_variety || ' - '}</span>
-          <BoldSpan> Duplicate: </BoldSpan>
-          <span>{duplicate || ' - '}</span>
-        </DetailLine>
+      <ImageContainer>
+        <BookImg
+          src={
+            cover_url ||
+            'http://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+          }
+        />
+      </ImageContainer>
+      <DivideIntoRows>
+        <Columns>
+          <Details>
+            <DetailLine>
+              <BoldSpan>TEXT ID: </BoldSpan>
+              <span>{text_id}</span>
+            </DetailLine>
+            <DetailLine>
+              <BoldSpan>Title: </BoldSpan>
+              <span>{title}</span>
+            </DetailLine>
+            <DetailLine>
+              <ClickableSpan onClick={goToAuthor(author_full_name)}>
+                <BoldSpan>Author: </BoldSpan>
+                <span>{author_full_name}</span>
+              </ClickableSpan>
+            </DetailLine>
+            {series ? (
+              <DetailLine>
+                <BoldSpan>Series Name: </BoldSpan>
+                <span>{series}</span>
+                <BoldSpan> Series Index: </BoldSpan>
+                <span>{series_index}</span>
+              </DetailLine>
+            ) : null}
+            <DetailLine>
+              <BoldSpan>Variety: </BoldSpan>
+              <span>{text_variety || ' - '}</span>
+              <BoldSpan> Duplicate: </BoldSpan>
+              <span>{duplicate || ' - '}</span>
+            </DetailLine>
+          </Details>
+          <Buttons>
+            <TrustedButton onClick={changeTrust} trusted={trusted}>
+              {trusted ? 'Trusted' : 'Trust'}
+            </TrustedButton>
+            <HiddenButton onClick={toggleHideBook} hidden={hidden}>
+              {hidden ? 'Hidden' : 'Visible'}
+            </HiddenButton>
+            {selected ? (
+              <Button selected onClick={clearSelection}>
+                Clear
+              </Button>
+            ) : (
+              <Button onClick={setSelected}>Reference</Button>
+            )}
+            <Duplicates>
+              {duplicatedBooks && duplicatedBooks.length > 0 && selected
+                ? duplicatedBooks.map(duplicatedBook => (
+                    <DuplicateBook>
+                      <DetailLine maxWidth={100} title={duplicatedBook.title}>
+                        {duplicatedBook.title}
+                      </DetailLine>
+                      <DeleteButton onClick={deleteDuplicate(duplicatedBook)}>
+                        X
+                      </DeleteButton>
+                    </DuplicateBook>
+                  ))
+                : null}
+            </Duplicates>
+          </Buttons>
+        </Columns>
         <DivisionLine />
+        <Details>
+          {!lexile_record && !editingLexile && (
+            <Button onClick={setEditingLexileTrue}>Add Lexile Record</Button>
+          )}
+          {lexile_record && (
+            <DetailLine>
+              <BoldSpan>Lexile Record</BoldSpan>
+              <EditLexileButtonIcon onClick={setEditingLexileTrue}>
+                <Icon viewBox="0 0 20 20">
+                  <path d="M18.303,4.742l-1.454-1.455c-0.171-0.171-0.475-0.171-0.646,0l-3.061,3.064H2.019c-0.251,0-0.457,0.205-0.457,0.456v9.578c0,0.251,0.206,0.456,0.457,0.456h13.683c0.252,0,0.457-0.205,0.457-0.456V7.533l2.144-2.146C18.481,5.208,18.483,4.917,18.303,4.742 M15.258,15.929H2.476V7.263h9.754L9.695,9.792c-0.057,0.057-0.101,0.13-0.119,0.212L9.18,11.36h-3.98c-0.251,0-0.457,0.205-0.457,0.456c0,0.253,0.205,0.456,0.457,0.456h4.336c0.023,0,0.899,0.02,1.498-0.127c0.312-0.077,0.55-0.137,0.55-0.137c0.08-0.018,0.155-0.059,0.212-0.118l3.463-3.443V15.929z M11.241,11.156l-1.078,0.267l0.267-1.076l6.097-6.091l0.808,0.808L11.241,11.156z" />
+                </Icon>
+              </EditLexileButtonIcon>
+            </DetailLine>
+          )}
+          {editingLexile && (
+            <AsyncCustomSelect
+              setSelected={setSelectedLexile}
+              getOptions={searchLexile}
+            />
+          )}
+          {editingLexile && (
+            <DetailLine>
+              <BoldSpan>Score: </BoldSpan>
+              <span>{selectedLexile ? selectedLexile.lexile : '---'}</span>
+              <BoldSpan> Author: </BoldSpan>
+              <span>
+                {selectedLexile ? selectedLexile.lexile_author : '---'}
+              </span>
+            </DetailLine>
+          )}
+          {editingLexile && (
+            <DetailLine>
+              <BoldSpan>Title: </BoldSpan>
+              <span>{selectedLexile ? selectedLexile.title : '---'}</span>
+            </DetailLine>
+          )}
+          {editingLexile && (
+            <LexileButtonsContainer>
+              <Button onClick={editBookLexile}>Save</Button>
+              <Button onClick={setEditingLexileFalse}>Cancel</Button>
+            </LexileButtonsContainer>
+          )}
 
-        {!lexile_record && !editingLexile && (
-          <Button onClick={setEditingLexileTrue}>Add Lexile Record</Button>
-        )}
-        {lexile_record && (
-          <DetailLine>
-            <BoldSpan>Lexile Record</BoldSpan>
-            <EditLexileButtonIcon onClick={setEditingLexileTrue}>
-              <Icon viewBox="0 0 20 20">
-                <path d="M18.303,4.742l-1.454-1.455c-0.171-0.171-0.475-0.171-0.646,0l-3.061,3.064H2.019c-0.251,0-0.457,0.205-0.457,0.456v9.578c0,0.251,0.206,0.456,0.457,0.456h13.683c0.252,0,0.457-0.205,0.457-0.456V7.533l2.144-2.146C18.481,5.208,18.483,4.917,18.303,4.742 M15.258,15.929H2.476V7.263h9.754L9.695,9.792c-0.057,0.057-0.101,0.13-0.119,0.212L9.18,11.36h-3.98c-0.251,0-0.457,0.205-0.457,0.456c0,0.253,0.205,0.456,0.457,0.456h4.336c0.023,0,0.899,0.02,1.498-0.127c0.312-0.077,0.55-0.137,0.55-0.137c0.08-0.018,0.155-0.059,0.212-0.118l3.463-3.443V15.929z M11.241,11.156l-1.078,0.267l0.267-1.076l6.097-6.091l0.808,0.808L11.241,11.156z" />
-              </Icon>
-            </EditLexileButtonIcon>
-          </DetailLine>
-        )}
-        {editingLexile && (
-          <Autocomplete
-            setSelected={setSelectedLexile}
-            getOptions={searchLexile}
-            baseSearch={title}
-          />
-        )}
-        {editingLexile && (
-          <DetailLine>
-            <BoldSpan>Score: </BoldSpan>
-            <span>{selectedLexile ? selectedLexile.lexile : '---'}</span>
-            <BoldSpan> Author: </BoldSpan>
-            <span>{selectedLexile ? selectedLexile.lexile_author : '---'}</span>
-          </DetailLine>
-        )}
-        {editingLexile && (
-          <DetailLine>
-            <BoldSpan>Title: </BoldSpan>
-            <span>{selectedLexile ? selectedLexile.title : '---'}</span>
-          </DetailLine>
-        )}
-        {editingLexile && (
-          <LexileButtonsContainer>
-            <Button onClick={editBookLexile}>Save</Button>
-            <Button onClick={setEditingLexileFalse}>Cancel</Button>
-          </LexileButtonsContainer>
-        )}
-
-        {lexile_record && !editingLexile && (
-          <DetailLine>
-            <BoldSpan>Score: </BoldSpan>
-            <span>{lexile_score}</span>
-            <BoldSpan> Author: </BoldSpan>
-            <span>{lexile_record.lexile_author}</span>
-          </DetailLine>
-        )}
-        {lexile_record && !editingLexile && (
-          <DetailLine>
-            <BoldSpan>Title: </BoldSpan>
-            <span>{lexile_record.title}</span>
-          </DetailLine>
-        )}
-      </Details>
-      <Buttons>
-        <TrustedButton onClick={changeTrust} trusted={trusted}>
-          {trusted ? 'Trusted' : 'Trust'}
-        </TrustedButton>
-        <HiddenButton onClick={toggleHideBook} hidden={hidden}>
-          {hidden ? 'Hidden' : 'Visible'}
-        </HiddenButton>
-        {selected ? (
-          <Button selected onClick={clearSelection}>
-            Clear
-          </Button>
-        ) : (
-          <Button onClick={setSelected}>Reference</Button>
-        )}
-        <Duplicates>
-          {duplicatedBooks && duplicatedBooks.length > 0 && selected
-            ? duplicatedBooks.map(duplicatedBook => (
-                <DuplicateBook>
-                  <DetailLine maxWidth={100} title={duplicatedBook.title}>
-                    {duplicatedBook.title}
-                  </DetailLine>
-                  <DeleteButton onClick={deleteDuplicate(duplicatedBook)}>
-                    X
-                  </DeleteButton>
-                </DuplicateBook>
-              ))
-            : null}
-        </Duplicates>
-      </Buttons>
+          {lexile_record && !editingLexile && (
+            <DetailLine>
+              <BoldSpan>Score: </BoldSpan>
+              <span>{lexile_score}</span>
+              <BoldSpan> Author: </BoldSpan>
+              <span>{lexile_record.lexile_author}</span>
+            </DetailLine>
+          )}
+          {lexile_record && !editingLexile && (
+            <DetailLine>
+              <BoldSpan>Title: </BoldSpan>
+              <span>{lexile_record.title}</span>
+            </DetailLine>
+          )}
+        </Details>
+      </DivideIntoRows>
     </Container>
   );
 }

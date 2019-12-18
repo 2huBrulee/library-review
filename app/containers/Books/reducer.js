@@ -85,7 +85,6 @@ const booksReducer = (state = initialState, action) =>
         draft.editedBooks = [];
         console.log('hiding');
         draft.error = false;
-        draft.loading = true;
         break;
       case BATCH_HIDE_FAILED:
         draft.error = action.error;
@@ -105,7 +104,6 @@ const booksReducer = (state = initialState, action) =>
       case BATCH_SET_REFERENCE:
         console.log('marking duplicates');
         draft.error = false;
-        draft.loading = true;
         break;
       case SET_REFERENCE_FAILED:
         draft.error = action.error;
@@ -124,7 +122,6 @@ const booksReducer = (state = initialState, action) =>
         break;
       case SET_TRUST_STATUS:
         draft.editedBooks = [];
-        draft.loading = true;
         draft.error = false;
         break;
       case SET_TRUST_SUCCESS:
@@ -145,7 +142,6 @@ const booksReducer = (state = initialState, action) =>
       case EDIT_BOOK:
         break;
       case EDIT_SUCCESS:
-        console.log(action);
         draft.editedBooks = action.booksChanged;
         draft.bookList = state.bookList.map(bookToEvaluate =>
           action.booksChanged.reduce(
