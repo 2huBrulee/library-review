@@ -19,6 +19,13 @@ const promiseOptions = inputValue =>
     }, 1000);
   }); */
 
+const customStyles = {
+  container: base => ({
+    ...base,
+    flex: 1,
+  }),
+};
+
 export default class WithPromises extends Component {
   state = { inputValue: '' };
 
@@ -31,15 +38,23 @@ export default class WithPromises extends Component {
   };
 
   render() {
+    console.log(this.props.default);
     return (
       <AsyncSelect
+        styles={customStyles}
         cacheOptions
         isSearchable
         name="lexile"
+        placeholder={
+          this.props.default &&
+          `${this.props.default.lexile}L, ${this.props.default.title}, ${
+            this.props.default.lexile_author
+          }`
+        }
         loadOptions={this.props.getOptions}
         onChange={this.handleInputChange}
         getOptionLabel={option =>
-          `${option.lexile_id}L, ${option.title}, ${option.lexile_author}`
+          `${option.lexile}L, ${option.title}, ${option.lexile_author}`
         }
       />
     );

@@ -146,14 +146,14 @@ const SearchBar = props => {
         {showingMoreOptions && searchCategory === 'BOOKS' && (
           <StyledCheckbox
             onChange={handleShowDuplicatesClick}
-            label="duplicates"
+            label="Duplicates"
             checked={duplicatesIncluded}
           />
         )}
         {showingMoreOptions && searchCategory === 'BOOKS' && (
           <Checkbox
             onChange={handleShowHiddenClick}
-            label="hidden"
+            label="Hidden"
             checked={hiddenIncluded}
           />
         )}

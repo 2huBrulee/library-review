@@ -18,11 +18,11 @@ export const MANU = 'MANU';
 
 export const SEARCH_TYPES = [
   {
-    label: TRUSTED,
+    label: 'Trusted',
     value: TRUSTED,
   },
   {
-    label: REGULAR,
+    label: 'Regular',
     value: REGULAR,
     defaultChecked: true,
   },
@@ -39,19 +39,19 @@ export const ORIGINS = [
     defaultChecked: true,
   },
   {
-    label: BASE,
+    label: 'Bse',
     value: BASE,
   },
   {
-    label: AUT,
+    label: 'Aut',
     value: AUT,
   },
   {
-    label: LEXILE,
+    label: 'Lexile',
     value: LEXILE,
   },
   {
-    label: MANU,
+    label: 'Manu',
     value: MANU,
   },
 ];
