@@ -34,12 +34,12 @@ export const SEARCH_TYPES = [
 
 export const ORIGINS = [
   {
-    label: 'ALL',
+    label: 'All',
     value: 'ALL',
     defaultChecked: true,
   },
   {
-    label: 'Bse',
+    label: 'Base',
     value: BASE,
   },
   {

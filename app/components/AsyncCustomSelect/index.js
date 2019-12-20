@@ -4,7 +4,7 @@
  *
  */
 
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import AsyncSelect from 'react-select/async';
 /*
@@ -23,40 +23,54 @@ const customStyles = {
   container: base => ({
     ...base,
     flex: 1,
+    maxWidth: 470,
   }),
 };
 
-export default class WithPromises extends Component {
-  state = { inputValue: '' };
+export default props => {
+  const [inputValue, setInputValue] = useState(null);
+  const {
+    showButtons,
+    setSelected,
+    editingLexile,
+    defaultLexile,
+    getOptions,
+    book,
+  } = props;
 
-  handleInputChange = newValue => {
-    console.log(newValue);
-    this.props.setSelected(newValue);
-    const inputValue = newValue;
-    this.setState({ inputValue });
-    return inputValue;
+  const handleInputChange = newValue => {
+    showButtons();
+    setSelected(newValue);
+    setInputValue(newValue);
+    return newValue;
   };
 
-  render() {
-    console.log(this.props.default);
-    return (
-      <AsyncSelect
-        styles={customStyles}
-        cacheOptions
-        isSearchable
-        name="lexile"
-        placeholder={
-          this.props.default &&
-          `${this.props.default.lexile}L, ${this.props.default.title}, ${
-            this.props.default.lexile_author
-          }`
-        }
-        loadOptions={this.props.getOptions}
-        onChange={this.handleInputChange}
-        getOptionLabel={option =>
-          `${option.lexile}L, ${option.title}, ${option.lexile_author}`
-        }
-      />
-    );
-  }
-}
+  useEffect(() => {
+    if (!editingLexile) {
+      setInputValue(defaultLexile);
+    }
+  }, [editingLexile, defaultLexile]);
+
+  return (
+    <AsyncSelect
+      value={inputValue}
+      styles={customStyles}
+      cacheOptions
+      isSearchable
+      name="lexile"
+      defaultInputValue={
+        defaultLexile &&
+        `${defaultLexile.lexile}L, ${defaultLexile.title}, ${
+          defaultLexile.lexile_author
+        }`
+      }
+      placeholder="Search for a book title"
+      defaultOptions={defaultLexile ? [defaultLexile] : []}
+      loadOptions={getOptions}
+      onChange={handleInputChange}
+      getOptionLabel={option =>
+        `${option.lexile}L, ${option.title}, ${option.lexile_author}`
+      }
+    />
+  );
+};
