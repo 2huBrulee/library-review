@@ -17,8 +17,6 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 // import messages from './messages';
 import Checkbox from 'react-simple-checkbox';
-
-import Autocomplete from 'components/Autocomplete';
 import AsyncCustomSelect from 'components/AsyncCustomSelect';
 
 const Container = styled.div`
@@ -96,6 +94,15 @@ const BoldSpan = styled.span`
   font-weight: bold;
 `;
 
+const BoldSpanSpaced = styled.span`
+  font-weight: bold;
+  margin: 0 0 0 8px;
+`;
+
+const Italics = styled.span`
+  font-style: italic;
+`;
+
 const ClickableSpan = styled.span`
   color: blue;
   &:hover {
@@ -133,7 +140,7 @@ const DeleteButton = styled.button`
 
 const Button = styled.button`
   min-width: 120px;
-  margin: 4px 8px;
+  margin: 15px 8px;
   background: #fafafa;
   border-color: #ff8000;
   border-style: solid;
@@ -153,7 +160,7 @@ const Button = styled.button`
 
 const TrustedButton = styled.button`
   width: 120px;
-  margin: 8px;
+  margin: 15px 8px;
   background-color: #fafafa;
   border-color: green;
   border-style: solid;
@@ -172,7 +179,7 @@ const TrustedButton = styled.button`
 
 const HiddenButton = styled.button`
   width: 120px;
-  margin: 8px;
+  margin: 15px 8px;
   background-color: #fafafa;
   border-color: darkgray;
   border-style: solid;
@@ -222,7 +229,7 @@ const ButtonIcon = styled.button`
   margin: 16px 0;
   width: max-content;
   height: max-content;
-  color: #ff8000;
+  color: #555555;
   border: 0;
   &:hover {
     cursor: pointer;
@@ -333,7 +340,7 @@ function BookListItem(props) {
       <ButtonColumn>
         {!selected ? (
           <StyledCheckbox
-            color="#FF8000"
+            color="#555555"
             size={3}
             tickSize={3}
             borderThickness={1}
@@ -361,12 +368,8 @@ function BookListItem(props) {
         <Columns>
           <Details>
             <DetailLine>
-              <BoldSpan>TEXT ID: </BoldSpan>
-              <span>{text_id}</span>
-            </DetailLine>
-            <DetailLine>
               <BoldSpan>Title: </BoldSpan>
-              <span>{title}</span>
+              <Italics>{title}</Italics>
             </DetailLine>
             <DetailLine>
               <ClickableSpan onClick={goToAuthor(author_full_name)}>
@@ -374,19 +377,25 @@ function BookListItem(props) {
                 <span>{author_full_name}</span>
               </ClickableSpan>
             </DetailLine>
+            <DetailLine>
+              <BoldSpan>TEXT ID: </BoldSpan>
+              <span>{text_id}</span>
+            </DetailLine>
             {series ? (
               <DetailLine>
                 <BoldSpan>Series Name: </BoldSpan>
                 <span>{series}</span>
-                <BoldSpan> Series Index: </BoldSpan>
+                <BoldSpanSpaced> Series Index: </BoldSpanSpaced>
                 <span>{series_index}</span>
               </DetailLine>
             ) : null}
             <DetailLine>
-              <BoldSpan>Variety: </BoldSpan>
-              <span>{text_variety || ' - '}</span>
               <BoldSpan> Duplicate: </BoldSpan>
               <span>{duplicate || ' - '}</span>
+            </DetailLine>
+            <DetailLine>
+              <BoldSpan>Variety: </BoldSpan>
+              <span>{text_variety || ' - '}</span>
             </DetailLine>
           </Details>
           <Buttons>
@@ -419,7 +428,6 @@ function BookListItem(props) {
             </Duplicates>
           </Buttons>
         </Columns>
-        <DivisionLine />
         <DetailsLarger>
           <DetailLineOverflow>
             <BoldSpan>Lexile</BoldSpan>

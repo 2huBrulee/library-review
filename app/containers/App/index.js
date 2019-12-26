@@ -24,7 +24,7 @@ import theme from '../../theme';
 
 const Title = styled.div`
   font-size: 40px;
-  margin: 0 0 10px;
+  margin: 4px 0 4px 6px;
   padding: 10px 0;
 `;
 

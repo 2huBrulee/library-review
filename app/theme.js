@@ -24,5 +24,6 @@ export default {
   mainColor: '#ff8000',
   backgroundColor: '#fafafa',
   borderColor: '#707070',
+  fontColor: '#555555',
   devices,
 };

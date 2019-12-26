@@ -37,10 +37,15 @@ const StyledTextInputNumberOf = styled(TextInput)`
   max-width: 159px;
 `;
 
-const StyledButton = styled(Button)``;
+const StyledButton = styled(Button)`
+  background-color: #0082c8;
+  color: white;
+  border: 1px solid #0082c8;
+`;
 
 const StyledClickableText = styled(ClickableText)`
   min-width: 100px;
+  color #0082c8;
 `;
 
 const StyledSticky = styled(Sticky)`
@@ -113,8 +118,8 @@ const SearchBar = props => {
             searchCategory === 'BOOKS'
               ? 'Enter Book Title'
               : searchCategory === 'AUTHORS'
-                ? "Enter Author's name"
-                : '<<<< Select Search Type'
+              ? "Enter Author's name"
+              : '<<<< Select Search Type'
           }
           valid={isQueryValid}
           value={searchString}
@@ -165,7 +170,7 @@ const SearchBar = props => {
           />
         )}
         <StyledClickableText onClick={handleShowMoreOptionsClick}>
-          {showingMoreOptions ? 'show less...' : 'show more...'}
+          {showingMoreOptions ? 'show less' : 'show more'}
         </StyledClickableText>
       </Wrapper>
     </StyledSticky>

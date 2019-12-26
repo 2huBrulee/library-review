@@ -14,14 +14,14 @@ import Sticky from 'react-sticky-el';
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: row;
 `;
 
 const Button = styled.button`
   width: 100px;
   margin: 5px 15px 5px 5px;
-  background: rgb(255, 128, 0);
+  background: #0082c8;
   border-width: 0;
   border-radius: 5px;
   align-items: center;
