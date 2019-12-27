@@ -7,10 +7,11 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { margin } from 'styled-system';
+import { margin, grid } from 'styled-system';
 
 const StyledTextInput = styled.input`
   ${margin};
+  ${grid};
   box-sizing: content-box;
   min-width: 128px;
   min-height: 32px;

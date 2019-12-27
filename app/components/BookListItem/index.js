@@ -18,6 +18,7 @@ import { withRouter } from 'react-router-dom';
 // import messages from './messages';
 import Checkbox from 'react-simple-checkbox';
 import AsyncCustomSelect from 'components/AsyncCustomSelect';
+import Question from 'components/Question';
 
 const Container = styled.div`
   max-width: 800px;
@@ -104,7 +105,7 @@ const Italics = styled.span`
 `;
 
 const ClickableSpan = styled.span`
-  color: blue;
+  color: #0082c8;
   &:hover {
     background-color: palevioletred;
     color: white;
@@ -162,7 +163,7 @@ const TrustedButton = styled.button`
   width: 120px;
   margin: 15px 8px;
   background-color: #fafafa;
-  border-color: green;
+  border-color: #2b9401;
   border-style: solid;
   border-width: 1px;
   border-radius: 5px;
@@ -172,9 +173,9 @@ const TrustedButton = styled.button`
   justify-content: center;
   display: flex;
   font-size: 16px;
-  color: green;
+  color: #2b9401;
   cursor: pointer;
-  ${({ trusted }) => trusted && `color: #fafafa; background-color: green`}
+  ${({ trusted }) => trusted && `color: #fafafa; background-color: #2b9401`}
 `;
 
 const HiddenButton = styled.button`
@@ -298,6 +299,7 @@ function BookListItem(props) {
 
   const [editingLexile, setEditingLexile] = useState(false);
   const [selectedLexile, setSelectedLexile] = useState(null);
+  const [showingQuestions, setShowingQuestions] = useState(false);
 
   const editBookLexile = () => {
     if (selectedLexile) {
@@ -451,6 +453,22 @@ function BookListItem(props) {
               <Button onClick={setEditingLexileFalse}>Cancel</Button>
             </LexileButtonsContainer>
           )}
+        </DetailsLarger>
+        <DetailsLarger>
+          <DetailLineOverflow>
+            <BoldSpan>Questions: </BoldSpan>
+            <ClickableSpan
+              onClick={() => setShowingQuestions(!showingQuestions)}
+            >
+              {book.questions
+                ? `[${book.questions.length}]`
+                : `[add a question]`}
+            </ClickableSpan>
+          </DetailLineOverflow>
+          {showingQuestions &&
+            book.questions &&
+            book.questions.map(question => <Question question={question} />)}
+          {showingQuestions && <Question editable />}
         </DetailsLarger>
       </DivideIntoRows>
     </Container>

@@ -23,7 +23,7 @@ const getBooks = bookQuery =>
     params: {
       ...bookQuery,
       embed:
-        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate,book.lexile_record',
+        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate,book.lexile_record,book.questions',
       force_display_cover: true,
     },
   });
@@ -32,7 +32,7 @@ const getBookById = id =>
   axios.get(`https://matilda.whooosreading.org/api/v1/books/text_id/${id}`, {
     params: {
       embed:
-        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate,book.lexile_record',
+        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate,book.lexile_record,book.questions',
       force_display_cover: true,
     },
   });
@@ -45,7 +45,7 @@ const hideBooks = (booksToHide, hidden) =>
         hidden,
       },
       embed:
-        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate,book.lexile_record',
+        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate,book.lexile_record,book.questions',
       force_display_cover: true,
     },
     {
@@ -67,7 +67,7 @@ const editBook = (book, newData) =>
     {
       book: newData,
       embed:
-        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate,book.lexile_record',
+        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate,book.lexile_record,book.questions',
       force_display_cover: true,
     },
   );
@@ -80,7 +80,7 @@ const setTrustStatus = (booksToEdit, trust) =>
         trusted: trust,
       },
       embed:
-        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate,book.lexile_record',
+        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate,book.lexile_record,book.questions',
       force_display_cover: true,
     },
     {
@@ -109,7 +109,7 @@ const setReferenceBook = (booksToReference, referenceBook) =>
         hidden: true,
       },
       embed:
-        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate,book.lexile_record',
+        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate,book.lexile_record,book.questions',
       force_display_cover: true,
     },
     {
