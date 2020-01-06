@@ -28,6 +28,8 @@ function SelectedItem(props) {
     clearSelection,
     clearDuplicate,
     duplicatedBooks,
+    dispatchCreateQuestion,
+    dispatchEditQuestion,
     hideBook,
   } = props;
   return (
@@ -50,6 +52,8 @@ function SelectedItem(props) {
           clearSelection={clearSelection}
           duplicatedBooks={duplicatedBooks}
           clearDuplicate={clearDuplicate}
+          createQuestion={dispatchCreateQuestion}
+          editQuestion={dispatchEditQuestion}
         />
       </Wrapper>
     </Sticky>

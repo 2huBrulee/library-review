@@ -22,6 +22,13 @@ import {
   SET_TRUST_SUCCESS,
   EDIT_BOOK,
   EDIT_SUCCESS,
+  CREATE_QUESTION,
+  CREATE_QUESTION_SUCCESS,
+  CREATE_QUESTION_FAILURE,
+  EDIT_QUESTION,
+  EDIT_QUESTION_SUCCESS,
+  EDIT_QUESTION_FAILURE,
+  CHANGE_QUESTION_TO_BE_CREATED,
 } from './constants';
 
 export const loadBooksFound = bookQuery => ({
@@ -110,4 +117,43 @@ export const editBook = (book, changes) => ({
 export const editSuccess = booksChanged => ({
   type: EDIT_SUCCESS,
   booksChanged,
+});
+
+export const createQuestion = (book, question) => ({
+  type: CREATE_QUESTION,
+  book,
+  question,
+});
+
+export const createQuestionFailure = error => ({
+  type: CREATE_QUESTION_FAILURE,
+  error,
+});
+
+export const createQuestionSuccess = (book, questionCreated) => ({
+  type: CREATE_QUESTION_SUCCESS,
+  book,
+  questionCreated,
+});
+
+export const editQuestion = (book, question) => ({
+  type: EDIT_QUESTION,
+  book,
+  question,
+});
+
+export const editQuestionFailure = error => ({
+  type: EDIT_QUESTION_FAILURE,
+  error,
+});
+
+export const editQuestionSuccess = (book, questionChanged) => ({
+  type: EDIT_QUESTION_SUCCESS,
+  book,
+  questionChanged,
+});
+
+export const changeQuestionToBeCreated = question => ({
+  type: CHANGE_QUESTION_TO_BE_CREATED,
+  question,
 });

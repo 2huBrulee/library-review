@@ -40,6 +40,5 @@ export const validateEditFields = (baseBook, changes) => {
   if (hidden !== changes.hidden) validatedChanges.hidden = changes.hidden;
   if (trusted !== changes.trusted) validatedChanges.trusted = changes.trusted;
 
-  console.log(validatedChanges);
   return validatedChanges;
 };

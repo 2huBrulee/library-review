@@ -22,6 +22,8 @@ function BookList(props) {
     selectDuplicate,
     clearDuplicate,
     duplicatedBooks,
+    dispatchCreateQuestion,
+    dispatchEditQuestion,
     setTrust,
     hideBook,
     edit,
@@ -49,6 +51,8 @@ function BookList(props) {
               {...book}
               book={book}
               key={book.text_id}
+              createQuestion={dispatchCreateQuestion}
+              editQuestion={dispatchEditQuestion}
             />
           ))
         : null}

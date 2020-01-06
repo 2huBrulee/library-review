@@ -21,3 +21,11 @@ export const SET_TRUST_STATUS = 'app/Books/SET_TRUST_STATUS';
 export const SET_TRUST_SUCCESS = 'app/Books/SET_TRUST_SUCCESS';
 export const EDIT_BOOK = 'app/Books/EDIT_BOOK';
 export const EDIT_SUCCESS = 'app/Books/EDIT_SUCCESS';
+export const CREATE_QUESTION = 'app/Books/CREATE_QUESTION';
+export const CREATE_QUESTION_SUCCESS = 'app/Books/CREATE_QUESTION_SUCCESS';
+export const CREATE_QUESTION_FAILURE = 'app/Books/CREATE_QUESTION_FAILURE';
+export const EDIT_QUESTION = 'app/Books/EDIT_QUESTION';
+export const EDIT_QUESTION_SUCCESS = 'app/Books/EDIT_QUESTION_SUCCESS';
+export const EDIT_QUESTION_FAILURE = 'app/Books/EDIT_QUESTION_FAILURE';
+export const CHANGE_QUESTION_TO_BE_CREATED =
+  'app/Books/CHANGE_QUESTION_TO_BE_CREATED';

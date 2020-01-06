@@ -218,12 +218,6 @@ const Icon = styled.svg`
   height: 32px;
 `;
 
-const DivisionLine = styled.div`
-  height: 3px;
-  border: none;
-  border-bottom: 1px solid lightgray;
-`;
-
 const ButtonIcon = styled.button`
   background-color: #fafafa;
   padding: 0;
@@ -271,7 +265,6 @@ function BookListItem(props) {
     text_id,
     // gr_id,
     cover_url,
-    lexile_score,
     lexile_record,
     series,
     series_index,
@@ -295,6 +288,8 @@ function BookListItem(props) {
     modify,
     searchLexile,
     edit,
+    createQuestion,
+    editQuestion,
   } = props;
 
   const [editingLexile, setEditingLexile] = useState(false);
@@ -393,7 +388,7 @@ function BookListItem(props) {
             ) : null}
             <DetailLine>
               <BoldSpan> Duplicate: </BoldSpan>
-              <span>{duplicate || ' - '}</span>
+              <span>{duplicate ? duplicate.title : ' - '}</span>
             </DetailLine>
             <DetailLine>
               <BoldSpan>Variety: </BoldSpan>
@@ -465,10 +460,28 @@ function BookListItem(props) {
                 : `[add a question]`}
             </ClickableSpan>
           </DetailLineOverflow>
+          {console.log(book.questions)}
           {showingQuestions &&
             book.questions &&
-            book.questions.map(question => <Question question={question} />)}
-          {showingQuestions && <Question editable />}
+            book.questions.map(question => (
+              <Question
+                key={question.matilda_id || 'no-key'}
+                book={book}
+                editQuestion={editQuestion}
+                createQuestion={createQuestion}
+                question={question}
+              />
+            ))}
+          {showingQuestions && (
+            <Question
+              key="new"
+              book={book}
+              createQuestion={createQuestion}
+              editQuestion={editQuestion}
+              newQuestion
+              editable
+            />
+          )}
         </DetailsLarger>
       </DivideIntoRows>
     </Container>

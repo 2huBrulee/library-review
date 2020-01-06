@@ -1,5 +1,6 @@
 import { call, put, takeLatest, all } from 'redux-saga/effects';
 import axios from 'axios';
+import { questionRequests } from './requests';
 import {
   loadBooksFoundSuccess,
   loadBooksFoundFailed,
@@ -9,6 +10,10 @@ import {
   batchHideFailed,
   setTrustSuccess,
   editSuccess,
+  createQuestionSuccess,
+  createQuestionFailure,
+  editQuestionSuccess,
+  editQuestionFailure,
 } from './actions';
 import {
   LOAD_BOOKS_FOUND,
@@ -16,6 +21,8 @@ import {
   BATCH_SET_REFERENCE,
   SET_TRUST_STATUS,
   EDIT_BOOK,
+  CREATE_QUESTION,
+  EDIT_QUESTION,
 } from './constants';
 
 const getBooks = bookQuery =>
@@ -43,6 +50,7 @@ const hideBooks = (booksToHide, hidden) =>
     {
       [booksToHide.length > 1 ? 'books' : 'book']: {
         hidden,
+        ...(hidden ? { truted: false } : null),
       },
       embed:
         'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate,book.lexile_record,book.questions',
@@ -93,7 +101,6 @@ const setTrustStatus = (booksToEdit, trust) =>
                 : `${booksString},${bookToEdit.text_id}`,
             '',
           );
-          console.log(xd);
           return xd;
         })(),
       },
@@ -188,6 +195,30 @@ export function* getBatchBookReference(action) {
   }
 }
 
+export function* getCreateQuestion(action) {
+  console.log(action);
+  try {
+    const { data } = yield call(
+      questionRequests.createQuestion,
+      action.book,
+      action.question,
+    );
+    yield put(createQuestionSuccess(action.book, data.question));
+  } catch (e) {
+    yield put(createQuestionFailure(e));
+  }
+}
+
+export function* getEditQuestion(action) {
+  console.log(action);
+  try {
+    const { data } = yield call(questionRequests.editQuestion, action.question);
+    yield put(editQuestionSuccess(action.book, data.question));
+  } catch (e) {
+    yield put(editQuestionFailure(e));
+  }
+}
+
 export function* bookTrustSaga() {
   yield takeLatest(SET_TRUST_STATUS, getBatchBookTrust);
 }
@@ -208,6 +239,15 @@ export function* editBookSaga() {
   yield takeLatest(EDIT_BOOK, getEditBook);
 }
 
+export function* createQuestionSaga() {
+  yield takeLatest(CREATE_QUESTION, getCreateQuestion);
+}
+
+export function* editQuestionSaga() {
+  console.log('yield');
+  yield takeLatest(EDIT_QUESTION, getEditQuestion);
+}
+
 // Individual exports for testing
 export default function* booksSaga() {
   // See example in containers/HomePage/saga.js
@@ -217,5 +257,7 @@ export default function* booksSaga() {
     referenceBooksSaga(),
     bookTrustSaga(),
     editBookSaga(),
+    createQuestionSaga(),
+    editQuestionSaga(),
   ]);
 }

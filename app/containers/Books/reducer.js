@@ -22,6 +22,13 @@ import {
   SET_TRUST_SUCCESS,
   EDIT_BOOK,
   EDIT_SUCCESS,
+  CREATE_QUESTION,
+  CREATE_QUESTION_SUCCESS,
+  CREATE_QUESTION_FAILURE,
+  EDIT_QUESTION,
+  EDIT_QUESTION_SUCCESS,
+  EDIT_QUESTION_FAILURE,
+  CHANGE_QUESTION_TO_BE_CREATED,
 } from './constants';
 
 export const initialState = {
@@ -31,6 +38,9 @@ export const initialState = {
   baseBookSelected: {},
   duplicatedBooks: [],
   editedBooks: [],
+  questionToBeCreated: null,
+  questionCreationError: false,
+  questionEditError: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -155,6 +165,41 @@ const booksReducer = (state = initialState, action) =>
         );
         draft.duplicatedBooks = [];
         draft.loading = false;
+        break;
+      case CREATE_QUESTION:
+        break;
+      case CREATE_QUESTION_SUCCESS:
+        console.log(action);
+        draft.questionToBeCreated = null;
+        draft.bookList = state.bookList.map(bookToEvaluate => {
+          bookToEvaluate.text_id === action.book.text_id &&
+            bookToEvaluate.questions.push(action.questionCreated);
+          return bookToEvaluate;
+        });
+        break;
+      case CREATE_QUESTION_FAILURE:
+        draft.questionCreationError = action.error;
+        break;
+      case EDIT_QUESTION:
+        console.log('go');
+        break;
+      case EDIT_QUESTION_SUCCESS:
+        draft.questionToBeCreated = null;
+        draft.bookList = state.bookList.map(bookToEvaluate => {
+          bookToEvaluate.text_id === action.book.text_id &&
+            bookToEvaluate.questions.map(questionToEvaluate =>
+              questionToEvaluate.key === action.questionChanged.key
+                ? action.questionChanged
+                : questionToEvaluate,
+            );
+          return bookToEvaluate;
+        });
+        break;
+      case EDIT_QUESTION_FAILURE:
+        draft.questionEditError = action.error;
+        break;
+      case CHANGE_QUESTION_TO_BE_CREATED:
+        draft.questionToBeCreated = action.question;
         break;
     }
   });

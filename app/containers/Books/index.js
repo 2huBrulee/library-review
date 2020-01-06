@@ -37,6 +37,8 @@ import {
   batchSetReference,
   setTrustStatus,
   editBook,
+  createQuestion,
+  editQuestion,
 } from './actions';
 import NoSearchResults from '../../components/NoSearchResults';
 import SelectedItem from '../../components/SelectedItem';
@@ -49,6 +51,8 @@ const ShowResults = ({
   searchingForDuplicates,
   dispatchSetTrust,
   dispatchEditBook,
+  dispatchCreateQuestion,
+  dispatchEditQuestion,
   duplicatedBooks,
   hideBook,
   clearDuplicates,
@@ -64,12 +68,14 @@ const ShowResults = ({
       hideBook={hideBook}
       clearDuplicate={clearDuplicates}
       duplicatedBooks={duplicatedBooks}
+      dispatchCreateQuestion={dispatchCreateQuestion}
+      dispatchEditQuestion={dispatchEditQuestion}
     />
   ) : (
     <NoSearchResults />
   );
 
-export function Books(props) {
+export const Books = props => {
   useInjectReducer({ key: 'books', reducer });
   useInjectSaga({ key: 'books', saga });
 
@@ -83,6 +89,8 @@ export function Books(props) {
     dispatchBatchLink,
     dispatchBatchHide,
     dispatchSetTrust,
+    dispatchCreateQuestion,
+    dispatchEditQuestion,
     location,
     loading,
     error,
@@ -148,6 +156,8 @@ export function Books(props) {
           clearSelection={dispatchClearSelection}
           clearDuplicate={dispatchClearDuplicate}
           dispatchEditBook={dispatchEditBook}
+          dispatchCreateQuestion={dispatchCreateQuestion}
+          dispatchEditQuestion={dispatchEditQuestion}
           hideBook={dispatchBatchHide}
           book={baseBookSelected}
         />
@@ -172,13 +182,15 @@ export function Books(props) {
           duplicatedBooks={duplicatedBooks}
           dispatchSetTrust={dispatchSetTrust}
           dispatchEditBook={dispatchEditBook}
+          dispatchCreateQuestion={dispatchCreateQuestion}
+          dispatchEditQuestion={dispatchEditQuestion}
           hideBook={dispatchBatchHide}
           bookList={bookList}
         />
       )}
     </div>
   );
-}
+};
 
 ShowResults.propTypes = {
   bookList: PropTypes.array,
@@ -199,6 +211,8 @@ Books.propTypes = {
   dispatchBatchLink: PropTypes.func.isRequired,
   dispatchSetTrust: PropTypes.func.isRequired,
   dispatchEditBook: PropTypes.func.isRequired,
+  dispatchCreateQuestion: PropTypes.func.isRequired,
+  dispatchEditQuestion: PropTypes.func.isRequired,
   bookList: PropTypes.array,
   loading: PropTypes.bool,
   error: PropTypes.any,
@@ -231,6 +245,11 @@ function mapDispatchToProps(dispatch) {
     dispatchSetTrust: (booksToTrust, trust) =>
       dispatch(setTrustStatus(booksToTrust, trust)),
     dispatchEditBook: (book, changes) => dispatch(editBook(book, changes)),
+    dispatchCreateQuestion: (book, question) =>
+      dispatch(createQuestion(book, question)),
+    dispatchEditQuestion: (book, question) =>{
+      console.log('y2')
+      dispatch(editQuestion(book, question))},
   };
 }
 

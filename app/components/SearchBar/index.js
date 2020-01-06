@@ -118,8 +118,8 @@ const SearchBar = props => {
             searchCategory === 'BOOKS'
               ? 'Enter Book Title'
               : searchCategory === 'AUTHORS'
-              ? "Enter Author's name"
-              : '<<<< Select Search Type'
+                ? "Enter Author's name"
+                : '<<<< Select Search Type'
           }
           valid={isQueryValid}
           value={searchString}

@@ -60,6 +60,12 @@ const makeEditedBooksSelector = () =>
     substate => substate.editedBooks,
   );
 
+const questionToBeCreateSelector = () =>
+  createSelector(
+    selectBooksDomain,
+    substate => substate.questionToBeCreated,
+  );
+
 export default makeSelectBooks;
 export {
   selectBooksDomain,
@@ -69,4 +75,5 @@ export {
   makeBaseBookSelector,
   makeDuplicatedBooksSelector,
   makeEditedBooksSelector,
+  questionToBeCreateSelector,
 };
