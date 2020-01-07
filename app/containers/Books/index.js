@@ -247,9 +247,10 @@ function mapDispatchToProps(dispatch) {
     dispatchEditBook: (book, changes) => dispatch(editBook(book, changes)),
     dispatchCreateQuestion: (book, question) =>
       dispatch(createQuestion(book, question)),
-    dispatchEditQuestion: (book, question) =>{
-      console.log('y2')
-      dispatch(editQuestion(book, question))},
+    dispatchEditQuestion: (book, question) => {
+      console.log('y2');
+      dispatch(editQuestion(book, question));
+    },
   };
 }
 

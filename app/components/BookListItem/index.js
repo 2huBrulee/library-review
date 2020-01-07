@@ -237,7 +237,7 @@ const EditLexileButtonIcon = styled.button`
   margin: 0;
   width: max-content;
   height: max-content;
-  color: #ff8000;
+  color: #aaaaaa;
   border: 0;
   &:hover {
     cursor: pointer;

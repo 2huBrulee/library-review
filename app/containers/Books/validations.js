@@ -42,3 +42,8 @@ export const validateEditFields = (baseBook, changes) => {
 
   return validatedChanges;
 };
+
+export const questionValidations = {
+  validateQuestionBody: body => body.length > 0 && body.includes('____'),
+  validateAnswer: answer => answer.length > 0,
+};

@@ -9,6 +9,8 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import TextInput from 'components/TextInput';
 import { grid, layout, space, typography } from 'styled-system';
+import Popover, { ArrowContainer } from 'react-tiny-popover';
+import { questionValidations } from 'containers/Books/validations';
 
 const Wrapper = styled.div`
   width: 566px;
@@ -38,6 +40,7 @@ const StyledInput = styled(TextInput)`
   ${layout};
   margin-left: auto;
   right: 0;
+  ${({ invalid }) => invalid && `border: 1px solid red;`}
 `;
 
 const Icon = styled.svg`
@@ -81,7 +84,7 @@ const TextSpan = styled.span`
 const SaveButton = styled.button`
   width: 120px;
   margin: 15px 8px;
-  background-color: #fafafa;
+  background-color: #2b9401;
   border-color: #2b9401;
   border-style: solid;
   border-width: 1px;
@@ -92,15 +95,14 @@ const SaveButton = styled.button`
   justify-content: center;
   display: flex;
   font-size: 16px;
-  color: #2b9401;
+  color: #fafafa;
   cursor: pointer;
-  ${({ trusted }) => trusted && `color: #fafafa; background-color: #2b9401`}
 `;
 
 const CancelButton = styled.button`
   width: 120px;
   margin: 15px 8px;
-  background-color: #fafafa;
+  background-color: #2b9401;
   border-color: #2b9401;
   border-style: solid;
   border-width: 1px;
@@ -111,16 +113,15 @@ const CancelButton = styled.button`
   justify-content: center;
   display: flex;
   font-size: 16px;
-  color: #2b9401;
+  color: #fafafa;
   cursor: pointer;
-  ${({ trusted }) => trusted && `color: #fafafa; background-color: #2b9401`}
 `;
 
 const DeleteButton = styled.button`
   width: 120px;
   margin: 15px 8px;
   grid-column: 3;
-  background-color: #fafafa;
+  background-color: #2b9401;
   border-color: #2b9401;
   border-style: solid;
   border-width: 1px;
@@ -131,9 +132,8 @@ const DeleteButton = styled.button`
   justify-content: center;
   display: flex;
   font-size: 16px;
-  color: #2b9401;
+  color: #fafafa;
   cursor: pointer;
-  ${({ trusted }) => trusted && `color: #fafafa; background-color: #2b9401`}
 `;
 
 const ButtonSection = styled.div`
@@ -145,25 +145,51 @@ const ButtonSection = styled.div`
   justify-items: center;
 `;
 
-function Question(props) {
+const Label = styled.span`
+  border-radius: 4px;
+  margin: 0 24px;
+  padding: 0 20px;
+  background-color: #cccccc;
+  display: inline-flex;
+  align-items: center;
+  color: white;
+`;
+
+const InvalidAlertWrapper = styled.div`
+  color: red;
+`;
+
+const Alert = props => (
+  <InvalidAlertWrapper>{props.message}</InvalidAlertWrapper>
+);
+
+const Question = props => {
   const { createQuestion, editQuestion, book } = props;
 
   const [question, setQuestion] = useState({
-    key: null,
-    id: null,
-    user_id: null,
-    body: null,
-    answer_options: null,
+    key: '',
+    id: '',
+    user_id: '',
+    body: '',
+    answer_options: [],
   });
 
   const [editable, setEditable] = useState(false);
+  const [questionEdited, setQuestionEdited] = useState(false);
+  const [answerEdited, setAnswerEdited] = useState(false);
+  const [invalidInput, setInvalidInput] = useState(false);
 
-  const questionBodyHandler = e =>
+  const questionBodyHandler = e => {
     setQuestion({ ...question, body: e.target.value });
-
-  const answersHandler = e =>
-    setQuestion({ ...question, answer_options: e.target.value.split(',') });
-
+    setQuestionEdited(true);
+  };
+  const answersHandler = e => {
+    setQuestion({
+      ...question,
+      answer_options: e.target.value.split(','),
+    });
+    setAnswerEdited(true);
+  };
   const cancelEdition = () => {
     setEditable(false);
     setQuestion(props.question);
@@ -176,25 +202,46 @@ function Question(props) {
   useEffect(() => setEditable(props.editable), [props.editable]);
 
   const createQuestionHandler = () => {
-    createQuestion(book, {
-      body: question.body,
-      answer_options: question.answer_options,
-    });
-    setQuestion({
-      key: '',
-      id: '',
-      user_id: '',
-      body: '',
-      answer_options: [''],
-    });
+    if (
+      questionValidations.validateAnswer(question.answer_options) &&
+      questionValidations.validateQuestionBody(question.body)
+    ) {
+      createQuestion(book, {
+        body: question.body,
+        answer_options: question.answer_options.map(answer => answer.trim()),
+      });
+      setQuestion({
+        key: '',
+        id: '',
+        user_id: '',
+        body: '',
+        answer_options: [],
+      });
+    } else {
+      setInvalidInput(true);
+    }
   };
 
   const editQuestionHandler = () => {
-    console.log('edit');
+    if (
+      questionValidations.validateAnswer(question.answer_options) &&
+      questionValidations.validateQuestionBody(question.body)
+    ) {
+      editQuestion(book, {
+        body: question.body,
+        answer_options: question.answer_options.map(answer => answer.trim()),
+        key: question.key,
+        status: 'UPDATED',
+      });
+      setEditable(false);
+    } else {
+      setInvalidInput(true);
+    }
+  };
+
+  const deleteQuestionHandler = () => {
     editQuestion(book, {
-      body: question.body,
-      answer_options: question.answer_options,
-      key: question.key,
+      global: false,
     });
     setEditable(false);
   };
@@ -213,16 +260,31 @@ function Question(props) {
           {props.newQuestion ? `New Question:` : `Key: `}
         </BoldTextSpan>
         <TextSpan ml={1}>{question.key}</TextSpan>
+        {!props.newQuestion && <Label>DISABLED</Label>}
       </DetailContainer>
       {editable ? (
         <Input gridColumn="2/13">
           <BoldText>Q: </BoldText>
-          <StyledInput
-            onChange={questionBodyHandler}
-            value={question.body}
-            minHeight={10}
-            width="91%"
-          />
+          <Popover
+            isOpen={
+              !questionValidations.validateQuestionBody(question.body) &&
+              (questionEdited||invalidInput)
+            }
+            position={'right'} // preferred position
+            disableReposition
+            content={<Alert message="Should contain 4 underscores" />}
+          >
+            <StyledInput
+              onChange={questionBodyHandler}
+              value={question.body}
+              minHeight={10}
+              width="91%"
+              invalid={
+                invalidInput &&
+                !questionValidations.validateQuestionBody(question.body)
+              }
+            />
+          </Popover>
         </Input>
       ) : (
         <DetailContainer height={24} lineHeight="24px" gridColumn={2}>
@@ -233,14 +295,30 @@ function Question(props) {
       {editable ? (
         <Input gridColumn="2/13">
           <BoldText>A: </BoldText>
-          <StyledInput
-            onChange={answersHandler}
-            value={
-              question.answer_options ? question.answer_options.join(',') : null
+          <Popover
+            isOpen={
+              !questionValidations.validateAnswer(question.answer_options) &&
+              (answerEdited||invalidInput)
             }
-            minHeight={10}
-            width="91%"
-          />
+            position={'right'} // preferred position
+            disableReposition
+            content={<Alert message="Can´t be empty" />}
+          >
+            <StyledInput
+              onChange={answersHandler}
+              value={
+                question.answer_options
+                  ? question.answer_options.join(',')
+                  : null
+              }
+              minHeight={10}
+              width="91%"
+              invalid={
+                invalidInput &&
+                !questionValidations.validateAnswer(question.answer_options)
+              }
+            />
+          </Popover>
         </Input>
       ) : (
         <DetailContainer height={24} lineHeight="24px" gridColumn="2/13">
@@ -264,12 +342,12 @@ function Question(props) {
           {!props.newQuestion && (
             <CancelButton onClick={cancelEdition}>Cancel</CancelButton>
           )}
-          <DeleteButton>Delete</DeleteButton>
+          <DeleteButton onClick={deleteQuestionHandler}>Delete</DeleteButton>
         </ButtonSection>
       )}
     </Wrapper>
   );
-}
+};
 
 Question.propTypes = {};
 
