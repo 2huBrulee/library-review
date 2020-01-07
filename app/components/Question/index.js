@@ -268,11 +268,11 @@ const Question = props => {
           <Popover
             isOpen={
               !questionValidations.validateQuestionBody(question.body) &&
-              (questionEdited||invalidInput)
+              (questionEdited || invalidInput)
             }
             position={'right'} // preferred position
             disableReposition
-            content={<Alert message="Should contain 4 underscores" />}
+            content={<Alert message="Must contain 4 underscores" />}
           >
             <StyledInput
               onChange={questionBodyHandler}
@@ -298,7 +298,7 @@ const Question = props => {
           <Popover
             isOpen={
               !questionValidations.validateAnswer(question.answer_options) &&
-              (answerEdited||invalidInput)
+              (answerEdited || invalidInput)
             }
             position={'right'} // preferred position
             disableReposition
