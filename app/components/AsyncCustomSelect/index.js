@@ -28,6 +28,7 @@ const customStyles = {
 };
 
 export default props => {
+  console.log(props);
   const [inputValue, setInputValue] = useState(null);
   const {
     showButtons,
@@ -47,13 +48,19 @@ export default props => {
 
   useEffect(() => {
     if (!editingLexile) {
-      setInputValue(defaultLexile);
+      if (defaultLexile) {
+        setInputValue(defaultLexile);
+      } else {
+        setInputValue(null);
+      }
     }
   }, [editingLexile, defaultLexile]);
 
   return (
     <AsyncSelect
       value={inputValue}
+      key={`my_unique_select_key__${inputValue}`}
+      option
       styles={customStyles}
       cacheOptions
       isSearchable

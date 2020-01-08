@@ -305,7 +305,9 @@ function BookListItem(props) {
     setEditingLexileFalse();
   };
 
-  const clearLexile = () => edit(book, { lexile_record_id: null });
+  const clearLexile = () => {
+    setSelectedLexile(null)
+    edit(book, { lexile_record_id: null });}
 
   const setEditingLexileTrue = () => {
     setSelectedLexile(lexile_record);
@@ -460,7 +462,6 @@ function BookListItem(props) {
                 : `[add a question]`}
             </ClickableSpan>
           </DetailLineOverflow>
-          {console.log(book.questions)}
           {showingQuestions &&
             book.questions &&
             book.questions.map(question => (
