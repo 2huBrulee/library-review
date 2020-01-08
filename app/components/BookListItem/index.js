@@ -306,8 +306,9 @@ function BookListItem(props) {
   };
 
   const clearLexile = () => {
-    setSelectedLexile(null)
-    edit(book, { lexile_record_id: null });}
+    setSelectedLexile(null);
+    edit(book, { lexile_record_id: null });
+  };
 
   const setEditingLexileTrue = () => {
     setSelectedLexile(lexile_record);
@@ -323,7 +324,7 @@ function BookListItem(props) {
   const changeCheck = () =>
     checked ? clearDuplicate(book) : selectDuplicate(book);
 
-  const setSelected = () => selectBaseBook(book);
+  const setSelected = () => !book.duplicate && selectBaseBook(book);
   const deleteDuplicate = duplicateBook => () => clearDuplicate(duplicateBook);
 
   const goToAuthor = author => () =>
@@ -408,9 +409,9 @@ function BookListItem(props) {
               <Button selected onClick={clearSelection}>
                 Clear
               </Button>
-            ) : (
+            ) : !book.duplicate ? (
               <Button onClick={setSelected}>Reference</Button>
-            )}
+            ) : null}
             <Duplicates>
               {duplicatedBooks && duplicatedBooks.length > 0 && selected
                 ? duplicatedBooks.map(duplicatedBook => (
