@@ -262,7 +262,7 @@ const Question = props => {
           {props.newQuestion ? `New Question:` : `Key: `}
         </BoldTextSpan>
         <TextSpan ml={1}>{question.key}</TextSpan>
-        {!props.question.global && <Label>DISABLED</Label>}
+        {props.question && !props.question.global && <Label>DISABLED</Label>}
       </DetailContainer>
       {editable ? (
         <Input gridColumn="2/13">
