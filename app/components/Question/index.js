@@ -84,8 +84,8 @@ const TextSpan = styled.span`
 const SaveButton = styled.button`
   width: 120px;
   margin: 15px 8px;
-  background-color: #2b9401;
-  border-color: #2b9401;
+  background-color: #fafafa;
+  border-color: #ff8000;
   border-style: solid;
   border-width: 1px;
   border-radius: 5px;
@@ -95,15 +95,15 @@ const SaveButton = styled.button`
   justify-content: center;
   display: flex;
   font-size: 16px;
-  color: #fafafa;
+  color: #ff8000;
   cursor: pointer;
 `;
 
 const CancelButton = styled.button`
   width: 120px;
   margin: 15px 8px;
-  background-color: #2b9401;
-  border-color: #2b9401;
+  background-color: #fafafa;
+  border-color: #ff8000;
   border-style: solid;
   border-width: 1px;
   border-radius: 5px;
@@ -113,7 +113,7 @@ const CancelButton = styled.button`
   justify-content: center;
   display: flex;
   font-size: 16px;
-  color: #fafafa;
+  color: #ff8000;
   cursor: pointer;
 `;
 
@@ -121,8 +121,8 @@ const DeleteButton = styled.button`
   width: 120px;
   margin: 15px 8px;
   grid-column: 3;
-  background-color: #2b9401;
-  border-color: #2b9401;
+  background-color: #fafafa;
+  border-color: #ff8000;
   border-style: solid;
   border-width: 1px;
   border-radius: 5px;
@@ -132,7 +132,7 @@ const DeleteButton = styled.button`
   justify-content: center;
   display: flex;
   font-size: 16px;
-  color: #fafafa;
+  color: #ff8000;
   cursor: pointer;
 `;
 
@@ -171,6 +171,7 @@ const Question = props => {
     id: '',
     user_id: '',
     body: '',
+    global: true,
     answer_options: [],
   });
 
@@ -215,6 +216,7 @@ const Question = props => {
         id: '',
         user_id: '',
         body: '',
+        global: true,
         answer_options: [],
       });
     } else {
@@ -260,7 +262,7 @@ const Question = props => {
           {props.newQuestion ? `New Question:` : `Key: `}
         </BoldTextSpan>
         <TextSpan ml={1}>{question.key}</TextSpan>
-        {!props.newQuestion && <Label>DISABLED</Label>}
+        {!props.question.global && <Label>DISABLED</Label>}
       </DetailContainer>
       {editable ? (
         <Input gridColumn="2/13">
@@ -272,7 +274,7 @@ const Question = props => {
             }
             position={'right'} // preferred position
             disableReposition
-            content={<Alert message="Must contain 4 underscores" />}
+            content={<Alert message="Must  contain 4 underscores" />}
           >
             <StyledInput
               onChange={questionBodyHandler}
