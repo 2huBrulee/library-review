@@ -21,6 +21,7 @@ import { FormattedMessage } from 'react-intl';
 import GlobalStyle from '../../global-styles';
 import messages from './messages';
 import theme from '../../theme';
+import LoginContainer from 'containers/LoginContainer';
 
 const Title = styled.div`
   font-size: 40px;
@@ -37,22 +38,38 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
+const getAuth = () =>
+  localStorage.getItem('username') &&
+  localStorage.getItem('password') &&
+  localStorage.getItem('username').length > 0 &&
+  localStorage.getItem('password').length > 0;
+
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <Container>
-        <Title>
-          <FormattedMessage {...messages.header} />
-        </Title>
         <Switch>
-          <Route path="/:path(authors|books)?" component={SearchBarContainer} />
+          <PrivateRoute
+            path="/:path(authors|books)"
+            component={() => (
+              <Title>
+                <FormattedMessage {...messages.header} />
+              </Title>
+            )}
+          />
         </Switch>
         <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route exact path="/authors" component={Authors} />
-          <Route exact path="/books" component={Books} />
+          <PrivateRoute
+            path="/:path(authors|books)"
+            component={SearchBarContainer}
+          />
+        </Switch>
+        <Switch>
+          <Route exact path="/login" component={LoginContainer} />
+          <PrivateRoute exact path="/authors" component={Authors} />
+          <PrivateRoute exact path="/books" component={Books} />
           <Route>
-            <Redirect to="/" />
+            <Redirect to="/login" />
           </Route>
         </Switch>
         <GlobalStyle />
@@ -60,3 +77,12 @@ export default function App() {
     </ThemeProvider>
   );
 }
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      getAuth() === true ? <Component {...props} /> : <Redirect to="/login" />
+    }
+  />
+);
