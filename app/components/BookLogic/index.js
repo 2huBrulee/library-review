@@ -9,6 +9,7 @@ import qs from 'qs';
 import BookListItemEditMode from 'components/BookListItemEditMode';
 import BookListItem from 'components/BookListItem';
 import { validateEditFields } from 'containers/Books/validations';
+import base64 from 'base-64';
 // import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 
