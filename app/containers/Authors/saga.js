@@ -10,6 +10,10 @@ const getAuthorkByKey = key =>
       embed:
         'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate',
     },
+    auth: {
+      username: localStorage.getItem('username'),
+      password: localStorage.getItem('password'),
+    },
   });
 
 const getAuthors = authorQuery =>
@@ -22,6 +26,10 @@ const getAuthors = authorQuery =>
       ...(authorQuery.origin ? { origin: authorQuery.origin } : null),
       embed:
         'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned',
+    },
+    auth: {
+      username: localStorage.getItem('username'),
+      password: localStorage.getItem('password'),
     },
   });
 

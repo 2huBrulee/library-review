@@ -23,6 +23,13 @@ function BookLogic(props) {
       `https://matilda.whooosreading.org/api/v1/lexile_records?${queryString}`,
       {
         method: 'GET',
+        headers: new Headers({
+          Authorization: `Basic ${base64.encode(
+            `${localStorage.getItem('username')}:${localStorage.getItem(
+              'password',
+            )}`,
+          )}`,
+        }),
       },
     )
       .then(r => r.json())

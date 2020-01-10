@@ -33,6 +33,10 @@ const getBooks = bookQuery =>
         'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate,book.lexile_record,book.questions',
       force_display_cover: true,
     },
+    auth: {
+      username: localStorage.getItem('username'),
+      password: localStorage.getItem('password'),
+    },
   });
 
 const getBookById = id =>
@@ -41,6 +45,10 @@ const getBookById = id =>
       embed:
         'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate,book.lexile_record,book.questions',
       force_display_cover: true,
+    },
+    auth: {
+      username: localStorage.getItem('username'),
+      password: localStorage.getItem('password'),
     },
   });
 
@@ -66,6 +74,10 @@ const hideBooks = (booksToHide, hidden) =>
           '',
         ),
       },
+      auth: {
+        username: localStorage.getItem('username'),
+        password: localStorage.getItem('password'),
+      },
     },
   );
 
@@ -77,6 +89,12 @@ const editBook = (book, newData) =>
       embed:
         'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate,book.lexile_record,book.questions',
       force_display_cover: true,
+    },
+    {
+      auth: {
+        username: localStorage.getItem('username'),
+        password: localStorage.getItem('password'),
+      },
     },
   );
 
@@ -104,6 +122,10 @@ const setTrustStatus = (booksToEdit, trust) =>
           return xd;
         })(),
       },
+      auth: {
+        username: localStorage.getItem('username'),
+        password: localStorage.getItem('password'),
+      },
     },
   );
 
@@ -128,6 +150,10 @@ const setReferenceBook = (booksToReference, referenceBook) =>
               : `${booksString},${bookToReference.text_id}`,
           '',
         ),
+      },
+      auth: {
+        username: localStorage.getItem('username'),
+        password: localStorage.getItem('password'),
       },
     },
   );
