@@ -134,7 +134,7 @@ const setReferenceBook = (booksToReference, referenceBook) =>
     `https://matilda.whooosreading.org/api/v1/books/text_id`,
     {
       [booksToReference.length > 1 ? 'books' : 'book']: {
-        duplicate: referenceBook.text_id,
+        duplicate_id: referenceBook.text_id,
         hidden: true,
       },
       embed:
