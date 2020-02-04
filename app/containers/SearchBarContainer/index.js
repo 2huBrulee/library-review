@@ -78,15 +78,41 @@ export function SearchBarContainer(props) {
 
   const params = qs.parse(urlSearch, { ignoreQueryPrefix: true });
 
+  const getOriginObject = origin =>
+    ORIGINS.reduce((pv, cv) => (origin === cv.value ? cv : pv), {
+      label: 'ALL',
+      value: 'ALL',
+    });
+
   useEffect(() => {
     if (reduxInit) {
-      dispatchSetSearchCategory(pathname === '/authors' ? 'AUTHORS' : 'BOOKS');
+      dispatchSetSearchCategory(
+        pathname === '/authors' ? {
+        label: 'Search Authors',
+        value: 'AUTHORS',
+      } : {
+        label: 'Search Books',
+        value: 'BOOKS',
+      });
       dispatchChangeSearchString(params.q || params.full_name || '');
-      if (params.origin) dispatchSetSearchOrigin(params.origin);
-      else dispatchSetSearchOrigin('ALL');
-      if (params.trusted) dispatchSetSearchType(TRUSTED);
-      else if (params.gr) dispatchSetSearchType(GR);
-      else dispatchSetSearchType(REGULAR);
+      if (params.origin) dispatchSetSearchOrigin(getOriginObject(params.origin));
+      else
+        dispatchSetSearchOrigin({
+        label: 'All',
+        value: 'ALL',
+      });
+      if (params.trusted) dispatchSetSearchType({
+        label: 'Trusted',
+        value: 'TRUSTED',
+      });
+      else if (params.gr) dispatchSetSearchType({
+        label: 'GR',
+        value: 'GR',
+      });
+      else dispatchSetSearchType({
+        label: 'Regular',
+        value: 'REGULAR',
+      });
       if (params.hidden) dispatchChangeHiddenVisibility(params.hidden);
       if (params.duplicate)
         dispatchChangeDuplicatesVisibility(params.duplicate);
@@ -106,12 +132,14 @@ export function SearchBarContainer(props) {
   useInjectSaga({ key: 'searchBarContainer', saga });
 
   const search = () => {
-    if (searchCategory === BOOKS) {
+    if (searchCategory.value === BOOKS) {
       const queryObject = {
         q: searchString,
-        ...(searchOrigin !== 'ALL' ? { origin: searchOrigin } : null),
-        ...(searchType === TRUSTED ? { trusted: true } : null),
-        ...(searchType === GR ? { gr: true } : null),
+        ...(searchOrigin.value !== 'ALL'
+          ? { origin: searchOrigin.value }
+          : null),
+        ...(searchType.value === TRUSTED ? { trusted: true } : null),
+        ...(searchType.value === GR ? { gr: true } : null),
         ...(hiddenIncluded ? { hidden: true } : null),
         ...(duplicatesIncluded ? { duplicate: true } : null),
         ...(numberOfResults > 0 ? { num_results: numberOfResults } : null),
@@ -124,7 +152,9 @@ export function SearchBarContainer(props) {
     } else {
       const queryObject = {
         full_name: searchString,
-        ...(searchOrigin !== 'ALL' ? { origin: searchOrigin } : null),
+        ...(searchOrigin.value !== 'ALL'
+          ? { origin: searchOrigin.value }
+          : null),
         ...(numberOfResults > 0 ? { num_results: numberOfResults } : null),
       };
       const searchQuery = `?${qs.stringify(queryObject)}`;
@@ -199,10 +229,10 @@ SearchBarContainer.propTypes = {
   dispatchChangeMoreOptionsVisibility: PropTypes.func.isRequired,
   dispatchChangeNumberOfResults: PropTypes.func.isRequired,
   dispatchNewRoute: PropTypes.func.isRequired,
-  searchCategory: PropTypes.string,
+  searchCategory: PropTypes.object,
   searchString: PropTypes.string,
-  searchType: PropTypes.string,
-  searchOrigin: PropTypes.string,
+  searchType: PropTypes.object,
+  searchOrigin: PropTypes.object,
   hiddenIncluded: PropTypes.bool,
   duplicatesIncluded: PropTypes.bool,
   showingMoreOptions: PropTypes.bool,

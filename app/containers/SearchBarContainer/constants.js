@@ -18,13 +18,12 @@ export const MANU = 'MANU';
 
 export const SEARCH_TYPES = [
   {
-    label: 'Trusted',
-    value: TRUSTED,
-  },
-  {
     label: 'Regular',
     value: REGULAR,
-    defaultChecked: true,
+  },
+  {
+    label: 'Trusted',
+    value: TRUSTED,
   },
   {
     label: GR,
@@ -36,7 +35,6 @@ export const ORIGINS = [
   {
     label: 'All',
     value: 'ALL',
-    defaultChecked: true,
   },
   {
     label: 'Base',
@@ -58,13 +56,12 @@ export const ORIGINS = [
 
 export const SEARCH_CATEGORIES = [
   {
-    label: 'Search Authors',
-    value: AUTHORS,
-  },
-  {
     label: 'Search Books',
     value: BOOKS,
-    defaultChecked: true,
+  },
+  {
+    label: 'Search Authors',
+    value: AUTHORS,
   },
 ];
 

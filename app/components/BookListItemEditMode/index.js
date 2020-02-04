@@ -72,7 +72,10 @@ const Label = styled.div`
 `;
 
 const StyledSelect = styled(Select)`
-  width: 196px;
+  width: 232px;
+  .Select__StyledReactSelect-fhpbt0-0 {
+    width: 232px;
+  }
 `;
 
 /*
@@ -137,7 +140,6 @@ function BookListItemEditMode(props) {
 
   const handleChange = e => {
     e.persist();
-    console.log(e.target.value);
     if (e.target.name === 'series_index') {
       try {
         const newSI = parseInt(e.target.value, 10);
@@ -168,6 +170,24 @@ function BookListItemEditMode(props) {
     }
   };
 
+  const handleTextVarietyChange = e => {
+    setChanges(prevValues => ({
+      ...prevValues,
+      text_variety: e.target.value.value,
+    }));
+  };
+
+  const textVarietyOptions = [
+    { label: 'fiction', value: 'fiction' },
+    { label: 'non-fiction', value: 'non-fiction' },
+  ];
+
+  const getTVOptionSelected = textVariety =>
+    textVarietyOptions.reduce(
+      (pv, cv) => (cv.value === textVariety ? cv : pv),
+      {},
+    );
+
   return (
     <Wrapper>
       <OddColumn>
@@ -185,12 +205,9 @@ function BookListItemEditMode(props) {
           <Label>Text Variety</Label>
           <StyledSelect
             name="text_variety"
-            value={changes.text_variety}
-            onChange={handleChange}
-            options={[
-              { label: 'fiction', value: 'fiction' },
-              { label: 'non-fiction', value: 'non-fiction' },
-            ]}
+            value={getTVOptionSelected(changes.text_variety)}
+            onChange={handleTextVarietyChange}
+            options={textVarietyOptions}
           />
         </InputDiv>
       </EvenColumn>

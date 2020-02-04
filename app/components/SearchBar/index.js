@@ -115,17 +115,17 @@ const SearchBar = props => {
         />
         <StyledTextInput
           placeholder={
-            searchCategory === 'BOOKS'
+            searchCategory.value === 'BOOKS'
               ? 'Enter Book Title'
-              : searchCategory === 'AUTHORS'
-                ? "Enter Author's name"
-                : '<<<< Select Search Type'
+              : searchCategory.value === 'AUTHORS'
+              ? "Enter Author's name"
+              : '<<<< Select Search Type'
           }
           valid={isQueryValid}
           value={searchString}
           onChange={handleSearchQueryInput}
         />
-        {searchCategory === 'BOOKS' ? (
+        {searchCategory.value === 'BOOKS' ? (
           <Select
             options={searchTypes}
             value={searchType}
@@ -141,21 +141,21 @@ const SearchBar = props => {
         <StyledButton disabled={!isQueryValid} onClick={search}>
           Search
         </StyledButton>
-        {showingMoreOptions && searchCategory === 'BOOKS' && (
+        {showingMoreOptions && searchCategory.value === 'BOOKS' && (
           <Select
             options={origins}
             value={searchOrigin}
             onChange={handleOriginChange}
           />
         )}
-        {showingMoreOptions && searchCategory === 'BOOKS' && (
+        {showingMoreOptions && searchCategory.value === 'BOOKS' && (
           <StyledCheckbox
             onChange={handleShowDuplicatesClick}
             label="Duplicates"
             checked={duplicatesIncluded}
           />
         )}
-        {showingMoreOptions && searchCategory === 'BOOKS' && (
+        {showingMoreOptions && searchCategory.value === 'BOOKS' && (
           <Checkbox
             onChange={handleShowHiddenClick}
             label="Hidden"

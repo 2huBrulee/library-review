@@ -19,7 +19,6 @@ function BookLogic(props) {
 
   const searchLexile = search => {
     const queryString = qs.stringify({ q: search });
-    console.log(queryString);
     return fetch(
       `https://matilda.whooosreading.org/api/v1/lexile_records?${queryString}`,
       {
@@ -35,10 +34,7 @@ function BookLogic(props) {
     )
       .then(r => r.json())
       .then(r => r.lexile_records)
-      .catch(error => {
-        console.error(error);
-        return [];
-      });
+      .catch(() => []);
   };
 
   const saveChanges = changes => {

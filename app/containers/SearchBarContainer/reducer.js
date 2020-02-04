@@ -17,10 +17,19 @@ import {
 } from './constants';
 
 export const initialState = {
-  searchCategory: 'BOOKS',
+  searchCategory: {
+    label: 'Search Books',
+    value: 'BOOKS',
+  },
   searchString: '',
-  searchType: 'TRUSTED',
-  searchOrigin: 'ALL',
+  searchType: {
+    label: 'Trusted',
+    value: 'TRUSTED',
+  },
+  searchOrigin: {
+    label: 'All',
+    value: 'ALL',
+  },
   hiddenIncluded: false,
   duplicatesIncluded: false,
   showingMoreOptions: false,
