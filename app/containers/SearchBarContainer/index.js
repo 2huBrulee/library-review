@@ -87,32 +87,39 @@ export function SearchBarContainer(props) {
   useEffect(() => {
     if (reduxInit) {
       dispatchSetSearchCategory(
-        pathname === '/authors' ? {
-        label: 'Search Authors',
-        value: 'AUTHORS',
-      } : {
-        label: 'Search Books',
-        value: 'BOOKS',
-      });
+        pathname === '/authors'
+          ? {
+            label: 'Search Authors',
+            value: 'AUTHORS',
+          }
+          : {
+            label: 'Search Books',
+            value: 'BOOKS',
+          },
+      );
       dispatchChangeSearchString(params.q || params.full_name || '');
-      if (params.origin) dispatchSetSearchOrigin(getOriginObject(params.origin));
+      if (params.origin)
+        dispatchSetSearchOrigin(getOriginObject(params.origin));
       else
         dispatchSetSearchOrigin({
-        label: 'All',
-        value: 'ALL',
-      });
-      if (params.trusted) dispatchSetSearchType({
-        label: 'Trusted',
-        value: 'TRUSTED',
-      });
-      else if (params.gr) dispatchSetSearchType({
-        label: 'GR',
-        value: 'GR',
-      });
-      else dispatchSetSearchType({
-        label: 'Regular',
-        value: 'REGULAR',
-      });
+          label: 'All',
+          value: 'ALL',
+        });
+      if (params.trusted)
+        dispatchSetSearchType({
+          label: 'Trusted',
+          value: 'TRUSTED',
+        });
+      else if (params.gr)
+        dispatchSetSearchType({
+          label: 'GR',
+          value: 'GR',
+        });
+      else
+        dispatchSetSearchType({
+          label: 'Regular',
+          value: 'REGULAR',
+        });
       if (params.hidden) dispatchChangeHiddenVisibility(params.hidden);
       if (params.duplicate)
         dispatchChangeDuplicatesVisibility(params.duplicate);

@@ -11,10 +11,10 @@ import { margin } from 'styled-system';
 
 const StyledButton = styled.button`
   ${margin};
-  box-sizing: content-box;
+  box-sizing: border-box;
   width: 128px;
   min-width: max-content;
-  height: 32px;
+  height: 38px;
   padding: 4px 8px;
   font-size: 16px;
   border: 1px solid #ff8000;

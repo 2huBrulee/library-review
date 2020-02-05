@@ -71,13 +71,6 @@ const Label = styled.div`
   padding: 0;
 `;
 
-const StyledSelect = styled(Select)`
-  width: 232px;
-  .Select__StyledReactSelect-fhpbt0-0 {
-    width: 232px;
-  }
-`;
-
 /*
   title, img_url, duplicate, hidden, series, series_index, trusted, text_variety
 */
@@ -88,7 +81,7 @@ function BookListItemEditMode(props) {
   const [changes, setChanges] = useState({
     title: '',
     img_url: '',
-    duplicate: '',
+    duplicate_id: '',
     hidden: false,
     series: '',
     series_index: '',
@@ -112,7 +105,7 @@ function BookListItemEditMode(props) {
       setChanges({
         title,
         img_url,
-        duplicate,
+        duplicate_id: duplicate.id,
         hidden,
         series,
         series_index,
@@ -203,11 +196,12 @@ function BookListItemEditMode(props) {
       <EvenColumn>
         <InputDiv>
           <Label>Text Variety</Label>
-          <StyledSelect
+          <Select
             name="text_variety"
             value={getTVOptionSelected(changes.text_variety)}
             onChange={handleTextVarietyChange}
             options={textVarietyOptions}
+            width="232px"
           />
         </InputDiv>
       </EvenColumn>
@@ -226,8 +220,8 @@ function BookListItemEditMode(props) {
           <Label>Duplicate</Label>
           <TextInput
             onChange={handleChange}
-            name="duplicate"
-            value={changes.duplicate}
+            name="duplicate_id"
+            value={changes.duplicate_id}
           />
         </InputDiv>
       </EvenColumn>
