@@ -5,6 +5,7 @@
  */
 
 import React, { useEffect } from 'react';
+import useDeepCompareEffect from 'use-deep-compare-effect'
 import PropTypes from 'prop-types';
 import qs from 'qs';
 import { connect } from 'react-redux';
@@ -84,7 +85,7 @@ export function SearchBarContainer(props) {
       value: 'ALL',
     });
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     if (reduxInit) {
       dispatchSetSearchCategory(
         pathname === '/authors'
@@ -133,7 +134,7 @@ export function SearchBarContainer(props) {
         dispatchChangeNumberOfResults(nResults > 0 ? nResults : -1);
       }
     }
-  }, [reduxInit,params]);
+  }, [reduxInit, params]);
 
   useInjectReducer({ key: 'searchBarContainer', reducer });
   useInjectSaga({ key: 'searchBarContainer', saga });

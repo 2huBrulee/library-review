@@ -121,7 +121,7 @@ function AuthorListItem(props) {
         {duplicate ? (
           <DetailLine>
             <BoldSpan>Duplicate: </BoldSpan>
-            <span>{duplicate.full_name}</span>
+            <span>{duplicate.matilda_id}</span>
           </DetailLine>
         ) : null}
         <DetailLine>
