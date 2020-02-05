@@ -10,6 +10,7 @@ import React, { useState } from 'react';
 // import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
+import qs from 'qs';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
 
@@ -96,7 +97,7 @@ function AuthorListItem(props) {
   const goToBook = book => () =>
     history.push({
       pathname: '/books',
-      search: `?name=${book.title}`,
+      search: `?${qs.stringify({ q: book.title })}`,
     });
 
   return (
@@ -120,7 +121,7 @@ function AuthorListItem(props) {
         {duplicate ? (
           <DetailLine>
             <BoldSpan>Duplicate: </BoldSpan>
-            <span>{duplicate}</span>
+            <span>{duplicate.full_name}</span>
           </DetailLine>
         ) : null}
         <DetailLine>

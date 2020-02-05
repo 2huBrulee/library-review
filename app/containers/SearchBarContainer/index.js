@@ -133,7 +133,7 @@ export function SearchBarContainer(props) {
         dispatchChangeNumberOfResults(nResults > 0 ? nResults : -1);
       }
     }
-  }, [reduxInit]);
+  }, [reduxInit,params]);
 
   useInjectReducer({ key: 'searchBarContainer', reducer });
   useInjectSaga({ key: 'searchBarContainer', saga });
