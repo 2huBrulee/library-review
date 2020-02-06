@@ -26,6 +26,7 @@ import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
 import BookList from '../../components/BookList';
+import StickyToolBar from '../../components/StickyToolBar';
 import BookHandling from '../../components/BookHandling';
 import {
   loadBooksFound,
@@ -149,28 +150,29 @@ export const Books = props => {
             </div>
           ))}
       </Modal>
-      {baseBookSelected.text_id ? (
-        <SelectedItem
-          baseBookSelected={baseBookSelected}
-          duplicatedBooks={duplicatedBooks}
-          clearSelection={dispatchClearSelection}
-          clearDuplicate={dispatchClearDuplicate}
-          dispatchEditBook={dispatchEditBook}
-          dispatchCreateQuestion={dispatchCreateQuestion}
-          dispatchEditQuestion={dispatchEditQuestion}
-          hideBook={dispatchBatchHide}
-          book={baseBookSelected}
-        />
-      ) : null}
-      {duplicatedBooks && duplicatedBooks.length > 0 ? (
-        <BookHandling
-          batchHide={batchHideAction}
-          batchLinking={batchLinkingAction}
-          batchTrust={batchTrust}
-          selected={!!baseBookSelected.text_id}
-        />
-      ) : null}
-
+      <StickyToolBar>
+        {baseBookSelected.text_id ? (
+          <SelectedItem
+            baseBookSelected={baseBookSelected}
+            duplicatedBooks={duplicatedBooks}
+            clearSelection={dispatchClearSelection}
+            clearDuplicate={dispatchClearDuplicate}
+            dispatchEditBook={dispatchEditBook}
+            dispatchCreateQuestion={dispatchCreateQuestion}
+            dispatchEditQuestion={dispatchEditQuestion}
+            hideBook={dispatchBatchHide}
+            book={baseBookSelected}
+          />
+        ) : null}
+        {duplicatedBooks && duplicatedBooks.length > 0 ? (
+          <BookHandling
+            batchHide={batchHideAction}
+            batchLinking={batchLinkingAction}
+            batchTrust={batchTrust}
+            selected={!!baseBookSelected.text_id}
+          />
+        ) : null}
+      </StickyToolBar>
       {loading ? (
         <WaveLoading />
       ) : (

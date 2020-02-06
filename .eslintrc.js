@@ -24,6 +24,7 @@ module.exports = {
   },
   extends: ['plugin:prettier/recommended'],
   rules: {
+    'react/jsx-uses-react': 1,
     'prettier/prettier': ['error', prettierOptions],
     'arrow-body-style': [2, 'as-needed'],
     'class-methods-use-this': 0,
@@ -70,7 +71,7 @@ module.exports = {
     'react/jsx-first-prop-new-line': [2, 'multiline'],
     'react/jsx-filename-extension': 0,
     'react/jsx-no-target-blank': 0,
-    'react/jsx-uses-vars': 2,
+    'react/jsx-uses-vars': 1,
     'react/require-default-props': 0,
     'react/require-extension': 0,
     'react/self-closing-comp': 0,

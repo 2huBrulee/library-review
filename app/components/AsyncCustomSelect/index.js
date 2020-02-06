@@ -28,7 +28,6 @@ const customStyles = {
 };
 
 export default props => {
-  console.log(props);
   const [inputValue, setInputValue] = useState(null);
   const {
     showButtons,

@@ -45,13 +45,15 @@ const StyledButton = styled(Button)`
 
 const StyledClickableText = styled(ClickableText)`
   min-width: 100px;
-  color #0082c8;
+  color: #0082c8;
 `;
 
 const StyledSticky = styled(Sticky)`
   background-color: #fafafa;
   &.sticky {
-    z-index: 99999;
+    z-index: 10;
+    max-height: 55px;
+    overflow: hidden;
     box-shadow: 0 4px 2px -2px lightgray !important;
   }
 `;
@@ -118,8 +120,8 @@ const SearchBar = props => {
             searchCategory.value === 'BOOKS'
               ? 'Enter Book Title'
               : searchCategory.value === 'AUTHORS'
-                ? "Enter Author's name"
-                : '<<<< Select Search Type'
+              ? "Enter Author's name"
+              : '<<<< Select Search Type'
           }
           valid={isQueryValid}
           value={searchString}

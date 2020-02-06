@@ -113,16 +113,6 @@ const ClickableSpan = styled.span`
   }
 `;
 
-const Duplicates = styled.div`
-  height: inherit;
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  right: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-`;
-
 const DeleteButton = styled.button`
   width: 16px;
   margin: 5px 15px 5px 5px;
@@ -206,11 +196,6 @@ const StyledCheckbox = styled(Checkbox)`
   margin: 0 10px 0 0;
 `;
 
-const DuplicateBook = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
 const Icon = styled.svg`
   flex: none;
   transition: fill 0.25s;
@@ -280,7 +265,6 @@ function BookListItem(props) {
     selected,
     clearSelection,
     selectDuplicate = f => f,
-    duplicatedBooks,
     clearDuplicate,
     toggleHideBook,
     setTrust,
@@ -325,7 +309,6 @@ function BookListItem(props) {
     checked ? clearDuplicate(book) : selectDuplicate(book);
 
   const setSelected = () => !book.duplicate && selectBaseBook(book);
-  const deleteDuplicate = duplicateBook => () => clearDuplicate(duplicateBook);
 
   const goToAuthor = author => () =>
     history.push({
@@ -338,7 +321,7 @@ function BookListItem(props) {
   return (
     <Container first={props.first}>
       <ButtonColumn>
-        {!selected ? (
+        {!selected && (
           <StyledCheckbox
             color="#555555"
             size={3}
@@ -349,7 +332,7 @@ function BookListItem(props) {
             tickAnimationDuration={300}
             onChange={changeCheck}
           />
-        ) : null}
+        )}
         <ButtonIcon onClick={setModify}>
           <Icon viewBox="0 0 20 20">
             <path d="M18.303,4.742l-1.454-1.455c-0.171-0.171-0.475-0.171-0.646,0l-3.061,3.064H2.019c-0.251,0-0.457,0.205-0.457,0.456v9.578c0,0.251,0.206,0.456,0.457,0.456h13.683c0.252,0,0.457-0.205,0.457-0.456V7.533l2.144-2.146C18.481,5.208,18.483,4.917,18.303,4.742 M15.258,15.929H2.476V7.263h9.754L9.695,9.792c-0.057,0.057-0.101,0.13-0.119,0.212L9.18,11.36h-3.98c-0.251,0-0.457,0.205-0.457,0.456c0,0.253,0.205,0.456,0.457,0.456h4.336c0.023,0,0.899,0.02,1.498-0.127c0.312-0.077,0.55-0.137,0.55-0.137c0.08-0.018,0.155-0.059,0.212-0.118l3.463-3.443V15.929z M11.241,11.156l-1.078,0.267l0.267-1.076l6.097-6.091l0.808,0.808L11.241,11.156z" />
@@ -412,20 +395,6 @@ function BookListItem(props) {
             ) : !book.duplicate ? (
               <Button onClick={setSelected}>Reference</Button>
             ) : null}
-            <Duplicates>
-              {duplicatedBooks && duplicatedBooks.length > 0 && selected
-                ? duplicatedBooks.map(duplicatedBook => (
-                    <DuplicateBook>
-                      <DetailLine maxWidth={100} title={duplicatedBook.title}>
-                        {duplicatedBook.title}
-                      </DetailLine>
-                      <DeleteButton onClick={deleteDuplicate(duplicatedBook)}>
-                        X
-                      </DeleteButton>
-                    </DuplicateBook>
-                  ))
-                : null}
-            </Duplicates>
           </Buttons>
         </Columns>
         <DetailsLarger>
@@ -452,39 +421,41 @@ function BookListItem(props) {
             </LexileButtonsContainer>
           )}
         </DetailsLarger>
-        <DetailsLarger>
-          <DetailLineOverflow>
-            <BoldSpan>Questions: </BoldSpan>
-            <ClickableSpan
-              onClick={() => setShowingQuestions(!showingQuestions)}
-            >
-              {book.questions
-                ? `[${book.questions.length}]`
-                : `[add a question]`}
-            </ClickableSpan>
-          </DetailLineOverflow>
-          {showingQuestions &&
-            book.questions &&
-            book.questions.map(question => (
+        {!selected && (
+          <DetailsLarger>
+            <DetailLineOverflow>
+              <BoldSpan>Questions: </BoldSpan>
+              <ClickableSpan
+                onClick={() => setShowingQuestions(!showingQuestions)}
+              >
+                {book.questions && book.questions.length > 0
+                  ? `[${book.questions.length}]`
+                  : `[add a question]`}
+              </ClickableSpan>
+            </DetailLineOverflow>
+            {showingQuestions &&
+              book.questions &&
+              book.questions.map(question => (
+                <Question
+                  key={question.matilda_id || 'no-key'}
+                  book={book}
+                  editQuestion={editQuestion}
+                  createQuestion={createQuestion}
+                  question={question}
+                />
+              ))}
+            {showingQuestions && (
               <Question
-                key={question.matilda_id || 'no-key'}
+                key="new"
                 book={book}
-                editQuestion={editQuestion}
                 createQuestion={createQuestion}
-                question={question}
+                editQuestion={editQuestion}
+                newQuestion
+                editable
               />
-            ))}
-          {showingQuestions && (
-            <Question
-              key="new"
-              book={book}
-              createQuestion={createQuestion}
-              editQuestion={editQuestion}
-              newQuestion
-              editable
-            />
-          )}
-        </DetailsLarger>
+            )}
+          </DetailsLarger>
+        )}
       </DivideIntoRows>
     </Container>
   );
