@@ -9,9 +9,8 @@ import Sticky from 'react-sticky-el';
 import styled from 'styled-components';
 
 const StyledSticky = styled(Sticky)`
-  background-color: red;
+  background-color: #fafafa;
   &.sticky {
-    background-color: green;
     margin: 55px 0 0 0;
     box-shadow: 0 4px 2px -2px lightgray;
     z-index: 5;
