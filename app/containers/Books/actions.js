@@ -29,6 +29,7 @@ import {
   EDIT_QUESTION_SUCCESS,
   EDIT_QUESTION_FAILURE,
   CHANGE_QUESTION_TO_BE_CREATED,
+  SELECT_ALL_BOOKS,
 } from './constants';
 
 export const loadBooksFound = bookQuery => ({
@@ -156,4 +157,8 @@ export const editQuestionSuccess = (book, questionChanged) => ({
 export const changeQuestionToBeCreated = question => ({
   type: CHANGE_QUESTION_TO_BE_CREATED,
   question,
+});
+
+export const selectAllBooks = () => ({
+  type: SELECT_ALL_BOOKS,
 });

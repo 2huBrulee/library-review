@@ -20,12 +20,9 @@ const getAuthors = authorQuery =>
   axios.get(`https://matilda.whooosreading.org/api/v1/authors`, {
     params: {
       full_name: authorQuery.full_name,
-      ...(authorQuery.num_results
-        ? { num_results: authorQuery.num_results }
-        : null),
+      ...(authorQuery.num_results ? { num_results: authorQuery.num_results } : null),
       ...(authorQuery.origin ? { origin: authorQuery.origin } : null),
-      embed:
-        'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned',
+      embed: 'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned',
     },
     auth: {
       username: localStorage.getItem('username'),
@@ -38,19 +35,12 @@ export function* getAuthorSearchResults(action) {
   try {
     const originRegEx = /(^AUT.+)|(^BASE.+)|(^LEXILE.+)|(^MANU.+)/g;
     if (originRegEx.test(action.authorQuery.full_name)) {
-      const { data } = yield call(
-        getAuthorkByKey,
-        action.authorQuery.full_name,
-      );
-      yield put(
-        loadAuthorsFoundSuccess(data.authors ? data.authors : [data.book]),
-      );
+      const { data } = yield call(getAuthorkByKey, action.authorQuery.full_name);
+      yield put(loadAuthorsFoundSuccess(data.authors ? data.authors : [data.book]));
     } else {
       console.log('here');
       const { data } = yield call(getAuthors, action.authorQuery);
-      yield put(
-        loadAuthorsFoundSuccess(data.authors ? data.authors : [data.author]),
-      );
+      yield put(loadAuthorsFoundSuccess(data.authors ? data.authors : [data.author]));
     }
   } catch (e) {
     console.log(e);

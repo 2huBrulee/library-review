@@ -29,6 +29,7 @@ import {
   EDIT_QUESTION_SUCCESS,
   EDIT_QUESTION_FAILURE,
   CHANGE_QUESTION_TO_BE_CREATED,
+  SELECT_ALL_BOOKS,
 } from './constants';
 
 export const initialState = {
@@ -141,8 +142,8 @@ const booksReducer = (state = initialState, action) =>
         draft.bookList = state.bookList.map(bookToEvaluate =>
           action.booksChanged.reduce(
             (bookToReturn, bookChanged) =>
-              bookChanged.text_id === bookToEvaluate.text_id &&
-              bookToReturn.text_id === bookToEvaluate.text_id
+              bookChanged.text_id === bookToEvaluate.text_ &&
+                bookToReturn.text_id === bookToEvaluate.text_id
                 ? bookChanged
                 : bookToReturn,
             bookToEvaluate,
@@ -158,8 +159,8 @@ const booksReducer = (state = initialState, action) =>
         draft.bookList = state.bookList.map(bookToEvaluate =>
           action.booksChanged.reduce(
             (bookToReturn, bookChanged) =>
-              bookChanged.text_id === bookToEvaluate.text_id &&
-              bookToReturn.text_id === bookToEvaluate.text_id
+              bookChanged.text_id === bookToaluate.text_id &&
+                bookToReturn.text_id === bookToEvaluate.text_id
                 ? bookChanged
                 : bookToReturn,
             bookToEvaluate,
@@ -183,7 +184,6 @@ const booksReducer = (state = initialState, action) =>
         draft.questionCreationError = action.error;
         break;
       case EDIT_QUESTION:
-        console.log('go');
         break;
       case EDIT_QUESTION_SUCCESS:
         draft.questionToBeCreated = null;
@@ -202,6 +202,11 @@ const booksReducer = (state = initialState, action) =>
         break;
       case CHANGE_QUESTION_TO_BE_CREATED:
         draft.questionToBeCreated = action.question;
+        break;
+      case SELECT_ALL_BOOKS:
+        draft.duplicatedBooks = state.bookList.filter(
+          book => book.text_id !== state.baseBookSelected.text_id,
+        );
         break;
     }
   });

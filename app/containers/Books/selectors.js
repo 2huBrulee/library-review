@@ -6,6 +6,7 @@ import { initialState } from './reducer';
  */
 
 const selectBooksDomain = state => state.books || initialState;
+const selectSearchBarContainerDomain = state => state.searchBarContainer || null;
 
 /**
  * Other specific selectors
@@ -14,6 +15,12 @@ const selectBooksDomain = state => state.books || initialState;
 /**
  * Default selector used by Books
  */
+
+const showingMoreOptionsSelector = () =>
+  createSelector(
+    selectSearchBarContainerDomain,
+    substate => substate && substate.showingMoreOptions,
+  );
 
 const makeSelectBooks = () =>
   createSelector(
@@ -25,9 +32,7 @@ const makeBookListSelector = () =>
   createSelector(
     selectBooksDomain,
     substate =>
-      substate.bookList.filter(
-        book => book.text_id !== substate.baseBookSelected.text_id,
-      ),
+      substate.bookList.filter(book => book.text_id !== substate.baseBookSelected.text_id),
   );
 
 const makeBookListLoaderSelector = () =>
@@ -76,4 +81,5 @@ export {
   makeDuplicatedBooksSelector,
   makeEditedBooksSelector,
   questionToBeCreateSelector,
+  showingMoreOptionsSelector,
 };

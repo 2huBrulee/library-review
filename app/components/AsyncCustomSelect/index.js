@@ -28,7 +28,7 @@ const customStyles = {
 };
 
 export default props => {
-  const [inputValue, setInputValue] = useState(null);
+  const [inputValue, setInputValue] = useState('');
   const {
     showButtons,
     setSelected,
@@ -50,7 +50,7 @@ export default props => {
       if (defaultLexile) {
         setInputValue(defaultLexile);
       } else {
-        setInputValue(null);
+        setInputValue('');
       }
     }
   }, [editingLexile, defaultLexile]);
@@ -65,10 +65,11 @@ export default props => {
       isSearchable
       name="lexile"
       defaultInputValue={
-        defaultLexile &&
-        `${defaultLexile.lexile}L, ${defaultLexile.title}, ${
+        defaultLexile
+          ? `${defaultLexile.lexile}L, ${defaultLexile.title}, ${
           defaultLexile.lexile_author
-        }`
+          }`
+          : ``
       }
       placeholder="Search for a book title"
       defaultOptions={defaultLexile ? [defaultLexile] : []}

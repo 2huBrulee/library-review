@@ -22,13 +22,13 @@ import {
 import reducer from './reducer';
 import saga from './saga';
 // import messages from './messages';
-import { loadAuthorsFound } from './actions';
+import { loadAuthorsFound, batchHideBooks } from './actions';
 import AuthorList from '../../components/AuthorList';
 import NoSearchResults from '../../components/NoSearchResults';
 
-const ShowResults = ({ authorList }) =>
+const ShowResults = ({ authorList, batchHideBooks }) =>
   authorList.length > 0 ? (
-    <AuthorList authorList={authorList} />
+    <AuthorList authorList={authorList} batchHideBooks={batchHideBooks} />
   ) : (
     <NoSearchResults />
   );
@@ -40,6 +40,7 @@ export function Authors(props) {
   const {
     authorList,
     dispatchLoadAuthorsFound,
+    dispatchBatchHideBooks,
     location,
     loading,
     error,
@@ -48,15 +49,18 @@ export function Authors(props) {
   const authorQuery = params.full_name;
 
   useEffect(() => {
-    if (authorQuery && authorQuery.trim().length > 0)
-      dispatchLoadAuthorsFound(params);
+    if (authorQuery && authorQuery.trim().length > 0) dispatchLoadAuthorsFound(params);
   }, [location.search]);
 
   if (error) console.log(`fetching error: ${error}`);
 
   return (
     <div>
-      {loading ? <WaveLoading /> : <ShowResults authorList={authorList} />}
+      {loading ? (
+        <WaveLoading />
+      ) : (
+        <ShowResults authorList={authorList} batchHideBooks={dispatchBatchHideBooks} />
+      )}
     </div>
   );
 }
@@ -65,6 +69,7 @@ ShowResults.propTypes = { authorList: PropTypes.array };
 
 Authors.propTypes = {
   dispatchLoadAuthorsFound: PropTypes.func.isRequired,
+  dispatchBatchHideBooks: PropTypes.func.isRequired,
   authorList: PropTypes.array,
   loading: PropTypes.bool,
   error: PropTypes.object,
@@ -79,8 +84,8 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatchLoadAuthorsFound: authorQuery =>
-      dispatch(loadAuthorsFound(authorQuery)),
+    dispatchLoadAuthorsFound: authorQuery => dispatch(loadAuthorsFound(authorQuery)),
+    dispatchBatchHideBooks: (booksToHide, hidden) => dispatch(batchHideBooks(booksToHide, hidden)),
   };
 }
 

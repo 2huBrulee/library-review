@@ -87,12 +87,15 @@ function AuthorListItem(props) {
     duplicate,
     books,
     history,
+    batchHideBooks,
     // hidden,
   } = props;
 
   const [maxBooks, setMaxBooks] = useState(3);
 
   const changeBooksShown = () => setMaxBooks(maxBooks !== 3 ? 3 : books.length);
+
+  const hideBooks = () => batchHideBooks(books, true);
 
   const goToBook = book => () =>
     history.push({
@@ -128,6 +131,7 @@ function AuthorListItem(props) {
           <BoldSpan>Books Written:</BoldSpan>
           <span>{books.length}</span>
         </DetailLine>
+        <Button onClick={hideBooks}>Hide all books</Button>
       </Details>
       <Books>
         <DetailLine>
@@ -141,9 +145,7 @@ function AuthorListItem(props) {
           ) : null,
         )}
         {books.length > 3 ? (
-          <Button onClick={changeBooksShown}>
-            {maxBooks <= 3 ? 'See All' : 'Collapse'}
-          </Button>
+          <Button onClick={changeBooksShown}>{maxBooks <= 3 ? 'See All' : 'Collapse'}</Button>
         ) : null}
       </Books>
     </Container>

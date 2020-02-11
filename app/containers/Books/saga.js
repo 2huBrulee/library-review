@@ -58,7 +58,7 @@ const hideBooks = (booksToHide, hidden) =>
     {
       [booksToHide.length > 1 ? 'books' : 'book']: {
         hidden,
-        ...(hidden ? { truted: false } : null),
+        ...(hidden ? { trusted: false } : null),
       },
       embed:
         'author.books,book.trusted,book.series,book.series_index,book.hidden,book.reassigned,book.duplicate,book.lexile_record,book.questions',
@@ -68,9 +68,7 @@ const hideBooks = (booksToHide, hidden) =>
       params: {
         keys: booksToHide.reduce(
           (booksString, bookToHide) =>
-            booksString === ''
-              ? bookToHide.text_id
-              : `${booksString},${bookToHide.text_id}`,
+            booksString === '' ? bookToHide.text_id : `${booksString},${bookToHide.text_id}`,
           '',
         ),
       },
@@ -114,9 +112,7 @@ const setTrustStatus = (booksToEdit, trust) =>
         keys: (() => {
           const xd = booksToEdit.reduce(
             (booksString, bookToEdit) =>
-              booksString === ''
-                ? bookToEdit.text_id
-                : `${booksString},${bookToEdit.text_id}`,
+              booksString === '' ? bookToEdit.text_id : `${booksString},${bookToEdit.text_id}`,
             '',
           );
           return xd;
@@ -163,14 +159,10 @@ export function* getBookSearchResults(action) {
     const originRegEx = /(^AUT.+)|(^BASE.+)|(^LEXILE.+)|(^MANU.+)/g;
     if (originRegEx.test(action.bookQuery.q)) {
       const { data } = yield call(getBookById, action.bookQuery.q);
-      yield put(
-        loadBooksFoundSuccess(data.results ? data.results : [data.book]),
-      );
+      yield put(loadBooksFoundSuccess(data.results ? data.results : [data.book]));
     } else {
       const { data } = yield call(getBooks, action.bookQuery);
-      yield put(
-        loadBooksFoundSuccess(data.results ? data.results : [data.book]),
-      );
+      yield put(loadBooksFoundSuccess(data.results ? data.results : [data.book]));
     }
   } catch (e) {
     yield put(loadBooksFoundFailed(e));
@@ -179,11 +171,7 @@ export function* getBookSearchResults(action) {
 
 export function* getBatchBookTrust(action) {
   try {
-    const { data } = yield call(
-      setTrustStatus,
-      action.booksToTrust,
-      action.trust,
-    );
+    const { data } = yield call(setTrustStatus, action.booksToTrust, action.trust);
     yield put(setTrustSuccess(data.results ? data.results : [data.book]));
   } catch (e) {
     yield put(setReferenceFailed(e));
@@ -210,11 +198,7 @@ export function* getBatchBookHide(action) {
 
 export function* getBatchBookReference(action) {
   try {
-    const { data } = yield call(
-      setReferenceBook,
-      action.duplicates,
-      action.referenceBook,
-    );
+    const { data } = yield call(setReferenceBook, action.duplicates, action.referenceBook);
     yield put(setReferenceSucces(data.results ? data.results : [data.book]));
   } catch (e) {
     yield put(setReferenceFailed(e));
@@ -224,11 +208,7 @@ export function* getBatchBookReference(action) {
 export function* getCreateQuestion(action) {
   console.log(action);
   try {
-    const { data } = yield call(
-      questionRequests.createQuestion,
-      action.book,
-      action.question,
-    );
+    const { data } = yield call(questionRequests.createQuestion, action.book, action.question);
     yield put(createQuestionSuccess(action.book, data.question));
   } catch (e) {
     yield put(createQuestionFailure(e));

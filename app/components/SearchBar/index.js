@@ -52,9 +52,10 @@ const StyledSticky = styled(Sticky)`
   background-color: #fafafa;
   &.sticky {
     z-index: 10;
-    max-height: 55px;
+    ${({ showingMoreOptions }) =>
+      showingMoreOptions ? `max-height: 135px;` : `max-height: 55px;`};
     overflow: hidden;
-    box-shadow: 0 4px 2px -2px lightgray !important;
+    ${({ hiddenShadow }) => !hiddenShadow && `box-shadow: 0 4px 2px -2px lightgray !important`}
   }
 `;
 
@@ -103,18 +104,17 @@ const SearchBar = props => {
     handleShowHiddenClick,
     handleChangeNumberOfResults,
     search,
+    referencedBook,
   } = props;
 
   const isQueryValid = searchString.length >= 1;
 
+  const hiddenShadow = searchCategory.value !== 'AUTHORS' || !!referencedBook;
+
   return (
-    <StyledSticky>
+    <StyledSticky hiddenShadow={hiddenShadow} showingMoreOptions={showingMoreOptions}>
       <Wrapper {...props} margin={2}>
-        <Select
-          options={searchCategories}
-          value={searchCategory}
-          onChange={handleCategoryChange}
-        />
+        <Select options={searchCategories} value={searchCategory} onChange={handleCategoryChange} />
         <StyledTextInput
           placeholder={
             searchCategory.value === 'BOOKS'
@@ -128,27 +128,15 @@ const SearchBar = props => {
           onChange={handleSearchQueryInput}
         />
         {searchCategory.value === 'BOOKS' ? (
-          <Select
-            options={searchTypes}
-            value={searchType}
-            onChange={handleTypeChange}
-          />
+          <Select options={searchTypes} value={searchType} onChange={handleTypeChange} />
         ) : (
-          <Select
-            options={origins}
-            value={searchOrigin}
-            onChange={handleOriginChange}
-          />
+          <Select options={origins} value={searchOrigin} onChange={handleOriginChange} />
         )}
         <StyledButton disabled={!isQueryValid} onClick={search}>
           Search
         </StyledButton>
         {showingMoreOptions && searchCategory.value === 'BOOKS' && (
-          <Select
-            options={origins}
-            value={searchOrigin}
-            onChange={handleOriginChange}
-          />
+          <Select options={origins} value={searchOrigin} onChange={handleOriginChange} />
         )}
         {showingMoreOptions && searchCategory.value === 'BOOKS' && (
           <StyledCheckbox
@@ -158,11 +146,7 @@ const SearchBar = props => {
           />
         )}
         {showingMoreOptions && searchCategory.value === 'BOOKS' && (
-          <Checkbox
-            onChange={handleShowHiddenClick}
-            label="Hidden"
-            checked={hiddenIncluded}
-          />
+          <Checkbox onChange={handleShowHiddenClick} label="Hidden" checked={hiddenIncluded} />
         )}
         {showingMoreOptions && (
           <StyledTextInputNumberOf

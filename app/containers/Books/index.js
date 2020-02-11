@@ -21,6 +21,7 @@ import {
   makeBaseBookSelector,
   makeDuplicatedBooksSelector,
   makeEditedBooksSelector,
+  showingMoreOptionsSelector,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -40,6 +41,7 @@ import {
   editBook,
   createQuestion,
   editQuestion,
+  selectAllBooks,
 } from './actions';
 import NoSearchResults from '../../components/NoSearchResults';
 import SelectedItem from '../../components/SelectedItem';
@@ -99,14 +101,15 @@ export const Books = props => {
     duplicatedBooks,
     editedBooks,
     dispatchEditBook,
+    dispatchSelectAllBooks,
+    showingMoreOptions,
   } = props;
 
   const params = qs.parse(location.search, { ignoreQueryPrefix: true });
   const bookQuery = params.q;
 
   useEffect(() => {
-    if (bookQuery && bookQuery.trim().length > 0)
-      dispatchLoadBooksFound(params);
+    if (bookQuery && bookQuery.trim().length > 0) dispatchLoadBooksFound(params);
   }, [location.search]);
 
   if (error) console.log(`fetching error: ${error}`);
@@ -133,12 +136,7 @@ export const Books = props => {
 
   return (
     <div>
-      <Modal
-        visible={isModalVisible}
-        hide={hideModal}
-        loading={loading}
-        error={error}
-      >
+      <Modal visible={isModalVisible} hide={hideModal} loading={loading} error={error}>
         <div>You have successfully modified the following book(s):</div>
         {editedBooks &&
           editedBooks.map(editedBook => (
@@ -150,7 +148,7 @@ export const Books = props => {
             </div>
           ))}
       </Modal>
-      <StickyToolBar>
+      <StickyToolBar showingMoreOptions={showingMoreOptions}>
         {baseBookSelected.text_id ? (
           <SelectedItem
             baseBookSelected={baseBookSelected}
@@ -164,14 +162,14 @@ export const Books = props => {
             book={baseBookSelected}
           />
         ) : null}
-        {duplicatedBooks && duplicatedBooks.length > 0 ? (
-          <BookHandling
-            batchHide={batchHideAction}
-            batchLinking={batchLinkingAction}
-            batchTrust={batchTrust}
-            selected={!!baseBookSelected.text_id}
-          />
-        ) : null}
+        <BookHandling
+          duplicatedBooks={duplicatedBooks}
+          batchHide={batchHideAction}
+          batchLinking={batchLinkingAction}
+          batchTrust={batchTrust}
+          selectAll={dispatchSelectAllBooks}
+          selected={!!baseBookSelected.text_id}
+        />
       </StickyToolBar>
       {loading ? (
         <WaveLoading />
@@ -215,6 +213,8 @@ Books.propTypes = {
   dispatchEditBook: PropTypes.func.isRequired,
   dispatchCreateQuestion: PropTypes.func.isRequired,
   dispatchEditQuestion: PropTypes.func.isRequired,
+  dispatchSelectAllBooks: PropTypes.func.isRequired,
+  showingMoreOptions: PropTypes.bool,
   bookList: PropTypes.array,
   loading: PropTypes.bool,
   error: PropTypes.any,
@@ -231,6 +231,7 @@ const mapStateToProps = createStructuredSelector({
   baseBookSelected: makeBaseBookSelector(),
   duplicatedBooks: makeDuplicatedBooksSelector(),
   editedBooks: makeEditedBooksSelector(),
+  showingMoreOptions: showingMoreOptionsSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -240,15 +241,13 @@ function mapDispatchToProps(dispatch) {
     dispatchSelectDuplicate: book => dispatch(setDuplicate(book)),
     dispatchClearSelection: () => dispatch(clearSelected()),
     dispatchClearDuplicate: book => dispatch(clearDuplicate(book)),
-    dispatchBatchHide: (booksToHide, hidden) =>
-      dispatch(batchHide(booksToHide, hidden)),
+    dispatchBatchHide: (booksToHide, hidden) => dispatch(batchHide(booksToHide, hidden)),
     dispatchBatchLink: (booksToLink, referenceBook) =>
       dispatch(batchSetReference(booksToLink, referenceBook)),
-    dispatchSetTrust: (booksToTrust, trust) =>
-      dispatch(setTrustStatus(booksToTrust, trust)),
+    dispatchSetTrust: (booksToTrust, trust) => dispatch(setTrustStatus(booksToTrust, trust)),
     dispatchEditBook: (book, changes) => dispatch(editBook(book, changes)),
-    dispatchCreateQuestion: (book, question) =>
-      dispatch(createQuestion(book, question)),
+    dispatchCreateQuestion: (book, question) => dispatch(createQuestion(book, question)),
+    dispatchSelectAllBooks: () => dispatch(selectAllBooks()),
     dispatchEditQuestion: (book, question) => {
       console.log('y2');
       dispatch(editQuestion(book, question));

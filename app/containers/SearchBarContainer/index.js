@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect } from 'react';
-import useDeepCompareEffect from 'use-deep-compare-effect'
+import useDeepCompareEffect from 'use-deep-compare-effect';
 import PropTypes from 'prop-types';
 import qs from 'qs';
 import { connect } from 'react-redux';
@@ -16,15 +16,7 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import SearchBar from 'components/SearchBar';
-import {
-  SEARCH_CATEGORIES,
-  SEARCH_TYPES,
-  ORIGINS,
-  BOOKS,
-  TRUSTED,
-  GR,
-  REGULAR,
-} from './constants';
+import { SEARCH_CATEGORIES, SEARCH_TYPES, ORIGINS, BOOKS, TRUSTED, GR, REGULAR } from './constants';
 import makeSelectSearchBarContainer, {
   searchCategorySelector,
   searchStringSelector,
@@ -37,6 +29,7 @@ import makeSelectSearchBarContainer, {
   searchSelector,
   pathSelector,
   reduxInitSelector,
+  referencedBookSelector,
 } from './selectors';
 
 import {
@@ -75,6 +68,7 @@ export function SearchBarContainer(props) {
     urlSearch,
     pathname,
     reduxInit,
+    referencedBook,
   } = props;
 
   const params = qs.parse(urlSearch, { ignoreQueryPrefix: true });
@@ -90,17 +84,16 @@ export function SearchBarContainer(props) {
       dispatchSetSearchCategory(
         pathname === '/authors'
           ? {
-            label: 'Search Authors',
-            value: 'AUTHORS',
-          }
+              label: 'Search Authors',
+              value: 'AUTHORS',
+            }
           : {
-            label: 'Search Books',
-            value: 'BOOKS',
-          },
+              label: 'Search Books',
+              value: 'BOOKS',
+            },
       );
       dispatchChangeSearchString(params.q || params.full_name || '');
-      if (params.origin)
-        dispatchSetSearchOrigin(getOriginObject(params.origin));
+      if (params.origin) dispatchSetSearchOrigin(getOriginObject(params.origin));
       else
         dispatchSetSearchOrigin({
           label: 'All',
@@ -122,8 +115,7 @@ export function SearchBarContainer(props) {
           value: 'REGULAR',
         });
       if (params.hidden) dispatchChangeHiddenVisibility(params.hidden);
-      if (params.duplicate)
-        dispatchChangeDuplicatesVisibility(params.duplicate);
+      if (params.duplicate) dispatchChangeDuplicatesVisibility(params.duplicate);
       if (params.num_results) {
         let nResults;
         try {
@@ -143,9 +135,7 @@ export function SearchBarContainer(props) {
     if (searchCategory.value === BOOKS) {
       const queryObject = {
         q: searchString,
-        ...(searchOrigin.value !== 'ALL'
-          ? { origin: searchOrigin.value }
-          : null),
+        ...(searchOrigin.value !== 'ALL' ? { origin: searchOrigin.value } : null),
         ...(searchType.value === TRUSTED ? { trusted: true } : null),
         ...(searchType.value === GR ? { gr: true } : null),
         ...(hiddenIncluded ? { hidden: true } : null),
@@ -160,9 +150,7 @@ export function SearchBarContainer(props) {
     } else {
       const queryObject = {
         full_name: searchString,
-        ...(searchOrigin.value !== 'ALL'
-          ? { origin: searchOrigin.value }
-          : null),
+        ...(searchOrigin.value !== 'ALL' ? { origin: searchOrigin.value } : null),
         ...(numberOfResults > 0 ? { num_results: numberOfResults } : null),
       };
       const searchQuery = `?${qs.stringify(queryObject)}`;
@@ -179,11 +167,9 @@ export function SearchBarContainer(props) {
 
   const handleTypeChange = e => dispatchSetSearchType(e.target.value);
 
-  const handleSearchQueryInput = e =>
-    dispatchChangeSearchString(e.target.value);
+  const handleSearchQueryInput = e => dispatchChangeSearchString(e.target.value);
 
-  const handleShowMoreOptionsClick = () =>
-    dispatchChangeMoreOptionsVisibility();
+  const handleShowMoreOptionsClick = () => dispatchChangeMoreOptionsVisibility();
 
   const handleShowDuplicatesClick = () => dispatchChangeDuplicatesVisibility();
 
@@ -222,6 +208,7 @@ export function SearchBarContainer(props) {
       handleShowDuplicatesClick={handleShowDuplicatesClick}
       handleShowHiddenClick={handleShowHiddenClick}
       handleChangeNumberOfResults={handleChangeNumberOfResults}
+      referencedBook={referencedBook}
       search={search}
     />
   );
@@ -245,6 +232,7 @@ SearchBarContainer.propTypes = {
   duplicatesIncluded: PropTypes.bool,
   showingMoreOptions: PropTypes.bool,
   numberOfResults: PropTypes.number,
+  referencedBook: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -260,22 +248,18 @@ const mapStateToProps = createStructuredSelector({
   urlSearch: searchSelector(),
   reduxInit: reduxInitSelector(),
   pathname: pathSelector(),
+  referencedBook: referencedBookSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatchSetSearchCategory: searchCategory =>
-      dispatch(setSearchCategory(searchCategory)),
+    dispatchSetSearchCategory: searchCategory => dispatch(setSearchCategory(searchCategory)),
     dispatchSetSearchType: searchType => dispatch(setSearchType(searchType)),
-    dispatchSetSearchOrigin: searchOrigin =>
-      dispatch(setSearchOrigin(searchOrigin)),
-    dispatchChangeSearchString: searchString =>
-      dispatch(changeSearchString(searchString)),
+    dispatchSetSearchOrigin: searchOrigin => dispatch(setSearchOrigin(searchOrigin)),
+    dispatchChangeSearchString: searchString => dispatch(changeSearchString(searchString)),
     dispatchChangeHiddenVisibility: () => dispatch(changeHiddenVisibility()),
-    dispatchChangeDuplicatesVisibility: () =>
-      dispatch(changeDuplicatesVisibility()),
-    dispatchChangeMoreOptionsVisibility: () =>
-      dispatch(changeMoreOptionsVisibility()),
+    dispatchChangeDuplicatesVisibility: () => dispatch(changeDuplicatesVisibility()),
+    dispatchChangeMoreOptionsVisibility: () => dispatch(changeMoreOptionsVisibility()),
     dispatchChangeNumberOfResults: numberOfResults =>
       dispatch(changeNumberOfResults(numberOfResults)),
     dispatchNewRoute: newLocation => dispatch(push(newLocation)),

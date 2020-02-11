@@ -9,7 +9,6 @@ import React from 'react';
 import styled from 'styled-components';
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
-import Sticky from 'react-sticky-el';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -40,25 +39,18 @@ function BookHandling(props) {
     batchHide = f => f,
     batchLinking = f => f,
     batchTrust = f => f,
+    selectAll = f => f,
+    duplicatedBooks,
   } = props;
 
   return (
-    <Sticky
-      topOffset={selected ? -275 : -55}
-      stickyStyle={{
-        backgroundColor: '#fafafa',
-        margin: `${selected ? 275 : 55}px 0 0 0`,
-        boxShadow: '0 4px 2px -2px lightgray',
-        zIndex: 99999,
-      }}
-    >
-      <Wrapper>
-        <Button onClick={batchHide}>Hide</Button>
-        {selected && <Button onClick={batchLinking}>Link</Button>}
-        <Button onClick={batchTrust(true)}>Trust</Button>
-        <Button onClick={batchTrust(false)}>Distrust</Button>
-      </Wrapper>
-    </Sticky>
+    <Wrapper>
+      {duplicatedBooks && duplicatedBooks.length > 0 && <Button onClick={batchHide}>Hide</Button>}
+      {duplicatedBooks && duplicatedBooks.length > 0 && selected && <Button onClick={batchLinking}>Link</Button>}
+      {duplicatedBooks && duplicatedBooks.length > 0 && <Button onClick={batchTrust(true)}>Trust</Button>}
+      {duplicatedBooks && duplicatedBooks.length > 0 && <Button onClick={batchTrust(false)}>Distrust</Button>}
+      <Button onClick={selectAll}>Select All</Button>
+    </Wrapper>
   );
 }
 

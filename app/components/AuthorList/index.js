@@ -14,7 +14,7 @@ import React from 'react';
 import AuthorListItem from '../AuthorListItem';
 
 function AuthorList(props) {
-  const { authorList } = props;
+  const { authorList, batchHideBooks } = props;
 
   return (
     <div>
@@ -24,6 +24,7 @@ function AuthorList(props) {
               first={index === 0}
               {...author}
               key={author.matilda_id}
+              batchHideBooks={batchHideBooks}
             />
           ))
         : null}

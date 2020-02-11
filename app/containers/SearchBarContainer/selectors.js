@@ -6,14 +6,20 @@ import { initialState } from './reducer';
  * urlSearch: state.router.location.search
  */
 
-const selectSearchBarContainerDomain = state =>
-  state.searchBarContainer || initialState;
+const selectSearchBarContainerDomain = state => state.searchBarContainer || initialState;
+const selectBooksDomain = state => state.books || null;
 
 const selectRouterLocation = state => state.router.location || { search: '' };
 
 /**
  * Other specific selectors
  */
+
+const referencedBookSelector = () =>
+  createSelector(
+    selectBooksDomain,
+    substate => substate && substate.baseBookSelected && substate.baseBookSelected.title,
+  );
 
 const searchSelector = () =>
   createSelector(
@@ -105,4 +111,5 @@ export {
   searchSelector,
   pathSelector,
   reduxInitSelector,
+  referencedBookSelector,
 };
